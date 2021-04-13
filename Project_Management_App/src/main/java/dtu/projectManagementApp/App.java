@@ -3,16 +3,26 @@ package dtu.projectManagementApp;
 import java.util.ArrayList;
 import java.util.List;
 
+import dtu.dto.ProjectInfo;
+
 public class App {
 	private List<Employee> employeeRepository = new ArrayList<>();
 	private List<Project> projectRepository = new ArrayList<>();
-
-	public void createProject(String name, int id) {
-		projectRepository.add(new Project(name,id));
+	
+	public void createProject(Project project) throws Exception {
+		if(!projectRepository.contains(project)) projectRepository.add(project);
+		else {
+			throw new Exception("Id already exist");
+		}
+		
 	}
 
 	public void deleteProject(Project project) {
 		projectRepository.remove(project);
+	}
+
+	public List<Project> getProjects() {
+		return projectRepository;
 	}
 
 }

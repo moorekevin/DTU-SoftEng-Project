@@ -12,4 +12,8 @@ public class Employee {
 		this.initials = initials;
 	}
 
+	public boolean isProjectManger() {
+		return isProjectManager;
+	}
+
 }

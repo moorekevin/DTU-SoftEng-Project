@@ -6,7 +6,6 @@ import dtu.projectManagementApp.Employee;
 
 public class EmployeeHelper {
     private App app;
-   // private Employee employee;
     private EmployeeInfo employee;
 
     public EmployeeHelper(App app) {
@@ -21,8 +20,6 @@ public class EmployeeHelper {
     }
 
     public EmployeeInfo exampleEmployee() {
-//        employee = new Employee("AAAA");
-//        return employee;
     	employee = new EmployeeInfo("AAAA");
     	return employee;
     }

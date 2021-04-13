@@ -1,5 +1,5 @@
 package dtu.projectManagementApp;
 
-public class EmployeeRepository {
-
+public interface EmployeeRepository {
+	
 }
