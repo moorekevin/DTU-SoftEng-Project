@@ -9,9 +9,14 @@ public class App {
 	private List<Employee> employeeRepository = new ArrayList<>();
 	private List<Project> projectRepository = new ArrayList<>();
 	
-	public void createProject(Project project) throws Exception {
+	public void createProject(Project project) {
 		for (Project p : projectRepository) {
-			if (project.getId() == p.getId()) throw new Exception("Project already exists");
+
+			try {
+				if (project.getId() == p.getId()) throw new Exception("Project already exists");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		projectRepository.add(project);
 	}
@@ -37,7 +42,6 @@ public class App {
 	
 	public void assignProjectManager(Project project, Employee pm) {
 		if (employeeRepository.contains(pm)) {
-			if()
 		}
 			
 	}
