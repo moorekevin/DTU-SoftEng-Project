@@ -13,4 +13,4 @@ Scenario: Assign a non-existing Employee to a Project
 	And there is not an Employee with initials "BBBB"
 	When the Project Manager assigns the Employee to the Project
 	Then the error is thrown "Employee does not exist"
-	And a Employee with initials "BBBB" is not assigned to the Project
+	

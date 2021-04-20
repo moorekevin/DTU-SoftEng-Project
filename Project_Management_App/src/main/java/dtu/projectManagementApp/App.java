@@ -31,13 +31,25 @@ public class App {
 		return employeeRepository;
 	}
 	
-	public void assignEmployeeToProject(Project project, Employee pm, Employee em) {
+	public void addEmployee(Employee em) {
+		employeeRepository.add(em);
+	}
+	
+	public void assignEmployeeToProject(Project project, Employee pm, Employee em) throws Exception {
+		
+		if (employeeRepository.contains(pm) && employeeRepository.contains(em)) {
+			if(projectRepository.contains(project)) {
+				em.assignToProject(project);
+			} else throw new Exception("Project does not exist");
+		} else throw new Exception("Employee does not exist");
 		
 	}
 	
-	public void assignProjectManager(Project project, Employee pm) {
-		if (employeeRepository.contains(pm)) {
-			if()
+	public void assignProjectManager(Project project, Employee em) {
+		if (employeeRepository.contains(em) && projectRepository.contains(project)) {
+				em.setProjectManager(true);
+				project.assignProjectManager(em);
+	
 		}
 			
 	}

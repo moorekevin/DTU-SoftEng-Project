@@ -23,7 +23,8 @@ public class EmployeeSteps {
 	private Project project;
 	private ProjectHelper projectHelper;
 	private EmployeeHelper employeeHelper;
-	private Employee employee;
+	private Employee pm;
+	private Employee em;
 	private ErrorMessage errorMessage;
 
 	public EmployeeSteps(App projectApp, ProjectHelper projectHelper, EmployeeHelper employeeHelper, ErrorMessage errorMessage) {
@@ -34,25 +35,30 @@ public class EmployeeSteps {
 	}
 	
 	@Given("a Project Manager with initials {string} is assigned to a Project")
-	public void a_project_manager_with_initials_is_assigned_to_a_project(String string) {
+	public void a_project_manager_with_initials_is_assigned_to_a_project(String string) throws Exception {
 		
-	   
-	    employee = new Employee(string);
+	    pm = new Employee(string);
 	    
 	    project = projectHelper.exampleProject();
-	    project.assignEmployeeToProject(employee);
-	    project.assignEmployeeToProject(employee);
-	    project.assignProjectManager(employee);
+	    projectApp.createProject(project);
+	    projectApp.addEmployee(pm);
+	  
+	    projectApp.assignProjectManager(project, pm);
 	    
-	    assertTrue(employee.isProjectManger());
-	    assertTrue(project.getProjectManger() == employee);
+	    assertTrue(pm.isProjectManger());
+	    assertTrue(project.getProjectManger() == pm);
 	}
 	
 	
 	@When("the Project Manager assigns the Employee to the Project")
-	public void the_project_manager_assigns_the_employee_to_the_project() {
-	   project.assignEmployeeToProject(employeeHelper.getEmployee());
-	   employeeHelper.getEmployee().addProject(project);
+	public void the_project_manager_assigns_the_employee_to_the_project() throws Exception {
+		em = employeeHelper.getEmployee();
+		try {
+			projectApp.assignEmployeeToProject(project, pm, em);
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	  
 	}
 
 	@Then("the Employee is assigned to the Project")
@@ -70,10 +76,7 @@ public class EmployeeSteps {
 		assertFalse(check);
 	}
 
-	@Then("a Employee with initials {string} is not assigned to the Project")
-	public void a_employee_with_initials_is_not_assigned_to_the_project(String string) {
-		
-	}
+	
 
 
 

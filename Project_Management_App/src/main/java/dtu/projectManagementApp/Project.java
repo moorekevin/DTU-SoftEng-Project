@@ -21,11 +21,10 @@ public class Project {
 	}
 	
 	public void assignProjectManager(Employee pm) {
-		
-		pm.setProjectManager();
 		projectManager = pm;
-		
 	}
+	
+	
 	
 	public Employee getProjectManger() {
 		return projectManager;

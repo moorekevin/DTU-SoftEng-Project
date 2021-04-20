@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import dtu.dto.EmployeeInfo;
 import dtu.dto.ProjectInfo;
 import dtu.projectManagementApp.App;
+import dtu.projectManagementApp.Employee;
 import dtu.projectManagementApp.Project;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -21,7 +22,7 @@ public class ProjectSteps {
 	private App projectApp;
 	private Project project;
 	private ProjectHelper projectHelper;
-	private EmployeeInfo employee;
+	private Employee employee;
 	private EmployeeHelper employeeHelper;
 	private ErrorMessage errorMessage;
 
@@ -35,7 +36,8 @@ public class ProjectSteps {
 	@Given("there is an Employee with initials {string}")
 	public void there_is_an_employee_with_initials(String string) {
 		employeeHelper.setEmployee(string);
-		employee = new EmployeeInfo(string);
+		projectApp.addEmployee(employeeHelper.getEmployee());
+	
 		
 	}
 
@@ -105,8 +107,6 @@ public class ProjectSteps {
 
 	@Then("the error is thrown {string}")
 	public void the_error_is_thrown(String error) {
-		System.out.println(error);
-		System.out.println(errorMessage.getErrorMessage());
 		assertTrue(error.equals(errorMessage.getErrorMessage()));
 
 	}

@@ -19,11 +19,11 @@ public class Employee {
 		return isProjectManager;
 	}
 	
-	public void setProjectManager() {
-		isProjectManager = true;
+	public void setProjectManager(boolean b) {
+		isProjectManager = b;
 	}
 	
-	public void addProject(Project project) {
+	public void assignToProject(Project project) {
 		assignedProjects.add(project);
 	}
 	
