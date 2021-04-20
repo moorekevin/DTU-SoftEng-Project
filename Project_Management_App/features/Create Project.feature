@@ -10,4 +10,5 @@ Scenario: Create Project as Employee
 Scenario: Create a Project with an ID that already exists
 	Given there is an Employee with initials "AAAA"
 	And there is a Project with id 211111
-	When the Employee creates a new Project with id 211111 	Then the error is thrown "Project already exists"
+	When the Employee creates a new Project with id 211111
+	Then the error is thrown "Project already exists"

@@ -10,15 +10,18 @@ public class App {
 	private List<Project> projectRepository = new ArrayList<>();
 	
 	public void createProject(Project project) throws Exception {
-		if(!projectRepository.contains(project)) projectRepository.add(project);
+		if (!projectRepository.contains(project)) projectRepository.add(project);
 		else {
 			throw new Exception("Id already exist");
 		}
 		
 	}
 
-	public void deleteProject(Project project) {
-		projectRepository.remove(project);
+	public void deleteProject(Project project) throws Exception {
+		if (projectRepository.contains(project)) projectRepository.remove(project);
+		else {
+			throw new Exception("Project does not exist");
+		}
 	}
 
 	public List<Project> getProjects() {
