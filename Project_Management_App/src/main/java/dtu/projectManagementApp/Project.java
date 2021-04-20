@@ -7,6 +7,7 @@ public class Project {
 	private String name;
 	private int id;
 	private List<Employee> assignedEmployees;
+	private Employee projectManager;
 	private static int count;
 
 	public Project(String name, int id) {
@@ -15,11 +16,19 @@ public class Project {
 		assignedEmployees = new ArrayList<Employee>();
 	}
 	
+	public void assignEmployeeToProject(Employee em) {
+		assignedEmployees.add(em);
+	}
+	
+	public void assignProjectManager(Employee pm) {
+		
+		pm.setProjectManager();
+		projectManager = pm;
+		
+	}
+	
 	public Employee getProjectManger() {
-		for (int i = 0; i < assignedEmployees.size(); i++) {
-			if (assignedEmployees.get(i).isProjectManger()) return assignedEmployees.get(i);
-		}
-		return null;
+		return projectManager;
 	}
 
 	public String getName() {

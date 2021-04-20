@@ -34,14 +34,15 @@ public class ProjectSteps {
 
 	@Given("there is an Employee with initials {string}")
 	public void there_is_an_employee_with_initials(String string) {
+		employeeHelper.setEmployee(string);
 		employee = new EmployeeInfo(string);
+		
 	}
 
 	@When("the Employee creates a Project with name {string}")
 	public void the_employee_creates_a_project_with_name(String name) throws Exception {
 		project = new Project(name, 0001);
 		projectApp.createProject(project);
-		System.out.println(projectApp.getProjects().contains(project));
 	}
 
 	@Then("the Project is assigned to the list of Projects")
@@ -70,8 +71,10 @@ public class ProjectSteps {
 	@When("the Employee creates a new Project with id {int}")
 	public void the_employee_creates_a_new_project_with_id(Integer id) {
 		project = new Project("AAAA", id);
+		
 		try {
 			projectApp.createProject(project);
+			
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -89,20 +92,23 @@ public class ProjectSteps {
 
 	@Then("a Project with id {int} is not in the list of Projects")
 	public void a_project_with_id_is_not_in_the_list_of_projects(Integer id) {
-		assertTrue(id == project.getId());
 		assertFalse(projectApp.getProjects().contains(project));
 	}
 
 	@Given("there is not a Project with id {int} in the list of Projects")
 	public void there_is_not_a_project_with_id_in_the_list_of_projects(Integer id) {
 		projectHelper.setProject("AAAA", id);
+		project = projectHelper.getProject();
 		assertFalse(projectApp.getProjects().contains(projectHelper.getProject()));
 
 	}
 
 	@Then("the error is thrown {string}")
 	public void the_error_is_thrown(String error) {
+		System.out.println(error);
+		System.out.println(errorMessage.getErrorMessage());
 		assertTrue(error.equals(errorMessage.getErrorMessage()));
+
 	}
 
 }

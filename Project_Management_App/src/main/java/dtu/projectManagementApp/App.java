@@ -10,22 +10,36 @@ public class App {
 	private List<Project> projectRepository = new ArrayList<>();
 	
 	public void createProject(Project project) throws Exception {
-		if (!projectRepository.contains(project)) projectRepository.add(project);
-		else {
-			throw new Exception("Id already exist");
+		for (Project p : projectRepository) {
+			if (project.getId() == p.getId()) throw new Exception("Project already exists");
 		}
-		
+		projectRepository.add(project);
 	}
 
 	public void deleteProject(Project project) throws Exception {
-		if (projectRepository.contains(project)) projectRepository.remove(project);
-		else {
-			throw new Exception("Project does not exist");
+		for (Project p : projectRepository) {
+			if (project.getId() != p.getId()) throw new Exception("Project does not exist");
 		}
+		projectRepository.remove(project);
 	}
 
 	public List<Project> getProjects() {
 		return projectRepository;
 	}
-
+	
+	public List<Employee> getEmployees() {
+		return employeeRepository;
+	}
+	
+	public void assignEmployeeToProject(Project project, Employee pm, Employee em) {
+		
+	}
+	
+	public void assignProjectManager(Project project, Employee pm) {
+		if (employeeRepository.contains(pm)) {
+			if()
+		}
+			
+	}
+	
 }
