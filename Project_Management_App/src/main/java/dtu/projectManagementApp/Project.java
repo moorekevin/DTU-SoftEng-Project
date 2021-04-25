@@ -24,8 +24,14 @@ public class Project {
 		projectManager = pm;
 	}
 	
-	
-	
+	public List<Employee> getAssignedEmployees() {
+		return assignedEmployees;
+	}
+
+	public void setAssignedEmployees(List<Employee> assignedEmployees) {
+		this.assignedEmployees = assignedEmployees;
+	}
+
 	public Employee getProjectManger() {
 		return projectManager;
 	}
@@ -46,7 +52,4 @@ public class Project {
 		this.id = id;
 	}
 	
-	
-	
-
 }

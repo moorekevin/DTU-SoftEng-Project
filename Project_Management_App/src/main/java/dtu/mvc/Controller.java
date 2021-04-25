@@ -3,9 +3,11 @@ package dtu.mvc;
 import java.util.HashMap;
 import java.util.Map;
 
+import dtu.projectManagementApp.*;
+
 public class Controller {
 	private UI ui;
-	private Model model;
+	private App app;
 
 	private boolean isRunning = true;
 
@@ -15,7 +17,7 @@ public class Controller {
 		setCommands();
 
 		ui = new UI(commandList);
-		model = new Model();
+		app = new App();
 
 		start();
 	}
@@ -46,7 +48,25 @@ public class Controller {
 
 		commandList.put("/deleteproject", new CommandInfo("Delete an already existing project", 
 			new Command() { public void runCommand() {
-				ui.deleteProject();
+				deleteProject();
+			};})
+		);
+		
+		commandList.put("/viewprojects", new CommandInfo("Show a list of all projects with name and ID", 
+			new Command() { public void runCommand() {
+				viewAllProjects();
+			};})
+		);
+
+		commandList.put("/assignemployee", new CommandInfo("Assign an employee to a project", 
+			new Command() { public void runCommand() {
+				assignEmployee();
+			};})
+		);
+
+		commandList.put("/assignprojectmanager", new CommandInfo("Assign an employee as a project manager to a project", 
+			new Command() { public void runCommand() {
+				assignProjectManager();
 			};})
 		);
 	}
@@ -55,14 +75,36 @@ public class Controller {
 		if (commandList.containsKey(userInput)) {
 			commandList.get(userInput).getCommand().runCommand();
 		} else {
-			ui.print("Unknown command. Type \"/help\" to get a list of all commands.");
+			ui.print("\nUnknown command. Type \"/help\" to get a list of all commands.");
 		}
 	}
 
 	// Commands
-	public void createProject() {
-		ui.print("What should the name of the project be?");
+	private void createProject() {
+		ui.print("\nWhat should the name of the project be?");
 		String nameOfProject = ui.getUserInput();
-		model.createProject(nameOfProject);
+//		Project projectCreated = new Project(nameOfProject, app.makeProjectId());
+		app.createProject(nameOfProject);
+		ui.print("\nProject created!");
+	}
+	
+	private void deleteProject() {
+		ui.print("\nWhat is the project's ID?");
+		int projectID = Integer.parseInt(ui.getUserInput());
+
+		app.deleteProject(projectID);
+		
+		ui.print("\nProject deleted!");
+	}
+	
+	private void viewAllProjects() {
+		ui.printProjects(app.getProjects());
+	}
+	
+	private void assignEmployee() {
+		
+	}
+
+	private void assignProjectManager() {
 	}
 }

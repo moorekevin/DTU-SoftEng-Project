@@ -2,21 +2,14 @@ package dtu.testSteps;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.runner.RunWith;
-
-import dtu.dto.EmployeeInfo;
-import dtu.dto.ProjectInfo;
 import dtu.projectManagementApp.App;
 import dtu.projectManagementApp.Employee;
 import dtu.projectManagementApp.Project;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.junit.Cucumber;
-import io.cucumber.junit.CucumberOptions;
 
 public class ProjectSteps {
 	private App projectApp;
@@ -34,22 +27,24 @@ public class ProjectSteps {
 		this.errorMessage = errorMessage;
 	}
 
-	@Given("there is an Employee with initials {string}")
-	public void there_is_an_employee_with_initials(String string) {
-		employeeHelper.setEmployee(string);
-		projectApp.addEmployee(employeeHelper.getEmployee());
-
-	}
-
 	@When("the Employee creates a Project with name {string}")
-	public void the_employee_creates_a_project_with_name(String name) throws Exception {
-		project = new Project(name, 0001);
-		projectApp.createProject(project);
+	public void the_employee_creates_a_project_with_name(String name) {
+		int size = projectApp.getProjects().size();
+		projectApp.createProject(name);
+		projectHelper.setProject(name, projectApp.getProjects().get(size).getId());
+		project = projectHelper.getProject();
 	}
 
 	@Then("the Project is assigned to the list of Projects")
 	public void the_project_is_assigned_to_the_list_of_projects() {
-		assertTrue(projectApp.getProjects().contains(project));
+		boolean projectAssigned = false;
+		for (Project proj: projectApp.getProjects()) {
+			if (proj.getId() == project.getId() && proj.getName() == project.getName()) {
+				projectAssigned = true;
+			}
+		}
+
+		assertTrue(projectAssigned);
 	}
 
 	@Then("the Project's first two digits in id is the last two digits in this year")
@@ -63,23 +58,23 @@ public class ProjectSteps {
 	}
 
 	@Given("there is a Project with id {int}")
-	public void there_is_a_project_with_id(Integer id) throws Exception {
+	public void there_is_a_project_with_id(Integer id) {
 		projectHelper.setProject("AAAA", id);
 		project = projectHelper.getProject();
-		projectApp.createProject(project);
+		projectApp.getProjects().add(project);
 
 	}
 
 	@When("the Employee creates a new Project with id {int}")
 	public void the_employee_creates_a_new_project_with_id(Integer id) {
 		project = new Project("AAAA", id);
-		projectApp.createProject(project);
+		projectApp.getProjects().add(project);
 
 	}
 
 	@When("the Employee deletes the Project")
 	public void the_employee_deletes_the_project() {
-		projectApp.deleteProject(project);
+		projectApp.deleteProject(project.getId());
 	}
 
 	@Then("a Project with id {int} is not in the list of Projects")
@@ -92,7 +87,6 @@ public class ProjectSteps {
 		projectHelper.setProject("AAAA", id);
 		project = projectHelper.getProject();
 		assertFalse(projectApp.getProjects().contains(projectHelper.getProject()));
-
 	}
 
 	@Then("the error is thrown {string}")
