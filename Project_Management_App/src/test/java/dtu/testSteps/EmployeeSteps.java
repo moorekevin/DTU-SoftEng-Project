@@ -75,6 +75,20 @@ public class EmployeeSteps {
 		}
 		assertFalse(check);
 	}
+	
+	@Given("a Project Manager with initials {string} is not assigned to the Project")
+	public void a_project_manager_with_initials_is_not_assigned_to_the_project(String string) {
+	    pm = new Employee(string);
+	    project = projectHelper.getProject();
+	    assertFalse(pm.getAssignedProjects().contains(project));
+	}
+
+	@Then("the Employee with initials {string} is not assigned to the Project")
+	public void the_employee_with_initials_is_not_assigned_to_the_project(String string) {
+		assertTrue(employeeHelper.getEmployee().getInitials().equals(string));
+		assertFalse(employeeHelper.getEmployee().getAssignedProjects().contains(project));
+	}
+
 
 	
 
