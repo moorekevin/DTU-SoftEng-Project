@@ -27,6 +27,10 @@ public class Employee {
 		assignedProjects.add(project);
 	}
 	
+	public void removeProject(Project project) {
+		assignedProjects.remove(project);
+	}
+	
 	public List<Project> getAssignedProjects(){
 		return assignedProjects;
 	}

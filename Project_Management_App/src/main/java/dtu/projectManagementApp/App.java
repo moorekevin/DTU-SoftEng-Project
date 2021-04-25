@@ -108,4 +108,50 @@ public class App {
 
 	}
 
+	public void removeEmployeeFromProject(Project project, Employee em) {
+		em.setProjectManager(false);
+		em.removeProject(project);
+		project.removeProjectManger();
+		project.removeEmployeeFromProject(em);
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public WorkActivity createWorkActivity(String name, int start, int end) {
+		Week startWeek = new Week(start);
+		Week endWeek = new Week(end);
+		return new WorkActivity(name,startWeek,endWeek);
+	}
+
 }

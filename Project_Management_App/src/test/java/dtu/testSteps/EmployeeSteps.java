@@ -79,6 +79,33 @@ public class EmployeeSteps {
 	public void the_employee_is_not_assigned_to_the_project() {
 		assertFalse(project.getAssignedEmployees().contains(em));
 	}
+	
+	@Given("the Project does not have a Project Manager")
+	public void the_project_does_not_have_a_project_manager() {
+		System.out.println(projectHelper.getProject().getProjectManger() == null);
+		assertTrue(projectHelper.getProject().getProjectManger() == null);
+	}
+	
+	@When("the Employee assigns the Employee as the Project Manager to the Project")
+	public void the_employee_assigns_the_employee_as_the_project_manager_to_the_project() {
+		em = employeeHelper.getEmployee();
+		project = projectHelper.getProject();
+		
+		projectApp.assignEmployeeToProject(project, em, em);
+		projectApp.assignProjectManager(project, em);
+	}
+	
+	@Then("the Project has the Project Manager with initials {string}")
+	public void the_project_has_the_project_manager_with_initials(String string) {
+		assertTrue(project.getProjectManger().getInitials().equals(string));  
+	}
+	
+	@When("the Project Manager is removed from the Project")
+	public void the_project_manager_is_removed_from_the_project() {
+	   projectApp.removeEmployeeFromProject(project, pm);
+	}
+
+
 
 	@Given("the Employee is not a Project Manager")
 	public void the_employee_is_not_a_project_manager() {
