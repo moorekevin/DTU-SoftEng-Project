@@ -7,6 +7,7 @@ public class Project {
 	private String name;
 	private int id;
 	private List<Employee> assignedEmployees;
+	private List<Activity> activities;
 	private Employee projectManager;
 	private static int count;
 
@@ -14,20 +15,27 @@ public class Project {
 		this.name = name;
 		this.id = id;
 		assignedEmployees = new ArrayList<Employee>();
+		activities = new ArrayList<Activity>();
 	}
 	
 	public void assignEmployeeToProject(Employee em) {
 		assignedEmployees.add(em);
 	}
 	
+	public void removeEmployeeFromProject(Employee em) {
+		assignedEmployees.remove(em);
+	}
+	
 	public void assignProjectManager(Employee pm) {
 		projectManager = pm;
 	}
 	
-	
-	
 	public Employee getProjectManger() {
 		return projectManager;
+	}
+	
+	public void removeProjectManger() {
+		projectManager = null;
 	}
 
 	public String getName() {
@@ -46,6 +54,9 @@ public class Project {
 		this.id = id;
 	}
 	
+	public void addActivity(Activity activity) {
+		activities.add(activity);
+	}
 	
 	
 

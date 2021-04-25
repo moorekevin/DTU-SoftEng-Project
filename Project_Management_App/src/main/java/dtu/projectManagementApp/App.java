@@ -22,8 +22,6 @@ public class App {
 	public String getError() {
 		return errorMessage;
 	}
-	
-	
 
 	public void deleteProject(Project project) {
 		for (Project p : projectRepository) {
@@ -64,11 +62,60 @@ public class App {
 
 	public void assignProjectManager(Project project, Employee em) {
 		if (employeeRepository.contains(em) && projectRepository.contains(project)) {
-			em.setProjectManager(true);
-			project.assignProjectManager(em);
+			if (project.getProjectManger() == null) {
+				em.setProjectManager(true);
+				project.assignProjectManager(em);
+			} else
+				errorMessage = "Project already has a Project Manager";
 
 		}
 
+	}
+
+	public void removeEmployeeFromProject(Project project, Employee em) {
+		em.setProjectManager(false);
+		em.removeProject(project);
+		project.removeProjectManger();
+		project.removeEmployeeFromProject(em);
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public WorkActivity createWorkActivity(String name, int start, int end) {
+		Week startWeek = new Week(start);
+		Week endWeek = new Week(end);
+		return new WorkActivity(name,startWeek,endWeek);
 	}
 
 }
