@@ -26,7 +26,8 @@ public class ProjectSteps {
 	private EmployeeHelper employeeHelper;
 	private ErrorMessage errorMessage;
 
-	public ProjectSteps(App projectApp, ProjectHelper projectHelper, EmployeeHelper employeeHelper, ErrorMessage errorMessage) {
+	public ProjectSteps(App projectApp, ProjectHelper projectHelper, EmployeeHelper employeeHelper,
+			ErrorMessage errorMessage) {
 		this.projectApp = projectApp;
 		this.projectHelper = projectHelper;
 		this.employeeHelper = employeeHelper;
@@ -37,8 +38,7 @@ public class ProjectSteps {
 	public void there_is_an_employee_with_initials(String string) {
 		employeeHelper.setEmployee(string);
 		projectApp.addEmployee(employeeHelper.getEmployee());
-	
-		
+
 	}
 
 	@When("the Employee creates a Project with name {string}")
@@ -73,23 +73,13 @@ public class ProjectSteps {
 	@When("the Employee creates a new Project with id {int}")
 	public void the_employee_creates_a_new_project_with_id(Integer id) {
 		project = new Project("AAAA", id);
-		
-		try {
-			projectApp.createProject(project);
-			
-		} catch (Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
+		projectApp.createProject(project);
 
 	}
 
 	@When("the Employee deletes the Project")
 	public void the_employee_deletes_the_project() {
-		try {
-			projectApp.deleteProject(project);
-		} catch (Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
+		projectApp.deleteProject(project);
 	}
 
 	@Then("a Project with id {int} is not in the list of Projects")
@@ -107,8 +97,7 @@ public class ProjectSteps {
 
 	@Then("the error is thrown {string}")
 	public void the_error_is_thrown(String error) {
-		assertTrue(error.equals(errorMessage.getErrorMessage()));
-
+		assertTrue(error.equals(projectApp.getError()));
 	}
 
 }

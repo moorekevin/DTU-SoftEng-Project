@@ -3,36 +3,34 @@ package dtu.projectManagementApp;
 import java.util.ArrayList;
 import java.util.List;
 
-import dtu.dto.ProjectInfo;
-
 public class App {
 	private List<Employee> employeeRepository = new ArrayList<>();
 	private List<Project> projectRepository = new ArrayList<>();
-<<<<<<< HEAD
+	private String errorMessage;
 
-	public void createProject(Project project) throws Exception {
-		for (Project p : projectRepository) {
-			if (project.getId() == p.getId())
-				throw new Exception("Project already exists");
-=======
-	
 	public void createProject(Project project) {
 		for (Project p : projectRepository) {
 
-			try {
-				if (project.getId() == p.getId()) throw new Exception("Project already exists");
-			} catch (Exception e) {
-				e.printStackTrace();
+			if (project.getId() == p.getId()) {
+				errorMessage = "Project already exists";
+				return;
 			}
->>>>>>> a50ed11391b5b3f3f052b065170141d1bb9d1871
 		}
 		projectRepository.add(project);
 	}
 
-	public void deleteProject(Project project) throws Exception {
+	public String getError() {
+		return errorMessage;
+	}
+	
+	
+
+	public void deleteProject(Project project) {
 		for (Project p : projectRepository) {
-			if (project.getId() != p.getId())
-				throw new Exception("Project does not exist");
+			if (project.getId() != p.getId()) {
+				errorMessage = "Project does not exist";
+				return;
+			}
 		}
 		projectRepository.remove(project);
 	}
@@ -49,20 +47,18 @@ public class App {
 		employeeRepository.add(em);
 	}
 
-	public void assignEmployeeToProject(Project project, Employee pm, Employee em) throws Exception {
+	public void assignEmployeeToProject(Project project, Employee pm, Employee em) {
 
 		if (employeeRepository.contains(pm)) {
-<<<<<<< HEAD
 			if (employeeRepository.contains(em)) {
 				if (projectRepository.contains(project)) {
 					em.assignToProject(project);
 				} else
-					throw new Exception("Project does not exist");
+					errorMessage = "Project does not exist";
 			} else
-				throw new Exception("Employee does not exist");
-
+				errorMessage = "Employee does not exist";
 		} else
-			throw new Exception("Project Manager is not assigned to the Project");
+			errorMessage = "Project Manager is not assigned to the Project";
 
 	}
 
@@ -71,8 +67,6 @@ public class App {
 			em.setProjectManager(true);
 			project.assignProjectManager(em);
 
-=======
->>>>>>> a50ed11391b5b3f3f052b065170141d1bb9d1871
 		}
 
 	}
