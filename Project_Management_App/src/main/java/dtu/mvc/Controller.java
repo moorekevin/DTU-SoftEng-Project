@@ -2,62 +2,67 @@ package dtu.mvc;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
-
-interface Command {
-    void runCommand();
-}
 
 public class Controller {
-	private View view;
+	private UI ui;
 	private Model model;
-	private Scanner reader;
 
 	private boolean isRunning = true;
 
-	private Map<String, Command> commandList;
+	private Map<String, CommandInfo> commandList;
 
 	public Controller() {
-		view = new View();
+		setCommands();
+
+		ui = new UI(commandList);
 		model = new Model();
-		reader = new Scanner(System.in);
+
+		start();
 	}
 
 	public void start() {
-		setCommands();
 
-		view.start();
+		ui.start();
+
 		while (isRunning) {
-			runUserCommand(reader.nextLine());
+			runUserCommand(ui.getUserInput());
 		}
 	}
 
 	public void setCommands() {
-		commandList = new HashMap<String, Command>();
+		commandList = new HashMap<String, CommandInfo>();
 
-		// Setting all commands
-		commandList.put("/help", new Command() {
-            public void runCommand() { help(); };
-        });
-		// commandList.put("/createproject", "Create a new project with a designated name");
-		// commandList.put("/deleteproject", "Delete an already existing project");
+		commandList.put("/help", new CommandInfo("Print all commands available", 
+			new Command() { public void runCommand() {
+				ui.printCommandList();
+			};})
+		);
 
-		commandList.get("/help");
-	}
-	
-	private void help() {
-		System.out.println("help");
+		commandList.put("/createproject", new CommandInfo("Create a new project", 
+			new Command() { public void runCommand() {
+				createProject();
+			};})
+		);
+
+		commandList.put("/deleteproject", new CommandInfo("Delete an already existing project", 
+			new Command() { public void runCommand() {
+				ui.deleteProject();
+			};})
+		);
 	}
 
 	public void runUserCommand(String userInput) {
-		commandList.get(userInput);
-		
-		
-//		switch ("/help") {
-//        
-//		case (String) commandListArray[0]: // help
-//			System.out.println("ok");
-//			break;
-//		}
+		if (commandList.containsKey(userInput)) {
+			commandList.get(userInput).getCommand().runCommand();
+		} else {
+			ui.print("Unknown command. Type \"/help\" to get a list of all commands.");
+		}
+	}
+
+	// Commands
+	public void createProject() {
+		ui.print("What should the name of the project be?");
+		String nameOfProject = ui.getUserInput();
+		model.createProject(nameOfProject);
 	}
 }
