@@ -1,9 +1,13 @@
 package dtu.projectManagementApp;
 
+import static java.util.Calendar.WEEK_OF_YEAR;
+
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class App {
@@ -25,11 +29,42 @@ public class App {
 		projectRepository.add(projectCreated);
 		return projectCreated;
 	}
+	
+	public WorkActivity createWorkActivity(String name, int start, int end) {
+		
+
+		Week startWeek = new Week(start);
+		Week endWeek = new Week(end);
+		
+		
+		return new WorkActivity(name, startWeek, endWeek);
+	}
+	
 
 	public int makeProjectId() {
 		date = new Date();
 		localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
+/*		Calendar calendar = Calendar.getInstance();
+		calendar.setFirstDayOfWeek(firstDayOfWeek);
+		calendar.setMinimalDaysInFirstWeek(minimalDaysInFirstWeek);
+		calendar.set(year, month, day);*/
+//		Date example = new Date();
+//		example.setDate(26);
+//		example.setMonth(4);
+//		example.setYear(localDate.getYear());
+//		System.out.println(localDate.getYear() + "ew");
+//		Calendar c = new GregorianCalendar();
+//		//c.set(2021, 4, 26);
+//		c.setTime(example);
+//		//c.setTime(example);
+//		System.out.println(c.get(Calendar.DAY_OF_MONTH));
+//		System.out.println(c.get(Calendar.MONTH));
+//		System.out.println(c.get(Calendar.YEAR));
+//		System.out.println(c.get(Calendar.WEEK_OF_YEAR));
+		
+		
+		
+		
 		String projectIDString = "" + localDate.getYear();
 		projectIDString = projectIDString.substring(2, 4) + "" + projectNum / 1000 + "" + projectNum / 100 + ""
 				+ projectNum / 10 + "" + projectNum / 1;
@@ -127,11 +162,5 @@ public class App {
 		}
 
 		project.removeEmployeeFromProject(em);
-	}
-
-	public WorkActivity createWorkActivity(String name, int start, int end) {
-		Week startWeek = new Week(start);
-		Week endWeek = new Week(end);
-		return new WorkActivity(name, startWeek, endWeek);
 	}
 }
