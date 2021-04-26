@@ -132,5 +132,4 @@ public class App {
 		Week endWeek = new Week(end);
 		return new WorkActivity(name, startWeek, endWeek);
 	}
-
 }
