@@ -19,6 +19,9 @@ public class UI {
 		sortedCommandList.addAll(this.commandList.keySet()); // Sorts the commands
 
 		reader = new Scanner(System.in);
+		
+		System.out.println("Welcome to Project Management Application v1.0");
+		System.out.println(" TIP: If you ever want to exit a command type \"/exit\"");
 	}
 
 	public void print(String printingInfo) {
@@ -30,7 +33,7 @@ public class UI {
 	}
 
 	public void start() {
-		System.out.println("Welcome to Project Management Application\nType your commands:\n (For help type \"/help\")\n");
+		System.out.println("\nType your commands:\n (For help type \"/help\")");
 	}
 
 	public void printCommandList() {

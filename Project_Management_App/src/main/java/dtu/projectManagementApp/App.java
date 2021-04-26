@@ -63,10 +63,12 @@ public class App {
 
 	public void deleteProject(int id) {
 		Project p = findProject(id);
-		if (p != null)
+		if (p != null) {
 			projectRepository.remove(p);
-		else
+		} else {
 			errorMessage = "Project does not exist";
+//			throw new Exception(errorMessage);
+		}
 	}
 
 	public List<Project> getProjects() {
