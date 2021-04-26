@@ -16,6 +16,6 @@ Scenario: Remove Project Manager from a Project
 
 Scenario: Assign Project Manager to Project that already has Project Manager
 	Given a Project Manager with initials "AAAA" is assigned to a Project
-	And there is an Employee with initials "BBBB"
+	And  there is an Employee with initials "BBBB"
 	When the Employee assigns the Employee as the Project Manager to the Project
 	Then the error is thrown "Project already has a Project Manager"

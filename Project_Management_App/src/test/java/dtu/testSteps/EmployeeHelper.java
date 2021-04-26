@@ -2,6 +2,7 @@ package dtu.testSteps;
 
 import dtu.projectManagementApp.App;
 import dtu.projectManagementApp.Employee;
+import dtu.projectManagementApp.Project;
 
 public class EmployeeHelper {
     private App app;
@@ -13,17 +14,22 @@ public class EmployeeHelper {
 
     public Employee getEmployee() {
         if (employee == null) {
-            employee = exampleEmployee();
+            employee = createEmployee("AAAA");
         }
         return employee;
     }
 
-    public Employee exampleEmployee() {
-    	employee = new Employee("AAAA");
-    	return employee;
-    }
+	public Employee createEmployee(String name) {
+		app.addEmployee(name);
+		employee = app.findEmployee(name);
+        return employee;
+	}
 
-    public void setEmployee(String initials) {
-        employee = new Employee(initials);
+    public void makeEmployeeProjectManager() {
+        employee.setProjectManager(new Project("AAAA", 9));
+    }
+    
+    public void setEmployee(Employee em) {
+    	employee = em;
     }
 }

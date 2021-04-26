@@ -9,13 +9,21 @@ public class Project {
 	private List<Employee> assignedEmployees;
 	private List<Activity> activities;
 	private Employee projectManager;
-	private static int count;
 
 	public Project(String name, int id) {
 		this.name = name;
 		this.id = id;
 		assignedEmployees = new ArrayList<Employee>();
 		activities = new ArrayList<Activity>();
+		projectManager = null;
+	}
+	
+	public Employee getProjectManager() {
+		return projectManager;
+	}
+	
+	public void removeProjectManager() {
+		projectManager = null;
 	}
 	
 	public void assignEmployeeToProject(Employee em) {
@@ -26,25 +34,18 @@ public class Project {
 		assignedEmployees.remove(em);
 	}
 	
-	public void assignProjectManager(Employee pm) {
-		projectManager = pm;
-	}
 	
 	public List<Employee> getAssignedEmployees() {
 		return assignedEmployees;
 	}
-
-	public void setAssignedEmployees(List<Employee> assignedEmployees) {
-		this.assignedEmployees = assignedEmployees;
-	}
-
-	public Employee getProjectManger() {
-		return projectManager;
-	}
 	
-	public void removeProjectManger() {
-		projectManager = null;
+	public void assignProjectManager(Employee em) {
+		projectManager = em;
 	}
+
+/*	public void setAssignedEmployees(List<Employee> assignedEmployees) {
+		this.assignedEmployees = assignedEmployees;
+	}	*/
 
 	public String getName() {
 		return name;

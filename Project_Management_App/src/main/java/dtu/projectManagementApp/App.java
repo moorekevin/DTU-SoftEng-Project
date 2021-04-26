@@ -51,7 +51,6 @@ public class App {
 	public Employee findEmployee(String initials) {
 		for (Employee employee : employeeRepository) {
 			if (employee.getInitials().equals(initials)) {
-				errorMessage = "Employee already exists";
 				return employee;
 			}
 		}
@@ -98,60 +97,40 @@ public class App {
 			errorMessage = "Employee(s) do not exist";
 	}
 
-	public void assignProjectManager(int projectId, String initials) {
-		Employee employee = findEmployee(initials);
-		Project project = findProject(projectId);
-		if (employee != null && project != null) {
-			employee.setProjectManager(true);
-			project.assignProjectManager(employee);
+	public void assignProjectManager(Project project, Employee em) {
+		if (em != null && project != null) {
+			if (project.getProjectManager() == null) {
+				em.setProjectManager(project);
+				project.assignProjectManager(em);
+			} else {
+				errorMessage = "Project already has a Project Manager";
+			}
+		} else {
+			errorMessage = "Project or Employee does not exist";
 		}
+	}
 
+	public void removeProjectManager(Project project, Employee pm) {
+		if (pm != null && project != null) {
+			pm.removeProjectManager(project);
+			project.removeProjectManager();
+		}
 	}
 
 	public void removeEmployeeFromProject(Project project, Employee em) {
-		em.setProjectManager(false);
-		em.removeProject(project);
-		project.removeProjectManger();
-		project.removeEmployeeFromProject(em);
+		if (em.getAssignedProjects().contains(project)) {
+			em.removeProject(project);
+		} else {
+			errorMessage = "Project is not assigned to employee";
+		}
 
+		project.removeEmployeeFromProject(em);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	public WorkActivity createWorkActivity(String name, int start, int end) {
 		Week startWeek = new Week(start);
 		Week endWeek = new Week(end);
-		return new WorkActivity(name,startWeek,endWeek);
+		return new WorkActivity(name, startWeek, endWeek);
 	}
 
 }

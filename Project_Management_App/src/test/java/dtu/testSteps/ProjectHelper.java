@@ -13,18 +13,14 @@ public class ProjectHelper {
 
 	public Project getProject() {
 		if (project == null) {
-			project = exampleProject();
+			project = this.createProject("AAAA");
 		}
 		return project;
 	}
 
-	public Project exampleProject() {
-		project = new Project("AAAA", 0001);
+	public Project createProject(String name) {
+		project = app.createProject(name);
 		return project;
-	}
-
-	public void setProject(String name, int id) {
-		project = new Project(name, id);
 	}
 
 	public void setProject(Project project) {

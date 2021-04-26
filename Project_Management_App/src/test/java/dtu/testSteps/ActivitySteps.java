@@ -36,7 +36,7 @@ public class ActivitySteps {
 	
 	@Given("there is an Employee with initials {string} assigned to the project")
 	public void there_is_an_employee_with_initials_assigned_to_the_project(String string) {
-	    employeeHelper.setEmployee(string);
+//	    employeeHelper.setEmployee(string);
 	    employee = employeeHelper.getEmployee();
 	    
 	}

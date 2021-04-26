@@ -5,7 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import dtu.projectManagementApp.App;
-import dtu.projectManagementApp.Employee;
 import dtu.projectManagementApp.Project;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -13,33 +12,24 @@ import io.cucumber.java.en.When;
 
 public class ProjectSteps {
 	private App projectApp;
-	private Project project;
-	private ProjectHelper projectHelper;
-	private Employee employee;
-	private EmployeeHelper employeeHelper;
-	private ErrorMessage errorMessage;
+	private ProjectHelper ph;
 
-	public ProjectSteps(App projectApp, ProjectHelper projectHelper, EmployeeHelper employeeHelper,
-			ErrorMessage errorMessage) {
+	public ProjectSteps(App projectApp, ProjectHelper ph) {
 		this.projectApp = projectApp;
-		this.projectHelper = projectHelper;
-		this.employeeHelper = employeeHelper;
-		this.errorMessage = errorMessage;
+		this.ph = ph;
 	}
 
 	@When("the Employee creates a Project with name {string}")
 	public void the_employee_creates_a_project_with_name(String name) {
-		int size = projectApp.getProjects().size();
-		projectApp.createProject(name);
-		projectHelper.setProject(name, projectApp.getProjects().get(size).getId());
-		project = projectHelper.getProject();
+		ph.createProject(name);
 	}
 
 	@Then("the Project is assigned to the list of Projects")
 	public void the_project_is_assigned_to_the_list_of_projects() {
 		boolean projectAssigned = false;
+		Project checkProject = ph.getProject();
 		for (Project proj: projectApp.getProjects()) {
-			if (proj.getId() == project.getId() && proj.getName() == project.getName()) {
+			if (proj.getId() == checkProject.getId() && proj.getName() == checkProject.getName()) {
 				projectAssigned = true;
 			}
 		}
@@ -54,39 +44,35 @@ public class ProjectSteps {
 
 	@Then("the Project has not a Project Manager")
 	public void the_project_has_not_a_project_manager() {
-		assertEquals(project.getProjectManger(), null);
+		assertEquals(ph.getProject().getProjectManager(), null);
 	}
 
 	@Given("there is a Project with id {int}")
 	public void there_is_a_project_with_id(Integer id) {
-		projectHelper.setProject("AAAA", id);
-		project = projectHelper.getProject();
-		projectApp.getProjects().add(project);
-
+		ph.setProject(new Project("AAAA", id));
+		projectApp.getProjects().add(ph.getProject());
 	}
 
 	@When("the Employee creates a new Project with id {int}")
 	public void the_employee_creates_a_new_project_with_id(Integer id) {
-		project = new Project("AAAA", id);
-		projectApp.getProjects().add(project);
+		projectApp.getProjects().add(new Project("AAAA", id));
 
 	}
 
 	@When("the Employee deletes the Project")
 	public void the_employee_deletes_the_project() {
-		projectApp.deleteProject(project.getId());
+		projectApp.deleteProject(ph.getProject().getId());
 	}
 
 	@Then("a Project with id {int} is not in the list of Projects")
 	public void a_project_with_id_is_not_in_the_list_of_projects(Integer id) {
-		assertFalse(projectApp.getProjects().contains(project));
+		assertFalse(projectApp.getProjects().contains(ph.getProject()));
 	}
 
 	@Given("there is not a Project with id {int} in the list of Projects")
 	public void there_is_not_a_project_with_id_in_the_list_of_projects(Integer id) {
-		projectHelper.setProject("AAAA", id);
-		project = projectHelper.getProject();
-		assertFalse(projectApp.getProjects().contains(projectHelper.getProject()));
+		ph.setProject(new Project("AAAA", id));
+		assertFalse(projectApp.getProjects().contains(ph.getProject()));
 	}
 
 	@Then("the error is thrown {string}")

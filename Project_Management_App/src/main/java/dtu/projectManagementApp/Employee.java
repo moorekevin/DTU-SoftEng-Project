@@ -5,40 +5,42 @@ import java.util.List;
 
 public class Employee {
 	private String initials;
-	private boolean isProjectManager;
 	private double registeredHoursToday;
 	private List<Project> assignedProjects;
-	
+	private List<Project> managingProjects;
+
 	public Employee(String initials) {
 		this.initials = initials;
-		this.isProjectManager = false;
 		assignedProjects = new ArrayList<>();
+		managingProjects = new ArrayList<>();
 	}
 
 	public boolean isProjectManger() {
-		return isProjectManager;
+		return 0 < managingProjects.size();
+	}
+
+	public void setProjectManager(Project project) {
+		managingProjects.add(project);
 	}
 	
-	public void setProjectManager(boolean b) {
-		isProjectManager = b;
+	public void removeProjectManager(Project project) {
+		managingProjects.remove(project);
 	}
-	
+
 	public void assignToProject(Project project) {
 		assignedProjects.add(project);
 	}
-	
+
 	public void removeProject(Project project) {
 		assignedProjects.remove(project);
 	}
-	
-	public List<Project> getAssignedProjects(){
+
+	public List<Project> getAssignedProjects() {
 		return assignedProjects;
 	}
-	
+
 	public String getInitials() {
 		return initials;
 	}
-	
-	
 
 }

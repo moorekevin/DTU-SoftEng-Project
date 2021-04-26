@@ -36,8 +36,9 @@ public class UI {
 	public void printCommandList() {
 		System.out.println("\n-------------- List of Commands --------------");
 		for (String command : sortedCommandList) { // Prints all available commands
-			System.out.format("%-18s%-18s%n", "\"" + command + "\"", " - " + commandList.get(command).getInfo());
+			System.out.format("%-23s%-18s%n", "\"" + command + "\"", " - " + commandList.get(command).getInfo());
 		}
+		System.out.println();
 	}
 
 	public void printProjects(List<Project> projects) {
