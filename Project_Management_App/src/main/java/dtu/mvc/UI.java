@@ -43,7 +43,6 @@ public class UI {
 		for (String command : sortedCommandList) { // Prints all available commands
 			System.out.format("%-23s%-18s%n", "\"" + command + "\"", " - " + commandList.get(command).getInfo());
 		}
-		System.out.println();
 	}
 
 	public void printProjects(List<Project> projects) {

@@ -105,8 +105,15 @@ public class Controller {
 		if (userInput != null) {
 			try {
 				int projectID = Integer.parseInt(userInput);
-				app.deleteProject(projectID);
-				ui.print("\nProject deleted!");
+				
+				try {
+					app.deleteProject(projectID);
+					ui.print("\nProject deleted!");
+				} catch (Exception e) {
+					ui.print("\n ERROR: " + e.getMessage());
+					deleteProject();
+				}
+				
 			} catch (NumberFormatException e) {
 				ui.print("\n ERROR: Please enter numbers as Project ID");
 				deleteProject();
