@@ -26,7 +26,9 @@ public class UI {
 	}
 
 	public String getUserInput() {
-		return reader.nextLine();
+		String input = reader.nextLine();
+		input.trim(); // Removes spaces in users input
+		return input;
 	}
 
 	public void start() {
