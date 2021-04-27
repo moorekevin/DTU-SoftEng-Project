@@ -12,14 +12,14 @@ public class EmployeeHelper {
         this.app = app;
     }
 
-    public Employee getEmployee() {
+    public Employee getEmployee() throws Exception {
         if (employee == null) {
             employee = createEmployee("AAAA");
         }
         return employee;
     }
 
-	public Employee createEmployee(String name) {
+	public Employee createEmployee(String name) throws Exception {
 		app.addEmployee(name);
 		employee = app.findEmployee(name);
         return employee;

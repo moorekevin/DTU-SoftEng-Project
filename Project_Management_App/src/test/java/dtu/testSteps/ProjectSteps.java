@@ -13,10 +13,12 @@ import io.cucumber.java.en.When;
 public class ProjectSteps {
 	private App projectApp;
 	private ProjectHelper ph;
+	private ErrorMessage errorMessage;
 
-	public ProjectSteps(App projectApp, ProjectHelper ph) {
+	public ProjectSteps(App projectApp, ProjectHelper ph, ErrorMessage errorMessage) {
 		this.projectApp = projectApp;
 		this.ph = ph;
+		this.errorMessage = errorMessage;
 	}
 
 	@When("the Employee creates a Project with name {string}")
@@ -61,7 +63,11 @@ public class ProjectSteps {
 
 	@When("the Employee deletes the Project")
 	public void the_employee_deletes_the_project() {
-		projectApp.deleteProject(ph.getProject().getId());
+		try {
+			projectApp.deleteProject(ph.getProject().getId());
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
 	}
 
 	@Then("a Project with id {int} is not in the list of Projects")
@@ -77,7 +83,7 @@ public class ProjectSteps {
 
 	@Then("the error is thrown {string}")
 	public void the_error_is_thrown(String error) {
-		assertTrue(error.equals(projectApp.getError()));
+		assertTrue(error.equals(errorMessage.getErrorMessage()));
 	}
 
 }

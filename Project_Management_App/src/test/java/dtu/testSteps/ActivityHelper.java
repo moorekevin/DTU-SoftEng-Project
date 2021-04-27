@@ -22,17 +22,22 @@ public class ActivityHelper {
 	}
 
 	public WorkActivity exampleWorkActivity() {
-		Week startWeek = new Week(0120);
-		Week endWeek = new Week(0320);
-		workActivity = new WorkActivity("AAAA", startWeek, endWeek);
+//		Week startWeek = new Week(0120);
+//		Week endWeek = new Week(0320);
+//		workActivity = new WorkActivity("AAAA", startWeek, endWeek);
 		return workActivity;
 	}
 
-	public void setWorkActivity(String name, int start, int end) {
+	public void setWorkActivity(String name, String start, String end) {
 		Week startWeek = new Week(start);
 		Week endWeek = new Week(end);
 		workActivity = new WorkActivity(name, startWeek, endWeek);
 	}
+	
+//	public WorkActivity createWorkActivity(String name) {
+//		project = app.createProject(name);
+//		return project;
+//	}
 	
 	 
 }
