@@ -56,24 +56,28 @@ public class Controller {
 	}
 
 	private void deleteProject() {
-		ui.print("\nWhat is the project's ID?");
+		boolean tryAgain = true;
+		while (tryAgain) {
+			tryAgain = false;
+			ui.print("\nWhat is the project's ID?");
 
-		String userInput = getInput();
-		if (userInput != null) {
-			try {
-				int projectID = Integer.parseInt(userInput);
-
+			String userInput = getInput();
+			if (userInput != null) {
 				try {
-					app.deleteProject(projectID);
-					ui.print("\nSUCCESS: Project deleted!");
-				} catch (Exception e) {
-					ui.print("\n ERROR: " + e.getMessage());
-					deleteProject();
-				}
+					int projectID = Integer.parseInt(userInput);
 
-			} catch (NumberFormatException e) {
-				ui.print("\n ERROR: Please enter numbers as Project ID");
-				deleteProject();
+					try {
+						app.deleteProject(projectID);
+						ui.print("\nSUCCESS: Project \"" + projectID + "\" deleted!");
+					} catch (Exception e) {
+						ui.print("ERROR: " + e.getMessage() + "\n");
+						tryAgain = true;
+					}
+
+				} catch (NumberFormatException e) {
+					ui.print("ERROR: Please enter numbers as Project ID\n");
+					tryAgain = true;
+				}
 			}
 		}
 	}
@@ -88,6 +92,7 @@ public class Controller {
 		String initials = getInput();
 		if (initials != null) {
 			try {
+				// TODO don't give success msg if employee already exists
 				app.addEmployee(initials);
 				ui.print("\nSUCCESS: Employee \"" + initials + "\" created!");
 			} catch (Exception e) {
@@ -97,32 +102,46 @@ public class Controller {
 	}
 
 	private void viewEmployees() {
-		ui.print("\nPlease input ID for which project you want to view all employees for.\n TIP: To view all employees for the company just press enter");
+		boolean tryAgain = true;
+		while (tryAgain) {
+			tryAgain = false;
+			ui.print(
+					"\nPlease input ID for which project you want to view all employees for.\n TIP: To view all employees for the company just press enter");
 
-		String id = getInput();
-		if (id.equals("")) {
-			ui.printEmployees(app.getEmployees());
-		} else {
-			try {
-				ui.printEmployees(app.findProject(Integer.parseInt(id)).getAssignedEmployees());
-			} catch (NumberFormatException e) {
-				ui.print("ERROR: Please enter numbers as Project ID\n");
-				viewEmployees();
-			} catch (NullPointerException e) {
-				ui.print("ERROR: Please enter a Project ID that exists\n");
-				viewEmployees();
+			String id = getInput();
+			if (id != null) {
+				if (id.equals("")) {
+					ui.printEmployees(app.getEmployees());
+				} else {
+					try {
+						ui.printEmployees(app.findProject(Integer.parseInt(id)).getAssignedEmployees());
+					} catch (NumberFormatException e) {
+						ui.print("ERROR: Please enter numbers as Project ID\n");
+						tryAgain = true;
+					} catch (NullPointerException e) {
+						ui.print("ERROR: Project doesn't exist\n");
+						tryAgain = true;
+					}
+				}
 			}
 		}
 	}
 
+	// TODO app receives project and employees that exist but then checks for it anyways
 	private void assignEmployee() {
-		ui.print("\nWhat are the initials of the employee which should be assigned?");
-
-		String initials = getInput();
-		if (initials != null) {
-			Employee em = app.findEmployee(initials);
-			
-			
+		Employee em = requestEmployee("\nWhat are the initials of the employee which should be assigned?");
+		if (em != null) {
+			Employee pm = requestEmployee("\nWhat are the initials of the project manager who is assigning?");
+			if (pm != null) {
+				Project project = requestProject();
+				if (project != null) {
+					try {
+						app.assignEmployeeToProject(project, pm, em);
+					} catch (Exception e) {
+						ui.print(e.getMessage());
+					}
+				}
+			}
 		}
 	}
 
@@ -133,6 +152,54 @@ public class Controller {
 	}
 
 	private void registerTime() {
+	}
+
+	private Employee requestEmployee(String question) {
+		boolean tryAgain = true;
+		while (tryAgain) {
+			tryAgain = false;
+			ui.print(question);
+
+			String initials = getInput();
+			if (initials != null) {
+				Employee em = app.findEmployee(initials);
+				if (em != null) {
+					return em;
+				} else {
+					ui.print("ERROR: Employee doesn't exits\n");
+					tryAgain = true;
+				}
+			}
+		}
+		return null;
+	}
+
+	private Project requestProject() {
+		boolean tryAgain = true;
+		while (tryAgain) {
+			tryAgain = false;
+			ui.print("\nWhat is the project's ID?");
+
+			String userInput = getInput();
+			if (userInput != null) {
+				try {
+					int projectID = Integer.parseInt(userInput);
+
+					Project p = app.findProject(projectID);
+					if (p != null) {
+						return p;
+					} else {
+						ui.print("ERROR: Project doesn't exist!");
+						tryAgain = true;
+					}
+
+				} catch (NumberFormatException e) {
+					ui.print("ERROR: Please enter numbers as Project ID\n");
+					tryAgain = true;
+				}
+			}
+		}
+		return null;
 	}
 
 	public void setCommands() {
