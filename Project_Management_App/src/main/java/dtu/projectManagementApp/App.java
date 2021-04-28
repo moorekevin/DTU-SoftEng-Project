@@ -86,6 +86,10 @@ public class App {
 			throw new Exception("Employee is not project manager");
 		if (!projectRepository.contains(project))
 			throw new Exception("Project does not exist");
+		if (project.getProjectManager() != pm) {
+			throw new Exception("Project Manager is not assigned to the Project");
+		}
+
 		project.assignEmployeeToProject(em);
 
 	}
@@ -177,8 +181,8 @@ public class App {
 			throw new Exception("Project does not have the Activity");
 		
 //		//Skal virke
-		if (!project.getProjectManager().equals(pm))
-			throw new Exception("Project Manager is not Project Manager to Project");
+		if (project.getProjectManager() != pm)
+			throw new Exception("Project Manager is not assigned to the Project");
 		
 		//Vigtig
 		if(!project.getAssignedEmployees().contains(em))
