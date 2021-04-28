@@ -41,8 +41,8 @@ public class ActivitySteps {
 		try {
 			String start, end;
 			WorkActivity temp = activityHelper.createWorkActivity(name);
-			start = temp.getStartWeek().getWeekYear();
-			end = temp.getEndWeek().getWeekYear();
+			start = temp.getStartWeek().getYearWeek();
+			end = temp.getEndWeek().getYearWeek();
 			activity = projectApp.createWorkActivity(name, start, end);
 			projectApp.addActivityToProject(projectHelper.getProject(), activity);
 			

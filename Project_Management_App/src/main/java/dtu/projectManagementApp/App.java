@@ -31,8 +31,8 @@ public class App {
 		date = new Date();
 		localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		String projectIDString = "" + localDate.getYear();
-		projectIDString = projectIDString.substring(2, 4) + "" + projectNum / 1000 + "" + projectNum / 100 + ""
-				+ projectNum / 10 + "" + projectNum / 1;
+		projectIDString = projectIDString.substring(2, 4) + "" + projectNum / 1000 + "" + projectNum % 1000 / 100 + ""
+				+ projectNum % 100 / 10 + "" + projectNum % 10;
 		int projectID = Integer.parseInt(projectIDString);
 
 		projectNum++;
@@ -123,8 +123,8 @@ public class App {
 	}
 
 	public WorkActivity createWorkActivity(String name, String start, String end) throws Exception {
-		isWeekYearValid(start);
-		isWeekYearValid(end);
+		isYearWeekValid(start);
+		isYearWeekValid(end);
 		
 		Week startWeek = new Week(start);
 		Week endWeek = new Week(end);
@@ -132,21 +132,21 @@ public class App {
 		
 	}
 	
-	public void isWeekYearValid(String weekYear) throws Exception {
+	public void isYearWeekValid(String yearWeek) throws Exception {
 
 		DateServer date = new DateServer();
 		int actualYear = date.getYear() % 100;
 		int actualWeek = date.getWeek();
 		
 		// first two digits
-		char temp = weekYear.charAt(0);
-		int week = temp == 0 ? 
-			Integer.parseInt((weekYear).substring(1, 2)): 
-			Integer.parseInt((weekYear).substring(0,2));
+		int year = Integer.parseInt((yearWeek).substring(0,2));
 		
 		// last two digits
-		int year = Integer.parseInt((weekYear).substring(2,4));
-		
+		char temp = yearWeek.charAt(0);
+		int week = temp == 0 ?
+			Integer.parseInt((yearWeek).substring(3, 4)): 
+			Integer.parseInt((yearWeek).substring(2, 4));
+			
 		if (year < actualYear)
 			throw new Exception("The year cannot be set to before " + actualYear);
 
@@ -154,11 +154,7 @@ public class App {
 			throw new Exception("The week cannot be set to before " + actualWeek);
 		
 		if ( week > 52) 
-			throw new Exception("Stop så");
-		
-//		//TEST
-//		if (week < 10) System.out.println("0" + week + year); 
-//		else System.out.println(week + year);
+			throw new Exception("The week cannot be set to: " + week);
 
 	}
 	

@@ -28,28 +28,23 @@ public class ActivityHelper {
 	}
 	
 	
-	public String getCurrentWeekYear() {
+	public String getCurrentYearWeek() {
 		DateServer date = new DateServer();
-		if (date.getWeek() < 10) {
-			return "0" + date.getWeek() + (date.getYear() % 100);
-		}
-		return "" + date.getWeek() + (date.getYear() % 100);
+		return (date.getYear() % 100) + "" + date.getWeek() / 10 + "" + date.getWeek() % 10;
 	}
 	
-	public String addToWeekYear(int weekPlus, int yearPlus) {
-		String weekYear = getCurrentWeekYear();
-		int week = Integer.parseInt((weekYear).substring(0,2));
-		int year = Integer.parseInt((weekYear).substring(2,4));
+	public String addToYearWeek(int yearPlus, int weekPlus) {
+		String yearWeek = getCurrentYearWeek();
+		int week = Integer.parseInt((yearWeek).substring(2, 4));
+		int year = Integer.parseInt((yearWeek).substring(0, 2));
 		
-		if(week+weekPlus < 10) {
-			return "0" + (week+weekPlus) + (year+yearPlus);
-		}
-		return "" + (week+weekPlus) + (year+yearPlus); 
+		return (year+yearPlus) % 100 + "" + (week+weekPlus) / 10 + "" + (week+weekPlus) % 10;
 	}
 	
+
 	public WorkActivity createWorkActivity(String name) throws Exception {
-		String startWeek = getCurrentWeekYear();
-		String endWeek = addToWeekYear(5,0);
+		String startWeek = getCurrentYearWeek();
+		String endWeek = addToYearWeek(1, 0);
 		workActivity = app.createWorkActivity(name, startWeek, endWeek);
 		return workActivity;
 	}
