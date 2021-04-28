@@ -178,7 +178,7 @@ public class App {
 		
 //		//Skal virke
 		if (!project.getProjectManager().equals(pm))
-			throw new Exception("Project Manager not assigned to Project");
+			throw new Exception("Project Manager is not Project Manager to Project");
 		
 		//Vigtig
 		if(!project.getAssignedEmployees().contains(em))

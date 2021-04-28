@@ -43,8 +43,12 @@ public class Project {
 		return activities;
 	}
 	
-	public void assignProjectManager(Employee em) {
-		projectManager = em;
+	public void assignProjectManager(Employee em) throws Exception {
+		if (projectManager == null) {
+			projectManager = em;
+		} else {
+			throw new Exception("Project Manager already exists for project");
+		}
 	}
 
 /*	public void setAssignedEmployees(List<Employee> assignedEmployees) {

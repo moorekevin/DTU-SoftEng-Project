@@ -30,8 +30,8 @@ public class EmployeeSteps {
 		em = eh.createEmployee(name);
 	}
 
-	@Given("a Project Manager with initials {string} is assigned to a Project")
-	public void a_project_manager_with_initials_is_assigned_to_a_project(String name) throws Exception {
+	@Given("a Project Manager with initials {string} is Project Manager to a Project")
+	public void a_project_manager_with_initials_is_project_manager_to_a_project(String name) throws Exception {
 		pm = eh.createAdditionalEmployee(name);
 
 		try {
@@ -64,8 +64,8 @@ public class EmployeeSteps {
 		assertTrue(projectApp.findEmployee(initials) == null);
 	}
 
-	@Given("a Project Manager with initials {string} is not assigned to the Project")
-	public void a_project_manager_with_initials_is_not_assigned_to_the_project(String initials) throws Exception {
+	@Given("a Project Manager with initials {string} is not Project Manager to the Project")
+	public void a_project_manager_with_initials_is_not_project_manager_to_the_project(String initials) throws Exception {
 		eh.createAdditionalEmployee(initials);
 		eh.makeEmployeeProjectManager(eh.getAdditionalEmployee());
 		pm = eh.getAdditionalEmployee();
