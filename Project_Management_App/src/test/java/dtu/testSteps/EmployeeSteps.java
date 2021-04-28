@@ -14,6 +14,7 @@ public class EmployeeSteps {
 	private ProjectHelper ph;
 	private EmployeeHelper eh;
 	private Employee pm;
+	private Employee em;
 	private ErrorMessage errorMessage;
 
 	public EmployeeSteps(App projectApp, ProjectHelper ph, EmployeeHelper eh, ErrorMessage errorMessage) {
@@ -26,12 +27,12 @@ public class EmployeeSteps {
 
 	@Given("there is an Employee with initials {string}")
 	public void there_is_an_employee_with_initials(String name) throws Exception {
-		eh.createEmployee(name);
+		em = eh.createEmployee(name);
 	}
 
 	@Given("a Project Manager with initials {string} is assigned to a Project")
 	public void a_project_manager_with_initials_is_assigned_to_a_project(String name) throws Exception {
-		pm = eh.createEmployee(name);
+		pm = eh.createAdditionalEmployee(name);
 
 		try {
 			projectApp.assignProjectManager(ph.getProject(), pm);
@@ -46,7 +47,7 @@ public class EmployeeSteps {
 	@When("the Project Manager assigns the Employee to the Project")
 	public void the_project_manager_assigns_the_employee_to_the_project() {
 		try {
-			projectApp.assignEmployeeToProject(ph.getProject(), pm, eh.getEmployee());
+			projectApp.assignEmployeeToProject(ph.getProject(), pm, em);
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -59,15 +60,15 @@ public class EmployeeSteps {
 
 	@Given("there is not an Employee with initials {string}")
 	public void there_is_not_an_employee_with_initials(String initials) {
-		eh.setEmployee(new Employee(initials));
+		em = eh.createNonExistingEmployee(initials);
 		assertTrue(projectApp.findEmployee(initials) == null);
 	}
 
 	@Given("a Project Manager with initials {string} is not assigned to the Project")
 	public void a_project_manager_with_initials_is_not_assigned_to_the_project(String initials) throws Exception {
-		eh.createEmployee(initials);
-		eh.makeEmployeeProjectManager();
-		pm = eh.getEmployee();
+		eh.createAdditionalEmployee(initials);
+		eh.makeEmployeeProjectManager(eh.getAdditionalEmployee());
+		pm = eh.getAdditionalEmployee();
 		assertFalse(pm.getAssignedProjects().contains(ph.getProject()));
 	}
 
@@ -87,7 +88,6 @@ public class EmployeeSteps {
 			projectApp.assignProjectManager(ph.getProject(), eh.getEmployee());
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
-			;
 		}
 	}
 

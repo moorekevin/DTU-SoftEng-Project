@@ -10,5 +10,9 @@ public class Week {
 	public Week(String weekYear) {
 		this.weekYear = weekYear;
 	}
+	
+	public String getWeekYear() {
+		return weekYear;
+	}
 
 }

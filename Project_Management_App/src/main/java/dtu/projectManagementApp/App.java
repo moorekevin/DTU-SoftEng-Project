@@ -30,34 +30,6 @@ public class App {
 	public int makeProjectId() {
 		date = new Date();
 		localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-//		Calendar calendar = Calendar.getInstance();
-//		// calendar.setFirstDayOfWeek(firstDayOfWeek);
-//		// calendar.setMinimalDaysInFirstWeek(minimalDaysInFirstWeek);
-//		// calendar.set(year, month, day);
-//		
-//		Date example = new Date();
-//		// example.setDate(localDate.getDayOfMonth());
-//		example.setMonth(localDate.getMonthValue());
-//		// example.setYear(localDate.getYear());
-//		//System.out.println(localDate.getYear() + "ew");
-//		Calendar c = new GregorianCalendar();
-//		//c.set(2021, 4, 26);
-//		c.setTime(example);
-//		//c.setTime(example);
-//		System.out.println(localDate.getMonth());
-//		System.out.println("day of month: " + c.get(Calendar.DAY_OF_MONTH));
-//		System.out.println("month: " + c.get(Calendar.MONTH));
-//		System.out.println("year: " + c.get(Calendar.YEAR));
-//		System.out.println("week of year: " + c.get(Calendar.WEEK_OF_YEAR));
-//		c.setTime(date);
-//		System.out.println("month with new Date: " + c.get(Calendar.MONTH));
-//		System.out.println("week of year with new Date: " + c.get(Calendar.WEEK_OF_YEAR));
-//		
-//		calendar.setTime(date);
-//		System.out.println("month with new Calendar: " + calendar.get(Calendar.MONTH));
-//		System.out.println("week of year with new Calendar: " + calendar.get(Calendar.WEEK_OF_YEAR));
-
 		String projectIDString = "" + localDate.getYear();
 		projectIDString = projectIDString.substring(2, 4) + "" + projectNum / 1000 + "" + projectNum / 100 + ""
 				+ projectNum / 10 + "" + projectNum / 1;
@@ -129,6 +101,7 @@ public class App {
 	}
 
 	public void removeProjectManager(Project project, Employee pm) throws Exception {
+		
 		if (pm == null || project == null)
 			throw new Exception("Project or Project Manager does not exist");
 		pm.removeProjectManager(project);
@@ -137,7 +110,7 @@ public class App {
 	}
 
 	public void removeEmployeeFromProject(Project project, Employee em) throws Exception {
-
+		
 		if (!em.getAssignedProjects().contains(project))
 			throw new Exception("Project is not assigned to employee");
 		em.removeProject(project);
@@ -146,49 +119,16 @@ public class App {
 	}
 
 	public WorkActivity createWorkActivity(String name, String start, String end) throws Exception {
+		isWeekYearValid(start);
+		isWeekYearValid(end);
 		
-		if (isWeekYearValid2(start) && isWeekYearValid2(end)) {
-			Week startWeek = new Week(start);
-			Week endWeek = new Week(end);
-			return new WorkActivity(name, startWeek, endWeek);
-		}
-		return null;
+		Week startWeek = new Week(start);
+		Week endWeek = new Week(end);
+		return new WorkActivity(name, startWeek, endWeek);
+		
 	}
-
-	// IDK MAN LEADING ZERO ER FORVIRRENDE, PRØVER MED STRING
-	public boolean isWeekYearValid(int weekYear) throws Exception {
-
-		DateServer date = new DateServer();
-		int test = weekYear;
-
-		System.out.println((test));
-		// first two digits
-		int temp = ("" + weekYear).length();
-		int week = temp < 4 ? Integer.parseInt(("" + weekYear).substring(0, 1))
-				: Integer.parseInt(("" + weekYear).substring(0, 2));
-//		int week = Integer.parseInt((""+weekYear).substring(0, 2));
-		// last two digits
-		int year = week < 10 ? weekYear % 10 : weekYear % 100;
-
-		int actualYear = date.getYear() % 100;
-		int actualWeek = date.getWeek();
-		if (week < 10)
-			System.out.println("0" + week);
-		else
-			System.out.println(week);
-
-		if (year < actualYear)
-			throw new Exception("The year cannot be set to before " + actualYear);
-
-		if (year == actualYear && week < actualWeek)
-			throw new Exception("The week cannot be set to before " + actualWeek);
-
-		return true;
-
-	}
-
-	//OKAY DET VIRKER MED STRING
-	public boolean isWeekYearValid2(String weekYear) throws Exception {
+	
+	public void isWeekYearValid(String weekYear) throws Exception {
 
 		DateServer date = new DateServer();
 		int actualYear = date.getYear() % 100;
@@ -209,12 +149,42 @@ public class App {
 		if (year == actualYear && week < actualWeek)
 			throw new Exception("The week cannot be set to before " + actualWeek);
 		
-		//TEST
-		if (week < 10) System.out.println("0" + week + year); 
-		else System.out.println(week + year);
-
-		return true;
+		if ( week > 52) 
+			throw new Exception("Stop så");
+		
+//		//TEST
+//		if (week < 10) System.out.println("0" + week + year); 
+//		else System.out.println(week + year);
 
 	}
+	
+	public void addActivityToProject(Project project, WorkActivity workActivity) {
+		project.addActivity(workActivity);
+	}
+	
+	public void assignEmployeeToActivity(Project project, WorkActivity workActivity, Employee pm, Employee em) throws Exception {
+		
+		//Vigtig
+		if (!employeeRepository.contains(pm) || !employeeRepository.contains(em))
+			throw new Exception("Employee(s) do not exist");
+		
+		if (!pm.isProjectManger())
+			throw new Exception("Employee is not project manager");
+		
+		if (!projectRepository.contains(project))
+			throw new Exception("Project does not exist");
+		if(!project.getActivities().contains(workActivity))
+			throw new Exception("Project does not have the Activity");
+		
+//		//Skal virke
+		if (!project.getProjectManager().equals(pm))
+			throw new Exception("Project Manager not assigned to Project");
+		
+		//Vigtig
+		if(!project.getAssignedEmployees().contains(em))
+			throw new Exception("Employee is not assigned to the Project");
+		
+		workActivity.addEmployee(em);
 
+	}
 }

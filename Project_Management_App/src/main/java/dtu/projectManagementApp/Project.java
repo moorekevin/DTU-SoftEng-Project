@@ -39,6 +39,10 @@ public class Project {
 		return assignedEmployees;
 	}
 	
+	public List<Activity> getActivities() {
+		return activities;
+	}
+	
 	public void assignProjectManager(Employee em) {
 		projectManager = em;
 	}

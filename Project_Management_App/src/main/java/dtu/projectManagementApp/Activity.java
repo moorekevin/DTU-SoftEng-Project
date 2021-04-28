@@ -11,4 +11,12 @@ public abstract class Activity {
 		this.endWeek = endWeek;
 	}
 	
+	public Week getStartWeek() {
+		return startWeek;
+	}
+	
+	public Week getEndWeek() {
+		return endWeek;
+	}
+	
 }

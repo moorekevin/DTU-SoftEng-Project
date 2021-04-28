@@ -83,7 +83,9 @@ public class ProjectSteps {
 
 	@Then("the error is thrown {string}")
 	public void the_error_is_thrown(String error) {
+
 		assertTrue(error.equals(errorMessage.getErrorMessage()));
+		
 	}
 
 }
