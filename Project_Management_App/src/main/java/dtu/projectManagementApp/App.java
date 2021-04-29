@@ -163,7 +163,7 @@ public class App {
 	private void validateYearWeeks(String start, String end) throws Exception {
 		isYearWeekValid(start);
 		isYearWeekValid(end);
-		if (Integer.parseInt(start) >= Integer.parseInt(end))
+		if (Integer.parseInt(start) > Integer.parseInt(end))
 			throw new Exception("ERROR: Start week cannot be larger than end week");
 	}
 	

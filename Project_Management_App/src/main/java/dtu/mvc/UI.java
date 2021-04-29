@@ -5,8 +5,10 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeSet;
 
+import dtu.projectManagementApp.Activity;
 import dtu.projectManagementApp.Employee;
 import dtu.projectManagementApp.Project;
+import dtu.projectManagementApp.WorkActivity;
 
 public class UI {
 	TreeSet<String> sortedCommandList;
@@ -68,6 +70,19 @@ public class UI {
 			System.out.println("-------");
 			for (int i = 0; i < employees.size(); i++) {
 				System.out.format("%-4s%-10s%n", " " + (i + 1), " " + employees.get(i).getInitials());
+			}
+		}
+	}
+	
+	public void printActivities(List<WorkActivity> activities) {
+		if (activities.size() == 0)
+			System.out.println("\nThere are no activities currently");
+		else {
+			System.out.println("\nThere exist " + activities.size() + " activity(ies):");
+			System.out.format("%-12s%-6s%-6s%n", "  Name", " Start", " End");
+			System.out.println("  -----------------------------------");
+			for (Activity act: activities) {
+				System.out.format("%-12s%-6s%-6s%n", "  " + act.getName(), " " + act.getStartWeek().getYearWeek(), " " + act.getEndWeek().getYearWeek());
 			}
 		}
 	}

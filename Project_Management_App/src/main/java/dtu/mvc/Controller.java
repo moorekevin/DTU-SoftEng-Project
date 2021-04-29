@@ -21,7 +21,7 @@ public class Controller {
 
 		createDataToTest();
 	}
-	
+
 	// Is not part of final product
 	// Should be deleted once done testing GUI
 	private void createDataToTest() {
@@ -72,34 +72,14 @@ public class Controller {
 	}
 
 	private void deleteProject() {
-		boolean tryAgain = true;
-		while (tryAgain) {
-			tryAgain = false;
-			ui.print("\nWhat is the project's ID?");
-
-			String userInput = getInput();
-			if (userInput != null) {
-				try {
-					int projectID = Integer.parseInt(userInput);
-
-					try {
-						app.deleteProject(projectID);
-						ui.print("\nSUCCESS: Project \"" + projectID + "\" deleted!");
-					} catch (Exception e) {
-						ui.print("ERROR: " + e.getMessage() + "\n");
-						tryAgain = true;
-					}
-
-				} catch (NumberFormatException e) {
-					ui.print("ERROR: Please enter numbers as Project ID\n");
-					tryAgain = true;
-				}
+		Project project = requestProject("\nWhat is the project's ID?");
+		if (project != null) {
+			try {
+				app.deleteProject(project.getId());
+			} catch (Exception e) {
+				ui.print(e.getMessage());
 			}
 		}
-	}
-
-	private void viewAllProjects() {
-		ui.printProjects(app.getProjects());
 	}
 
 	private void addEmployee() {
@@ -116,7 +96,75 @@ public class Controller {
 		}
 	}
 
+	private void assignEmployee() {
+		Employee pm = requestEmployee("\nWhat are the initials of the project manager who is assigning?");
+		if (pm != null) { // Continue only if user didn't type /exit
+			Employee em = requestEmployee("\nWhat are the initials of the employee who should be assigned?");
+			if (em != null) {
+				Project project = requestProject("\nWhat is the ID of the project the employee should be assigned to?");
+				try {
+					app.assignEmployeeToProject(project, pm, em);
+					System.out.println("\nSUCCESS: Employee assigned to project!");
+				} catch (Exception e) {
+					ui.print(e.getMessage());
+				}
+			}
+		}
+	}
+
+	private void assignProjectManager() {
+		Employee em = requestEmployee("\nWhat are the initials of the employee who should be project manager?");
+		if (em != null) {
+			Project project = requestProject(
+					"\nWhat is the ID of the project the project manager should be assigned to?");
+			try {
+				app.assignProjectManager(project, em);
+				ui.print("\nSUCCESS: Project manager assigned!");
+			} catch (Exception e) {
+				ui.print(e.getMessage());
+			}
+		}
+	}
+
+	private void createActivity() {
+		Employee pm = requestEmployee("\nWhat are the initials of the project manager who is creating the activity?");
+		if (pm != null) {
+			Project project = requestProject("\nWhat is the ID of the project it should be assigned to?");
+			if (project != null) {
+				ui.print("\nWhat should the name of the activity be?");
+				String name = getInput();
+				if (name != null) {
+					ui.print(
+							"\nWhat week does the activity begin?\n Enter week on form yyww (e.g. 2101 for first week of 2021)");
+					String startWeek = getInput();
+					if (startWeek != null) {
+						ui.print(
+								"\nWhat week does the activity end?\n Enter week on form yyww (e.g. 2101 for first week of 2021)");
+						String endWeek = getInput();
+						if (endWeek != null) {
+							try {
+								app.createWorkActivity(project, pm, name, startWeek, endWeek);
+								ui.print("\nSUCCESS: Activity created!");
+							} catch (Exception e) {
+								ui.print(e.getMessage());
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void registerTime() {
+	}
+
+	private void viewProjects() {
+		ui.printProjects(app.getProjects());
+	}
+
 	private void viewEmployees() {
+		// TODO use requestproject() somehow
+
 		boolean tryAgain = true;
 		while (tryAgain) {
 			tryAgain = false;
@@ -142,63 +190,11 @@ public class Controller {
 		}
 	}
 
-	private void assignEmployee() {
-		Employee pm = requestEmployee("\nWhat are the initials of the project manager who is assigning?");
-		if (pm != null) { // Continue only if user didn't type /exit
-			Employee em = requestEmployee("\nWhat are the initials of the employee who should be assigned?");
-			if (em != null) {
-				Project project = requestProject();
-				try {
-					app.assignEmployeeToProject(project, pm, em);
-					System.out.println("\nSUCCESS: Employee assigned to project!");
-				} catch (Exception e) {
-					ui.print(e.getMessage());
-				}
-			}
+	private void viewActivities() {
+		Project project = requestProject("\nWhat is the ID of the project you wish to see the activities for?");
+		if (project != null) {
+			ui.printActivities(project.getActivities());
 		}
-	}
-
-	private void assignProjectManager() {
-		Employee em = requestEmployee("\nWhat are the initials of the employee who should be project manager?");
-		if (em != null) {
-			Project project = requestProject();
-			try {
-				app.assignProjectManager(project, em);
-				ui.print("\nSUCCESS: Project manager assigned!");
-			} catch (Exception e) {
-				ui.print(e.getMessage());
-			}
-		}
-	}
-
-	private void createActivity() {
-		Employee pm = requestEmployee("\nWhat are the initials of the project manager who is creating the activity?");
-		if (pm != null) {
-			Project project = requestProject();
-			if (project != null) {
-				ui.print("\nWhat should the name of the activity be?");
-				String name = getInput();
-				if (name != null) {
-					ui.print("\nWhat week does the activity begin?\n Enter week on form yyww (e.g. 2101 for first week of 2021)");
-					String startWeek = getInput();
-					if (startWeek != null) {
-						ui.print("\nWhat week does the activity end?\n Enter week on form yyww (e.g. 2101 for first week of 2021)");
-						String endWeek = getInput();
-						if (endWeek != null) {
-							try {
-								app.createWorkActivity(project, pm, name, startWeek, endWeek);
-								ui.print("\nSUCCESS: Activity created!");
-							} catch (Exception e) {
-								ui.print(e.getMessage());
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	private void registerTime() {
 	}
 
 	private Employee requestEmployee(String msg) {
@@ -222,11 +218,11 @@ public class Controller {
 		return null;
 	}
 
-	private Project requestProject() {
+	private Project requestProject(String msg) {
 		boolean tryAgain = true;
 		while (tryAgain) {
 			tryAgain = false;
-			ui.print("\nWhat is the project's ID?");
+			ui.print(msg);
 
 			String userInput = getInput();
 			if (userInput != null) {
@@ -274,7 +270,7 @@ public class Controller {
 
 		commandList.put("/viewprojects", new CommandInfo("Show a list of all projects with name and ID", new Command() {
 			public void runCommand() {
-				viewAllProjects();
+				viewProjects();
 			};
 		}));
 		//////////////////////////////////////////////
@@ -292,7 +288,7 @@ public class Controller {
 		}));
 
 		commandList.put("/viewemployees",
-				new CommandInfo("View list of employees for project or whole company", new Command() {
+				new CommandInfo("View list of employees for a project or whole company", new Command() {
 					public void runCommand() {
 						viewEmployees();
 					};
@@ -311,6 +307,12 @@ public class Controller {
 		commandList.put("/createactivity", new CommandInfo("Create a new activity", new Command() {
 			public void runCommand() {
 				createActivity();
+			};
+		}));
+
+		commandList.put("/viewactivities", new CommandInfo("View list of activities for a project", new Command() {
+			public void runCommand() {
+				viewActivities();
 			};
 		}));
 
