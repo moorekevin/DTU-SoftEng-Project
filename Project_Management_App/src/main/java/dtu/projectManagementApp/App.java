@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import dtu.exceptions.*;
+
 public class App {
 	private List<Employee> employeeRepository;
 	private List<Project> projectRepository;
@@ -39,28 +41,26 @@ public class App {
 		return projectID;
 	}
 
-	public Project findProject(int id) {
+	public Project findProject(int id) throws Exception {
 		for (Project p : projectRepository) {
 			if (id == p.getId()) {
 				return p;
 			}
 		}
-		return null;
+		throw new Exception("ERROR: Project does not exist");
 	}
 
-	public Employee findEmployee(String initials) {
+	public Employee findEmployee(String initials) throws Exception {
 		for (Employee employee : employeeRepository) {
 			if (employee.getInitials().equals(initials)) {
 				return employee;
 			}
 		}
-		return null;
+		throw new EmployeeNotFoundException("ERROR: Employee does not exist");
 	}
 
 	public void deleteProject(int id) throws Exception {
 		Project p = findProject(id);
-		if (p == null)
-			throw new Exception("Project does not exist");
 		projectRepository.remove(p);
 	}
 
@@ -73,21 +73,19 @@ public class App {
 	}
 
 	public void addEmployee(String initials) throws Exception {
-		if (findEmployee(initials) != null)
-			throw new Exception("Employee already exists");
-		employeeRepository.add(new Employee(initials));
+		try {
+			findEmployee(initials);
+			throw new Exception("ERROR: Employee already exists");
+		} catch (EmployeeNotFoundException e) {
+			employeeRepository.add(new Employee(initials));
+		}
 	}
 
 	public void assignEmployeeToProject(Project project, Employee pm, Employee em) throws Exception {
-
-		if (!employeeRepository.contains(pm) || !employeeRepository.contains(em))
-			throw new Exception("Employee(s) do not exist");
 		if (!pm.isProjectManger())
-			throw new Exception("Employee is not project manager");
-		if (!projectRepository.contains(project))
-			throw new Exception("Project does not exist");
+			throw new Exception("ERROR: Employee is not project manager");
 		if (project.getProjectManager() != pm) {
-			throw new Exception("Project Manager is not assigned to the Project");
+			throw new Exception("ERROR: Project Manager is not assigned to the Project");
 		}
 
 		project.assignEmployeeToProject(em);
@@ -95,10 +93,8 @@ public class App {
 	}
 
 	public void assignProjectManager(Project project, Employee em) throws Exception {
-		if (em == null || project == null)
-			throw new Exception("Project or Employee does not exist");
 		if (project.getProjectManager() != null)
-			throw new Exception("Project already has a Project Manager");
+			throw new Exception("ERROR: Project already has a Project Manager");
 		em.setProjectManager(project);
 		project.assignProjectManager(em);
 
@@ -107,7 +103,7 @@ public class App {
 	public void removeProjectManager(Project project, Employee pm) throws Exception {
 		
 		if (pm == null || project == null)
-			throw new Exception("Project or Project Manager does not exist");
+			throw new Exception("ERROR: Project or Project Manager does not exist");
 		pm.removeProjectManager(project);
 		project.removeProjectManager();
 
@@ -116,7 +112,7 @@ public class App {
 	public void removeEmployeeFromProject(Project project, Employee em) throws Exception {
 		
 		if (!em.getAssignedProjects().contains(project))
-			throw new Exception("Project is not assigned to employee");
+			throw new Exception("ERROR: Project is not assigned to employee");
 		em.removeProject(project);
 		project.removeEmployeeFromProject(em);
 
@@ -127,7 +123,7 @@ public class App {
 		isYearWeekValid(end);
 		
 		if(project.getProjectManager() != pm) 
-			throw new Exception("Project Manager must be assigned to the Project");
+			throw new Exception("ERROR: Project Manager must be assigned to the Project");
 		
 		Week startWeek = new Week(start);
 		Week endWeek = new Week(end);
@@ -162,7 +158,7 @@ public class App {
 		if (year < actualYear 
 			||year == actualYear && week < actualWeek 
 			|| week > 52)
-			throw new Exception("Activity start/end-YearWeek is invalid");
+			throw new Exception("ERROR: Activity start/end-YearWeek is invalid");
 	}
 	
 	
@@ -170,23 +166,23 @@ public class App {
 		
 		//Vigtig
 		if (!employeeRepository.contains(pm) || !employeeRepository.contains(em))
-			throw new Exception("Employee(s) do not exist");
+			throw new Exception("ERROR: Employee(s) do not exist");
 		
 		if (!pm.isProjectManger())
-			throw new Exception("Employee is not project manager");
+			throw new Exception("ERROR: Employee is not project manager");
 		
 		if (!projectRepository.contains(project))
-			throw new Exception("Project does not exist");
+			throw new Exception("ERROR: Project does not exist");
 		if(!project.getActivities().contains(workActivity))
-			throw new Exception("Project does not have the Activity");
+			throw new Exception("ERROR: Project does not have the Activity");
 		
 //		//Skal virke
 		if (project.getProjectManager() != pm)
-			throw new Exception("Project Manager is not assigned to the Project");
+			throw new Exception("ERROR: Project Manager is not assigned to the Project");
 		
 		//Vigtig
 		if(!project.getAssignedEmployees().contains(em))
-			throw new Exception("Employee is not assigned to the Project");
+			throw new Exception("ERROR: Employee is not assigned to the Project");
 		
 		workActivity.addEmployee(em);
 	}

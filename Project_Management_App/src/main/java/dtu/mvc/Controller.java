@@ -92,7 +92,6 @@ public class Controller {
 		String initials = getInput();
 		if (initials != null) {
 			try {
-				// TODO don't give success msg if employee already exists
 				app.addEmployee(initials);
 				ui.print("\nSUCCESS: Employee \"" + initials + "\" created!");
 			} catch (Exception e) {
@@ -118,8 +117,8 @@ public class Controller {
 					} catch (NumberFormatException e) {
 						ui.print("ERROR: Please enter numbers as Project ID\n");
 						tryAgain = true;
-					} catch (NullPointerException e) {
-						ui.print("ERROR: Project doesn't exist\n");
+					} catch (Exception e) {
+						ui.print(e.getMessage());
 						tryAgain = true;
 					}
 				}
@@ -127,19 +126,16 @@ public class Controller {
 		}
 	}
 
-	// TODO app receives project and employees that exist but then checks for it anyways
 	private void assignEmployee() {
-		Employee em = requestEmployee("\nWhat are the initials of the employee which should be assigned?");
-		if (em != null) {
-			Employee pm = requestEmployee("\nWhat are the initials of the project manager who is assigning?");
-			if (pm != null) {
+		Employee pm = requestEmployee("\nWhat are the initials of the project manager who is assigning?");
+		if (pm != null) { // Continue only if user didn't type /exit
+			Employee em = requestEmployee("\nWhat are the initials of the employee which should be assigned?");
+			if (em != null) {
 				Project project = requestProject();
-				if (project != null) {
-					try {
-						app.assignEmployeeToProject(project, pm, em);
-					} catch (Exception e) {
-						ui.print(e.getMessage());
-					}
+				try {
+					app.assignEmployeeToProject(project, pm, em);
+				} catch (Exception e) {
+					ui.print(e.getMessage());
 				}
 			}
 		}
@@ -154,19 +150,20 @@ public class Controller {
 	private void registerTime() {
 	}
 
-	private Employee requestEmployee(String question) {
+	private Employee requestEmployee(String msg) {
 		boolean tryAgain = true;
 		while (tryAgain) {
 			tryAgain = false;
-			ui.print(question);
+			ui.print(msg);
 
 			String initials = getInput();
 			if (initials != null) {
-				Employee em = app.findEmployee(initials);
-				if (em != null) {
+				Employee em;
+				try {
+					em = app.findEmployee(initials);
 					return em;
-				} else {
-					ui.print("ERROR: Employee doesn't exits\n");
+				} catch (Exception e) {
+					ui.print(e.getMessage());
 					tryAgain = true;
 				}
 			}
@@ -185,21 +182,21 @@ public class Controller {
 				try {
 					int projectID = Integer.parseInt(userInput);
 
-					Project p = app.findProject(projectID);
-					if (p != null) {
+					Project p;
+					try {
+						p = app.findProject(projectID);
 						return p;
-					} else {
-						ui.print("ERROR: Project doesn't exist!");
+					} catch (Exception e) {
+						ui.print(e.getMessage());
 						tryAgain = true;
 					}
-
 				} catch (NumberFormatException e) {
 					ui.print("ERROR: Please enter numbers as Project ID\n");
 					tryAgain = true;
 				}
 			}
 		}
-		return null;
+		return null; // Never happens FIX for code coverage
 	}
 
 	public void setCommands() {
