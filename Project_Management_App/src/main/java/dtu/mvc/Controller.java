@@ -19,7 +19,23 @@ public class Controller {
 		ui = new UI(commandList);
 		app = new App();
 
-		start();
+		createDataToTest();
+	}
+	
+	// Is not part of final product
+	// Should be deleted once done testing GUI
+	private void createDataToTest() {
+		try {
+			app.addEmployee("em");
+			app.addEmployee("pm");
+			app.createProject("Project01");
+			app.createProject("Number2");
+			app.assignProjectManager(app.findProject(210001), app.findEmployee("pm"));
+			app.assignEmployeeToProject(app.findProject(210001), app.findEmployee("pm"), app.findEmployee("em"));
+			app.createWorkActivity(app.findProject(210001), app.findEmployee("pm"), "Activity01", "2201", "2210");
+		} catch (Exception e) {
+			ui.print(e.getMessage());
+		}
 	}
 
 	public void start() {
@@ -29,7 +45,7 @@ public class Controller {
 		}
 	}
 
-	public void runUserCommand(String userInput) {
+	private void runUserCommand(String userInput) {
 		if (commandList.containsKey(userInput)) {
 			commandList.get(userInput).getCommand().runCommand();
 		} else {
@@ -37,7 +53,7 @@ public class Controller {
 		}
 	}
 
-	public String getInput() { // Lets the user exit commands
+	private String getInput() { // Lets the user exit commands
 		String userInput = ui.getUserInput();
 		if (userInput.equals("/exit")) {
 			return null;
@@ -50,8 +66,8 @@ public class Controller {
 		ui.print("\nWhat should the name of the project be?");
 		String nameOfProject = getInput();
 		if (nameOfProject != null) {
-			app.createProject(nameOfProject);
-			ui.print("\nSUCCESS: Project \"" + nameOfProject + "\" created!");
+			Project project = app.createProject(nameOfProject);
+			ui.print("\nSUCCESS: Project \"" + project.getName() + "\" created with ID \"" + project.getId() + "\"!");
 		}
 	}
 
@@ -156,6 +172,30 @@ public class Controller {
 	}
 
 	private void createActivity() {
+		Employee pm = requestEmployee("\nWhat are the initials of the project manager who is creating the activity?");
+		if (pm != null) {
+			Project project = requestProject();
+			if (project != null) {
+				ui.print("\nWhat should the name of the activity be?");
+				String name = getInput();
+				if (name != null) {
+					ui.print("\nWhat week does the activity begin?\n Enter week on form yyww (e.g. 2101 for first week of 2021)");
+					String startWeek = getInput();
+					if (startWeek != null) {
+						ui.print("\nWhat week does the activity end?\n Enter week on form yyww (e.g. 2101 for first week of 2021)");
+						String endWeek = getInput();
+						if (endWeek != null) {
+							try {
+								app.createWorkActivity(project, pm, name, startWeek, endWeek);
+								ui.print("\nSUCCESS: Activity created!");
+							} catch (Exception e) {
+								ui.print(e.getMessage());
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	private void registerTime() {

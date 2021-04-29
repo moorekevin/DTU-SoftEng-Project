@@ -34,7 +34,6 @@ public class Project {
 		assignedEmployees.remove(em);
 	}
 	
-	
 	public List<Employee> getAssignedEmployees() {
 		return assignedEmployees;
 	}
@@ -50,10 +49,6 @@ public class Project {
 			throw new Exception("Project Manager already exists for project");
 		}
 	}
-
-/*	public void setAssignedEmployees(List<Employee> assignedEmployees) {
-		this.assignedEmployees = assignedEmployees;
-	}	*/
 
 	public String getName() {
 		return name;
