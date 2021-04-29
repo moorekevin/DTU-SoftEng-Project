@@ -39,11 +39,11 @@ public class ActivitySteps {
 	public void a_work_activity_with_name_is_assigned_to_the_project(String name) {
 
 		try {
-			String start, end;
+			
 			pm = employeeHelper.getAdditionalEmployee();
-			WorkActivity temp = activityHelper.createWorkActivity(projectHelper.getProject(), pm, name);
-			start = temp.getStartWeek().getYearWeek();
-			end = temp.getEndWeek().getYearWeek();
+			String start = activityHelper.getCurrentYearWeek();
+			String end = activityHelper.addToYearWeek(1, 0);
+//			
 			activity = projectApp.createWorkActivity(projectHelper.getProject(), pm, name, start, end);
 
 		} catch (Exception e) {
@@ -119,8 +119,39 @@ public class ActivitySteps {
 	
 	@Then("the WorkActivity is not assigned to the Project")
 	public void the_work_activity_is_not_assigned_to_the_project() throws Exception {
-		
 		assertFalse(projectHelper.getProject().getActivities().contains(activity));
+	}
+	
+	@Given("a WorkActivity with name {string}, start-week {string} and end-week {string} is assigned to the Project")
+	public void a_work_activity_with_name_start_week_and_end_week_is_assigned_to_the_project(String name, String start, String end) throws Exception {
+		project = projectHelper.getProject();
+		pm = employeeHelper.getAdditionalEmployee();
+		try {
+			activity = projectApp.createWorkActivity(project, pm, name, start, end);
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	
+	@Given("the WorkActivity's expected hours is set to {double}")
+	public void the_work_activity_s_expected_hours_is_set_to(Double expectedHours) {
+	    activity.setExpectedHours(expectedHours);
+	}
+	
+	@When("the Project Manager edits the Activity to name {string}, start-week {string} and end-week {string}")
+	public void the_project_manager_edits_the_activity_to_name_start_week_and_end_week(String name, String start, String end) {
+	    try {
+			projectApp.editActivity(activity, projectHelper.getProject(), pm, name, start, end);
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	
+	@Then("the Activity has name {string}, start-week {string} and end-week {string}")
+	public void the_activity_has_name_start_week_and_end_week(String name, String start, String end) {
+	   assertTrue(activity.getName().equals(name));
+	   assertTrue(activity.getStartWeek().getYearWeek().equals(start));
+	   assertTrue(activity.getEndWeek().getYearWeek().equals(end));
 	}
 	
 }

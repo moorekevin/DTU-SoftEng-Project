@@ -14,5 +14,9 @@ public class Week {
 	public String getYearWeek() {
 		return yearWeek;
 	}
+	
+	public void setYearWeek(String yearWeek) {
+		this.yearWeek = yearWeek;
+	}
 
 }

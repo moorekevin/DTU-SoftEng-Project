@@ -7,14 +7,14 @@ public class Project {
 	private String name;
 	private int id;
 	private List<Employee> assignedEmployees;
-	private List<Activity> activities;
+	private List<WorkActivity> activities;
 	private Employee projectManager;
 
 	public Project(String name, int id) {
 		this.name = name;
 		this.id = id;
 		assignedEmployees = new ArrayList<Employee>();
-		activities = new ArrayList<Activity>();
+		activities = new ArrayList<WorkActivity>();
 		projectManager = null;
 	}
 	
@@ -39,7 +39,7 @@ public class Project {
 		return assignedEmployees;
 	}
 	
-	public List<Activity> getActivities() {
+	public List<WorkActivity> getActivities() {
 		return activities;
 	}
 	
@@ -71,7 +71,7 @@ public class Project {
 		this.id = id;
 	}
 	
-	public void addActivity(Activity activity) {
+	public void addActivity(WorkActivity activity) {
 		activities.add(activity);
 	}
 

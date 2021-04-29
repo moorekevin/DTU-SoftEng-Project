@@ -129,6 +129,11 @@ public class App {
 		if(project.getProjectManager() != pm) 
 			throw new Exception("Project Manager must be assigned to the Project");
 		
+		for (WorkActivity activity : project.getActivities()) {
+			if (activity.getName().equals(name)) 
+				throw new Exception("This Activity is already assigned to the Project");
+		}
+		
 		Week startWeek = new Week(start);
 		Week endWeek = new Week(end);
 		WorkActivity activity = new WorkActivity(name, startWeek, endWeek);
@@ -136,6 +141,18 @@ public class App {
 		project.addActivity(activity);
 		
 		return activity;
+	}
+	
+	public void editActivity(WorkActivity activity, Project project, Employee pm, String name, String start, String end) throws Exception {
+		isYearWeekValid(start);
+		isYearWeekValid(end);
+		
+		if(project.getProjectManager() != pm) 
+			throw new Exception("Project Manager must be assigned to the Project");
+		
+		activity.setName(name);
+		activity.setStart(start);
+		activity.setEnd(end);
 	}
 	
 	public void setExpectedHours(WorkActivity activity, double exptectedHours){
