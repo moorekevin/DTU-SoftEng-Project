@@ -122,14 +122,26 @@ public class App {
 
 	}
 
-	public WorkActivity createWorkActivity(String name, String start, String end) throws Exception {
+	public WorkActivity createWorkActivity(Project project, Employee pm, String name, String start, String end) throws Exception {
 		isYearWeekValid(start);
 		isYearWeekValid(end);
 		
+		if(project.getProjectManager() != pm) 
+			throw new Exception("Project Manager must be assigned to the Project");
+		
 		Week startWeek = new Week(start);
 		Week endWeek = new Week(end);
-		return new WorkActivity(name, startWeek, endWeek);
+		WorkActivity activity = new WorkActivity(name, startWeek, endWeek);
 		
+		project.addActivity(activity);
+		
+		return activity;
+	}
+	
+	public void setExpectedHours(WorkActivity activity, double exptectedHours){
+		if(activity != null) {
+		activity.setExpectedHours(exptectedHours);
+		}
 	}
 	
 	public void isYearWeekValid(String yearWeek) throws Exception {
@@ -147,20 +159,12 @@ public class App {
 			Integer.parseInt((yearWeek).substring(3, 4)): 
 			Integer.parseInt((yearWeek).substring(2, 4));
 			
-		if (year < actualYear)
-			throw new Exception("The year cannot be set to before " + actualYear);
-
-		if (year == actualYear && week < actualWeek)
-			throw new Exception("The week cannot be set to before " + actualWeek);
-		
-		if ( week > 52) 
-			throw new Exception("The week cannot be set to: " + week);
-
+		if (year < actualYear 
+			||year == actualYear && week < actualWeek 
+			|| week > 52)
+			throw new Exception("Activity start/end-YearWeek is invalid");
 	}
 	
-	public void addActivityToProject(Project project, WorkActivity workActivity) {
-		project.addActivity(workActivity);
-	}
 	
 	public void assignEmployeeToActivity(Project project, WorkActivity workActivity, Employee pm, Employee em) throws Exception {
 		
@@ -185,6 +189,6 @@ public class App {
 			throw new Exception("Employee is not assigned to the Project");
 		
 		workActivity.addEmployee(em);
-
 	}
+	
 }

@@ -19,4 +19,8 @@ public abstract class Activity {
 		return endWeek;
 	}
 	
+	public String getName(){
+		return name;
+	}
+	
 }

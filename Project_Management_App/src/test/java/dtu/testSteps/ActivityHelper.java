@@ -4,6 +4,7 @@ import dtu.projectManagementApp.WorkActivity;
 import dtu.projectManagementApp.Activity;
 import dtu.projectManagementApp.App;
 import dtu.projectManagementApp.DateServer;
+import dtu.projectManagementApp.Employee;
 import dtu.projectManagementApp.Project;
 import dtu.projectManagementApp.Week;
 
@@ -16,9 +17,9 @@ public class ActivityHelper {
 	}
 
 	public WorkActivity getWorkActivity() throws Exception {
-		if (workActivity == null) {
-			workActivity = createWorkActivity("AAAA");
-		}
+//		if (workActivity == null) {
+//			workActivity = createWorkActivity("AAAA");
+//		}
 		return workActivity;
 	}
 
@@ -42,15 +43,15 @@ public class ActivityHelper {
 	}
 	
 
-	public WorkActivity createWorkActivity(String name) throws Exception {
+	public WorkActivity createWorkActivity(Project project, Employee pm, String name) throws Exception {
 		String startWeek = getCurrentYearWeek();
 		String endWeek = addToYearWeek(1, 0);
-		workActivity = app.createWorkActivity(name, startWeek, endWeek);
+		workActivity = app.createWorkActivity(project, pm, name, startWeek, endWeek);
 		return workActivity;
 	}
 	
-	public WorkActivity createWorkActivity(String name, String start, String end) throws Exception {
-		workActivity = app.createWorkActivity(name, start, end);
+	public WorkActivity createWorkActivity(Project project, Employee pm, String name, String start, String end) throws Exception {
+		workActivity = app.createWorkActivity(project, pm, name, start, end);
 		return workActivity;
 	}
 	

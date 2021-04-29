@@ -8,6 +8,7 @@ public class WorkActivity extends Activity {
 	private double expectedHours;
 	private double workedHours;
 	private List<Employee> assignedEmployees = new ArrayList<>();
+	
 	public WorkActivity(String name, Week startWeek, Week endWeek) {
 		super(name, startWeek, endWeek);
 	}
@@ -30,5 +31,13 @@ public class WorkActivity extends Activity {
 	
 	public void addEmployee(Employee em) {
 		assignedEmployees.add(em);
+	}
+	
+	public double getExpectedHours(){
+		return expectedHours;
+	}
+	
+	public void setExpectedHours(double expectedHours){
+		this.expectedHours = expectedHours;
 	}
 }
