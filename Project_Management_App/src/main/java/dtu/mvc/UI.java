@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeSet;
 
+import dtu.projectManagementApp.Employee;
 import dtu.projectManagementApp.Project;
 
 public class UI {
@@ -47,15 +48,26 @@ public class UI {
 
 	public void printProjects(List<Project> projects) {
 		if (projects.size() == 0)
-			System.out.println("\nThere are no projects currently");
+			System.out.println("There are no projects currently");
 		else {
-			System.out.println("\nThere exist " + projects.size() + " project(s):");
+			System.out.println("There exist " + projects.size() + " project(s):");
 			System.out.format("%-10s%-10s%n", "  ID", "Name");
 			System.out.println("  ------------");
 			for (Project proj : projects) {
 				System.out.format("%-10s%-10s%n", "  " + proj.getId(), proj.getName());
 			}
-			System.out.println();
+		}
+	}
+	
+	public void printEmployees(List<Employee> employees) {
+		if (employees.size() == 0)
+			System.out.println("There are no employees currently");
+		else {
+			System.out.println("There exist " + employees.size() + " employee(s):");
+			System.out.println("-------");
+			for (int i = 0; i < employees.size(); i++) {
+				System.out.format("%-4s%-10s%n", " " + i, " " + employees.get(i).getInitials());
+			}
 		}
 	}
 }
