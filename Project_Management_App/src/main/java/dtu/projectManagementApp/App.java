@@ -101,7 +101,6 @@ public class App {
 			throw new Exception("ERROR: Project already has a Project Manager");
 		em.setProjectManager(project);
 		project.assignProjectManager(em);
-
 	}
 
 	public void removeProjectManager(Project project, Employee pm) throws Exception {

@@ -115,7 +115,7 @@ public class Controller {
 					try {
 						ui.printEmployees(app.findProject(Integer.parseInt(id)).getAssignedEmployees());
 					} catch (NumberFormatException e) {
-						ui.print("ERROR: Please enter numbers as Project ID\n");
+						ui.print("ERROR: Please enter numbers as Project ID");
 						tryAgain = true;
 					} catch (Exception e) {
 						ui.print(e.getMessage());
@@ -129,11 +129,12 @@ public class Controller {
 	private void assignEmployee() {
 		Employee pm = requestEmployee("\nWhat are the initials of the project manager who is assigning?");
 		if (pm != null) { // Continue only if user didn't type /exit
-			Employee em = requestEmployee("\nWhat are the initials of the employee which should be assigned?");
+			Employee em = requestEmployee("\nWhat are the initials of the employee who should be assigned?");
 			if (em != null) {
 				Project project = requestProject();
 				try {
 					app.assignEmployeeToProject(project, pm, em);
+					System.out.println("\nSUCCESS: Employee assigned to project!");
 				} catch (Exception e) {
 					ui.print(e.getMessage());
 				}
@@ -142,6 +143,16 @@ public class Controller {
 	}
 
 	private void assignProjectManager() {
+		Employee em = requestEmployee("\nWhat are the initials of the employee who should be project manager?");
+		if (em != null) {
+			Project project = requestProject();
+			try {
+				app.assignProjectManager(project, em);
+				ui.print("\nSUCCESS: Project manager assigned!");
+			} catch (Exception e) {
+				ui.print(e.getMessage());
+			}
+		}
 	}
 
 	private void createActivity() {
@@ -191,7 +202,7 @@ public class Controller {
 						tryAgain = true;
 					}
 				} catch (NumberFormatException e) {
-					ui.print("ERROR: Please enter numbers as Project ID\n");
+					ui.print("ERROR: Please enter numbers as Project ID");
 					tryAgain = true;
 				}
 			}
