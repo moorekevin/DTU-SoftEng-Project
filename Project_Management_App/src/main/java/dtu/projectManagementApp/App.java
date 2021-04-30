@@ -82,6 +82,10 @@ public class App {
 	}
 
 	public void assignEmployeeToProject(Project project, Employee pm, Employee em) throws Exception {
+		// Checks if employees exist
+		findEmployee(pm.getInitials());
+		findEmployee(em.getInitials());
+		
 		if (!pm.isProjectManger())
 			throw new Exception("ERROR: Employee is not project manager");
 		if (project.getProjectManager() != pm) {

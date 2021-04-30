@@ -61,7 +61,6 @@ public class EmployeeSteps {
 	@Given("there is not an Employee with initials {string}")
 	public void there_is_not_an_employee_with_initials(String initials) {
 		em = eh.createNonExistingEmployee(initials);
-		
 		boolean errorThrown = false;
 		try { // Checks that employee indeed does not exist
 			projectApp.findEmployee(em.getInitials());
@@ -69,6 +68,7 @@ public class EmployeeSteps {
 			errorThrown = true;
 		}
 		assertTrue(errorThrown);
+		
 	}
 
 	@Given("a Project Manager with initials {string} is not assigned to the Project")

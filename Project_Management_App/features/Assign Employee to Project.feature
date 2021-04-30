@@ -13,7 +13,7 @@ Scenario: Assign a non-existing Employee to a Project
 	Given a Project Manager with initials "AAAA" is assigned to a Project
 	And there is not an Employee with initials "BBBB"
 	When the Project Manager assigns the Employee to the Project
-	Then the error is thrown "ERROR: Employee(s) do not exist"
+	Then the error is thrown "ERROR: Employee does not exist"
 
 Scenario: Assign an Employee to a Project when Employee is not a Project Manager
 	Given there is a Project with id 211111

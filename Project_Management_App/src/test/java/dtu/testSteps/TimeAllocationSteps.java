@@ -36,7 +36,8 @@ public class TimeAllocationSteps {
 	}
 
 	@Given("the Employee has {double} total hours Planned Work for Week {string}")
-	public void the_employee_has_total_hours_planned_work_for_week(Double hours, String yearWeek) {
+	public void the_employee_has_total_hours_planned_work_for_week(Double hours, String yearWeek) throws Exception {
+	    em = employeeHelper.getEmployee();
 	    
 	}
 

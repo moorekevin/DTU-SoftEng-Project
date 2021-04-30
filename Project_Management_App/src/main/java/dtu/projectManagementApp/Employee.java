@@ -8,11 +8,13 @@ public class Employee {
 	private double registeredHoursToday;
 	private List<Project> assignedProjects;
 	private List<Project> managingProjects;
+	private List<PlannedWeek> plannedWeekRepository;
 
 	public Employee(String initials) {
 		this.initials = initials;
 		assignedProjects = new ArrayList<>();
 		managingProjects = new ArrayList<>();
+		plannedWeekRepository = new ArrayList<>();
 	}
 
 	public boolean isProjectManger() {
@@ -42,5 +44,10 @@ public class Employee {
 	public String getInitials() {
 		return initials;
 	}
+
+	public List<PlannedWeek> getPlannedWeeks() {
+		return plannedWeekRepository;
+	}
+
 
 }
