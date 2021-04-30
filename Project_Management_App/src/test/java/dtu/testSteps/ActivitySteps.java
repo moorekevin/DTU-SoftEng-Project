@@ -128,6 +128,7 @@ public class ActivitySteps {
 		pm = employeeHelper.getAdditionalEmployee();
 		try {
 			activity = projectApp.createWorkActivity(project, pm, name, start, end);
+			activityHelper.setWorkActivity(activity);
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}

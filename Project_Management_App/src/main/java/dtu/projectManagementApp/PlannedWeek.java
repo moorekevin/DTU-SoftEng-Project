@@ -1,24 +1,53 @@
 package dtu.projectManagementApp;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class PlannedWeek {
-	private int projectId;
-	private int plannedHours;
 	private Week week;
-	private List<Activity> activities = new ArrayList<>();
+	private Map<Activity,Double> plannedActivities;
+
+	public PlannedWeek(Week week) {
+		this.week = week;
+		this.plannedActivities = new HashMap<Activity,Double>();
+	}
 	
-	 
+	public Week getWeek() {
+		return week;
+	}
 	
-	
-	
-	
-	public void setPlannedHours(int hours) {
-		plannedHours = hours;
+
+	public void addHoursForActivity(Activity activity, Double hours) {
+		if(!plannedActivities.containsKey(activity)) {
+			plannedActivities.put(activity, 0.0);
+		}
+		
+		Double registeredHours = plannedActivities.get(activity);
+		
+		plannedActivities.put(activity, registeredHours+hours);
 	}
 
-	public int getPlannedHours() {
-		return plannedHours;
+	public double getTotalPlannedHours() {
+		double totalPlannedHours = 0.0; 
+		for (Activity checkActivity : plannedActivities.keySet()) {
+			totalPlannedHours += plannedActivities.get(checkActivity);
+		}
+		return totalPlannedHours;
 	}
+
+	@Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+  
+        if (!(obj instanceof PlannedWeek)) {
+            return false;
+        }
+          
+        PlannedWeek plannedWeekComparison = (PlannedWeek) obj;
+          
+        return this.getWeek().equals(plannedWeekComparison.getWeek());
+    }
+
 }

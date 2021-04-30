@@ -34,41 +34,34 @@ public class TimeAllocationSteps {
 		this.employeeHelper = employeeHelper;
 		this.errorMessage = errorMessage;
 	}
-
+	
+	@Given("there is an Employee with initials {string} assigned to the WorkActivity")
+	public void there_is_an_employee_with_initials_assigned_to_the_work_activity(String name) throws Exception {
+	    activity = activityHelper.getWorkActivity();
+	    em = employeeHelper.createEmployee(name);
+	    pm = employeeHelper.getAdditionalEmployee();
+	    activity.getAssignedEmployees().add(em);
+	    
+	}
+	
 	@Given("the Employee has {double} total hours Planned Work for Week {string}")
-	public void the_employee_has_total_hours_planned_work_for_week(Double hours, String yearWeek) throws Exception {
-	    em = employeeHelper.getEmployee();
+	public void the_employee_has_total_hours_planned_work_for_week(Double hours, String yearWeek) {
+	    double check = projectApp.calculatePlannedHours(pm, em, yearWeek);
+	    assertTrue(hours == check);
 	    
 	}
 
 	@When("the Project Manager allocates {double} hours for the Employee for the WorkActivity for Week {string}")
 	public void the_project_manager_allocates_hours_for_the_employee_for_the_work_activity_for_week(Double hours, String yearWeek) {
-	    // Write code here that turns the phrase above into concrete actions
-	    throw new io.cucumber.java.PendingException();
+	
+		projectApp.allocateTimeForEmployee(pm, em, hours, activity, yearWeek);
 	}
 
 	@Then("the Employee has a total of {double} hours Planned Work for Week {string}")
 	public void the_employee_has_a_total_of_hours_planned_work_for_week(Double hours, String yearWeek) {
-	    // Write code here that turns the phrase above into concrete actions
-	    throw new io.cucumber.java.PendingException();
+		the_employee_has_total_hours_planned_work_for_week(hours, yearWeek);
+	
 	}
 
-	@Given("the Employee is assigned only to that Activity")
-	public void the_employee_is_assigned_only_to_that_activity() {
-	    // Write code here that turns the phrase above into concrete actions
-	    throw new io.cucumber.java.PendingException();
-	}
-
-	@When("the Project Manager views the Employees Time Allocation for week {string}")
-	public void the_project_manager_views_the_employees_time_allocation_for_week(String string) {
-	    // Write code here that turns the phrase above into concrete actions
-	    throw new io.cucumber.java.PendingException();
-	}
-
-	@Then("the Time Allocation for the Employee shows the Employee has {double} total hours Planned Work for Week {string}")
-	public void the_time_allocation_for_the_employee_shows_the_employee_has_total_hours_planned_work_for_week(Double double1, String string) {
-	    // Write code here that turns the phrase above into concrete actions
-	    throw new io.cucumber.java.PendingException();
-	}
 	
 }

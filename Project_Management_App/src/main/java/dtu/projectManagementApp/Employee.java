@@ -48,6 +48,10 @@ public class Employee {
 	public List<PlannedWeek> getPlannedWeeks() {
 		return plannedWeekRepository;
 	}
+	
+	public void addPlannedWeek(PlannedWeek plannedWeek) {
+		plannedWeekRepository.add(plannedWeek);
+	}
 
 
 }

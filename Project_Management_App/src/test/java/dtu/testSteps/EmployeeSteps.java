@@ -33,6 +33,7 @@ public class EmployeeSteps {
 	@Given("a Project Manager with initials {string} is assigned to a Project")
 	public void a_project_manager_with_initials_is_assigned_to_a_project(String name) throws Exception {
 		pm = eh.createAdditionalEmployee(name);
+		ph.createProject("Project");
 
 		try {
 			projectApp.assignProjectManager(ph.getProject(), pm);

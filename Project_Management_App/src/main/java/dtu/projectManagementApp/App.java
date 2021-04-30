@@ -208,4 +208,32 @@ public class App {
 		workActivity.addEmployee(em);
 	}
 	
+	//When the Project Manager allocates 10 hour(s) for the Employee for the Activity for Week 0120
+	
+	public void allocateTimeForEmployee(Employee pm, Employee em, Double hours, Activity activity, String weekYear) {
+		
+		//HUSK FEJLHÅNDTERING
+		Week week = new Week(weekYear);
+		PlannedWeek plannedWeek = new PlannedWeek(week);
+		
+		if (!em.getPlannedWeeks().contains(plannedWeek)) {
+			em.addPlannedWeek(plannedWeek);
+		}
+		int indexOfPlannedWeek = em.getPlannedWeeks().indexOf(plannedWeek);
+		em.getPlannedWeeks().get(indexOfPlannedWeek).addHoursForActivity(activity, hours);
+		
+	}
+	
+	public double calculatePlannedHours(Employee pm, Employee em, String week) {
+		
+		//HUSK FEJLHÅNDTERING
+		for (PlannedWeek plannedWeek : em.getPlannedWeeks()) {
+			if (plannedWeek.getWeek().getYearWeek().equals(week)) {
+				return plannedWeek.getTotalPlannedHours();
+			}
+		}
+		
+		return 0;
+	}
+	
 }
