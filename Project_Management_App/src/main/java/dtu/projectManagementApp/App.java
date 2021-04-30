@@ -85,7 +85,7 @@ public class App {
 		// Checks if employees exist
 		findEmployee(pm.getInitials());
 		findEmployee(em.getInitials());
-		
+
 		if (!pm.isProjectManger())
 			throw new Exception("ERROR: Employee is not project manager");
 		if (project.getProjectManager() != pm) {
@@ -101,11 +101,10 @@ public class App {
 			throw new Exception("ERROR: Project already has a Project Manager");
 		em.setProjectManager(project);
 		project.assignProjectManager(em);
-
 	}
 
 	public void removeProjectManager(Project project, Employee pm) throws Exception {
-		
+
 		if (pm == null || project == null)
 			throw new Exception("ERROR: Project or Project Manager does not exist");
 		pm.removeProjectManager(project);
@@ -114,7 +113,7 @@ public class App {
 	}
 
 	public void removeEmployeeFromProject(Project project, Employee em) throws Exception {
-		
+
 		if (!em.getAssignedProjects().contains(project))
 			throw new Exception("ERROR: Project is not assigned to employee");
 		em.removeProject(project);
@@ -122,92 +121,108 @@ public class App {
 
 	}
 
-	public WorkActivity createWorkActivity(Project project, Employee pm, String name, String start, String end) throws Exception {
-		isYearWeekValid(start);
-		isYearWeekValid(end);
-		
-		if(project.getProjectManager() != pm) 
+	public WorkActivity createWorkActivity(Project project, Employee pm, String name, String start, String end)
+			throws Exception {
+		validateYearWeeks(start, end);
+
+		if (project.getProjectManager() != pm)
 			throw new Exception("ERROR: Project Manager must be assigned to the Project");
-		
+
 		for (WorkActivity activity : project.getActivities()) {
-			if (activity.getName().equals(name)) 
+			if (activity.getName().equals(name))
 				throw new Exception("This Activity is already assigned to the Project");
 		}
-		
+
 		Week startWeek = new Week(start);
 		Week endWeek = new Week(end);
 		WorkActivity activity = new WorkActivity(name, startWeek, endWeek);
-		
+
 		project.addActivity(activity);
-		
+
 		return activity;
 	}
-	
-	public void editActivity(WorkActivity activity, Project project, Employee pm, String name, String start, String end) throws Exception {
-		isYearWeekValid(start);
-		isYearWeekValid(end);
-		
-		if(project.getProjectManager() != pm) 
+
+	public void editActivity(WorkActivity activity, Project project, Employee pm, String name, String start, String end)
+			throws Exception {
+		validateYearWeeks(start, end);
+
+		if (project.getProjectManager() != pm)
 			throw new Exception("Project Manager must be assigned to the Project");
-		
+
 		activity.setName(name);
 		activity.setStart(start);
 		activity.setEnd(end);
 	}
-	
-	public void setExpectedHours(WorkActivity activity, double exptectedHours){
-		if(activity != null) {
-		activity.setExpectedHours(exptectedHours);
+
+	public void setExpectedHours(WorkActivity activity, double exptectedHours) {
+		if (activity != null) {
+			activity.setExpectedHours(exptectedHours);
 		}
+	}
+
+	private void validateYearWeeks(String start, String end) throws Exception {
+		isYearWeekValid(start);
+		isYearWeekValid(end);
+		if (Integer.parseInt(start) > Integer.parseInt(end))
+			throw new Exception("ERROR: Start week cannot be larger than end week");
 	}
 	
 	public void isYearWeekValid(String yearWeek) throws Exception {
-
 		DateServer date = new DateServer();
 		int actualYear = date.getYear() % 100;
 		int actualWeek = date.getWeek();
-		
+
 		// first two digits
-		int year = Integer.parseInt((yearWeek).substring(0,2));
-		
-		// last two digits
-		char temp = yearWeek.charAt(0);
-		int week = temp == 0 ?
-			Integer.parseInt((yearWeek).substring(3, 4)): 
-			Integer.parseInt((yearWeek).substring(2, 4));
-			
-		if (year < actualYear 
-			||year == actualYear && week < actualWeek 
-			|| week > 52)
-			throw new Exception("ERROR: Activity start/end-YearWeek is invalid");
+		try {
+			int year = Integer.parseInt((yearWeek).substring(0, 2));
+
+			// last two digits
+			char temp = yearWeek.charAt(0);
+			int week;
+			week = temp == 0 ? Integer.parseInt((yearWeek).substring(3, 4))
+					: Integer.parseInt((yearWeek).substring(2, 4));
+
+			if (year < actualYear || year == actualYear && week < actualWeek || week < 1 || week > 52) {
+				throw new Exception("ERROR: Activity start/end-YearWeek is invalid");
+			}
+		} catch (NumberFormatException e) {
+			throw new Exception("ERROR: Week should be numeric");
+		} catch (StringIndexOutOfBoundsException e) {
+			throw new Exception("ERROR: Week should be on form yyww");
+		}
+
 	}
 	
-	
-	public void assignEmployeeToActivity(Project project, WorkActivity workActivity, Employee pm, Employee em) throws Exception {
+	private void isIntervalValid(String start, String end) {
 		
-		//Vigtig
+	}
+
+	public void assignEmployeeToActivity(Project project, WorkActivity workActivity, Employee pm, Employee em)
+			throws Exception {
+
+		// Vigtig
 		if (!employeeRepository.contains(pm) || !employeeRepository.contains(em))
 			throw new Exception("ERROR: Employee(s) do not exist");
-		
+
 		if (!pm.isProjectManger())
 			throw new Exception("ERROR: Employee is not project manager");
-		
+
 		if (!projectRepository.contains(project))
 			throw new Exception("ERROR: Project does not exist");
-		if(!project.getActivities().contains(workActivity))
+		if (!project.getActivities().contains(workActivity))
 			throw new Exception("ERROR: Project does not have the Activity");
-		
+
 //		//Skal virke
 		if (project.getProjectManager() != pm)
 			throw new Exception("ERROR: Project Manager is not assigned to the Project");
-		
-		//Vigtig
-		if(!project.getAssignedEmployees().contains(em))
+
+		// Vigtig
+		if (!project.getAssignedEmployees().contains(em))
 			throw new Exception("ERROR: Employee is not assigned to the Project");
-		
+
 		workActivity.addEmployee(em);
 	}
-	
+
 	//When the Project Manager allocates 10 hour(s) for the Employee for the Activity for Week 0120
 	
 	public void allocateTimeForEmployee(Employee pm, Employee em, Double hours, Activity activity, String weekYear) {

@@ -5,8 +5,10 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeSet;
 
+import dtu.projectManagementApp.Activity;
 import dtu.projectManagementApp.Employee;
 import dtu.projectManagementApp.Project;
+import dtu.projectManagementApp.WorkActivity;
 
 public class UI {
 	TreeSet<String> sortedCommandList;
@@ -36,7 +38,8 @@ public class UI {
 	}
 
 	public void start() {
-		System.out.println("\nType your commands:\n (For help type \"/help\")");
+		System.out.println("\nType your commands:");
+		System.out.println(" (For help type \"/help\")");
 	}
 
 	public void printCommandList() {
@@ -48,25 +51,38 @@ public class UI {
 
 	public void printProjects(List<Project> projects) {
 		if (projects.size() == 0)
-			System.out.println("There are no projects currently");
+			System.out.println("\nThere are no projects currently");
 		else {
-			System.out.println("There exist " + projects.size() + " project(s):");
-			System.out.format("%-10s%-10s%n", "  ID", "Name");
-			System.out.println("  ------------");
+			System.out.println("\nThere exist " + projects.size() + " project(s):");
+			System.out.format("%-10s%-12s%-10s%n", "  ID", "Name", "Project manager");
+			System.out.println("  -----------------------------------");
 			for (Project proj : projects) {
-				System.out.format("%-10s%-10s%n", "  " + proj.getId(), proj.getName());
+				System.out.format("%-10s%-12s%-10s%n", "  " + proj.getId(), proj.getName(), proj.getProjectManager() == null ? "" : proj.getProjectManager().getInitials());
 			}
 		}
 	}
 	
 	public void printEmployees(List<Employee> employees) {
 		if (employees.size() == 0)
-			System.out.println("There are no employees currently");
+			System.out.println("\nThere are no employees currently");
 		else {
-			System.out.println("There exist " + employees.size() + " employee(s):");
+			System.out.println("\nThere exist " + employees.size() + " employee(s):");
 			System.out.println("-------");
 			for (int i = 0; i < employees.size(); i++) {
-				System.out.format("%-4s%-10s%n", " " + i, " " + employees.get(i).getInitials());
+				System.out.format("%-4s%-10s%n", " " + (i + 1), " " + employees.get(i).getInitials());
+			}
+		}
+	}
+	
+	public void printActivities(List<WorkActivity> activities) {
+		if (activities.size() == 0)
+			System.out.println("\nThere are no activities currently");
+		else {
+			System.out.println("\nThere exist " + activities.size() + " activity(ies):");
+			System.out.format("%-12s%-6s%-6s%n", "  Name", " Start", " End");
+			System.out.println("  -----------------------------------");
+			for (Activity act: activities) {
+				System.out.format("%-12s%-6s%-6s%n", "  " + act.getName(), " " + act.getStartWeek().getYearWeek(), " " + act.getEndWeek().getYearWeek());
 			}
 		}
 	}
