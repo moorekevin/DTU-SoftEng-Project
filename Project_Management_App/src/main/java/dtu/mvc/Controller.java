@@ -155,6 +155,39 @@ public class Controller {
 		}
 	}
 
+	private void editActivity() {
+		Employee pm = requestEmployee("\nWhat are the initials of the project manager who is editing the activity?");
+		if (pm != null) {
+			Project project = requestProject("\nWhat is the ID of the project it is assigned to?");
+			if (project != null) {
+				WorkActivity activity = requestActivity(project, "\nWhat is the activity's name?");
+				if (activity != null) {
+					ui.print(
+							"\nWhat should the new name of the activity be?\n (Leave blank if name shouldn't be changed)");
+					String name = getInput();
+					if (name != null) {
+						ui.print(
+								"\nWhat week does the activity begin?\n Enter week on form yyww (leave blank if start week shouldn't be changed)");
+						String startWeek = getInput();
+						if (startWeek != null) {
+							ui.print(
+									"\nWhat week does the activity end?\n Enter week on form yyww (leave blank if end week shouldn't be changed)");
+							String endWeek = getInput();
+							if (endWeek != null) {
+								try {
+									app.editActivity(activity, project, pm, name, startWeek, endWeek);
+									ui.print("\nSUCCESS: Activity information updated!");
+								} catch (Exception e) {
+									ui.print(e.getMessage());
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	private void registerTime() {
 	}
 
@@ -197,6 +230,7 @@ public class Controller {
 		}
 	}
 
+	// TODO Reduce redundancy
 	private Employee requestEmployee(String msg) {
 		boolean tryAgain = true;
 		while (tryAgain) {
@@ -205,10 +239,8 @@ public class Controller {
 
 			String initials = getInput();
 			if (initials != null) {
-				Employee em;
 				try {
-					em = app.findEmployee(initials);
-					return em;
+					return app.findEmployee(initials);
 				} catch (Exception e) {
 					ui.print(e.getMessage());
 					tryAgain = true;
@@ -229,10 +261,8 @@ public class Controller {
 				try {
 					int projectID = Integer.parseInt(userInput);
 
-					Project p;
 					try {
-						p = app.findProject(projectID);
-						return p;
+						return app.findProject(projectID);
 					} catch (Exception e) {
 						ui.print(e.getMessage());
 						tryAgain = true;
@@ -243,7 +273,26 @@ public class Controller {
 				}
 			}
 		}
-		return null; // Never happens FIX for code coverage
+		return null;
+	}
+
+	private WorkActivity requestActivity(Project project, String msg) {
+		boolean tryAgain = true;
+		while (tryAgain) {
+			tryAgain = false;
+			ui.print(msg);
+
+			String name = getInput();
+			if (name != null) {
+				try {
+					return app.findActivity(project, name);
+				} catch (Exception e) {
+					ui.print(e.getMessage());
+					tryAgain = true;
+				}
+			}
+		}
+		return null;
 	}
 
 	public void setCommands() {
@@ -307,6 +356,12 @@ public class Controller {
 		commandList.put("/createactivity", new CommandInfo("Create a new activity", new Command() {
 			public void runCommand() {
 				createActivity();
+			};
+		}));
+
+		commandList.put("/editactivity", new CommandInfo("Edit an activity's information", new Command() {
+			public void runCommand() {
+				editActivity();
 			};
 		}));
 

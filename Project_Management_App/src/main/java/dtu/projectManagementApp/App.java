@@ -59,6 +59,15 @@ public class App {
 		throw new EmployeeNotFoundException("ERROR: Employee does not exist");
 	}
 
+	public WorkActivity findActivity(Project project, String name) throws Exception {
+		for (WorkActivity activity : project.getActivities()) {
+			if (activity.getName().equals(name)) {
+				return activity;
+			}
+		}
+		throw new Exception("ERROR: Activity is not assigned to the project");
+	}
+
 	public void deleteProject(int id) throws Exception {
 		Project p = findProject(id);
 		projectRepository.remove(p);
@@ -144,14 +153,19 @@ public class App {
 
 	public void editActivity(WorkActivity activity, Project project, Employee pm, String name, String start, String end)
 			throws Exception {
+		// TODO Fix if one is left blank 
 		validateYearWeeks(start, end);
 
 		if (project.getProjectManager() != pm)
 			throw new Exception("Project Manager must be assigned to the Project");
 
-		activity.setName(name);
-		activity.setStart(start);
-		activity.setEnd(end);
+		// Should only be updated if user typed information
+		if (!name.equals(""))
+			activity.setName(name);
+		if (!start.equals(""))
+			activity.setStart(start);
+		if (!end.equals(""))
+			activity.setEnd(end);
 	}
 
 	public void setExpectedHours(WorkActivity activity, double exptectedHours) {
@@ -166,7 +180,7 @@ public class App {
 		if (Integer.parseInt(start) > Integer.parseInt(end))
 			throw new Exception("ERROR: Start week cannot be larger than end week");
 	}
-	
+
 	public void isYearWeekValid(String yearWeek) throws Exception {
 		DateServer date = new DateServer();
 		int actualYear = date.getYear() % 100;
@@ -191,10 +205,6 @@ public class App {
 			throw new Exception("ERROR: Week should be on form yyww");
 		}
 
-	}
-	
-	private void isIntervalValid(String start, String end) {
-		
 	}
 
 	public void assignEmployeeToActivity(Project project, WorkActivity workActivity, Employee pm, Employee em)
@@ -223,32 +233,33 @@ public class App {
 		workActivity.addEmployee(em);
 	}
 
-	//When the Project Manager allocates 10 hour(s) for the Employee for the Activity for Week 0120
-	
+	// When the Project Manager allocates 10 hour(s) for the Employee for the
+	// Activity for Week 0120
+
 	public void allocateTimeForEmployee(Employee pm, Employee em, Double hours, Activity activity, String weekYear) {
-		
-		//HUSK FEJLHÅNDTERING
+
+		// HUSK FEJLHÅNDTERING
 		Week week = new Week(weekYear);
 		PlannedWeek plannedWeek = new PlannedWeek(week);
-		
+
 		if (!em.getPlannedWeeks().contains(plannedWeek)) {
 			em.addPlannedWeek(plannedWeek);
 		}
 		int indexOfPlannedWeek = em.getPlannedWeeks().indexOf(plannedWeek);
 		em.getPlannedWeeks().get(indexOfPlannedWeek).addHoursForActivity(activity, hours);
-		
+
 	}
-	
+
 	public double calculatePlannedHours(Employee pm, Employee em, String week) {
-		
-		//HUSK FEJLHÅNDTERING
+
+		// HUSK FEJLHÅNDTERING
 		for (PlannedWeek plannedWeek : em.getPlannedWeeks()) {
 			if (plannedWeek.getWeek().getYearWeek().equals(week)) {
 				return plannedWeek.getTotalPlannedHours();
 			}
 		}
-		
+
 		return 0;
 	}
-	
+
 }
