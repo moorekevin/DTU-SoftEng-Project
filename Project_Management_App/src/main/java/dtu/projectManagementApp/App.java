@@ -69,8 +69,8 @@ public class App {
 	}
 
 	// TODO Should receive project instead
-	public void deleteProject(int id) throws Exception {
-		Project p = findProject(id);
+	public void deleteProject(Project project) throws Exception {
+		Project p = findProject(project.getId());
 		projectRepository.remove(p);
 	}
 

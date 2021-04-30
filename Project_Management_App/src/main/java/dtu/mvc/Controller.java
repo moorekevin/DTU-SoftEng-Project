@@ -75,7 +75,7 @@ public class Controller {
 		Project project = requestProject("\nWhat is the project's ID?");
 		if (project != null) {
 			try {
-				app.deleteProject(project.getId());
+				app.deleteProject(project);
 				ui.print("\nSUCCESS: Project deleted!");
 			} catch (Exception e) {
 				ui.print(e.getMessage());
@@ -213,6 +213,12 @@ public class Controller {
 				}
 			}
 		}
+	}
+	
+	private void planTimeAllocation() {
+	}
+	
+	private void viewTimeAllocation() {
 	}
 
 	private void registerTime() {
@@ -409,10 +415,24 @@ public class Controller {
 						viewActivities();
 					};
 				}));
-
+		
+		//////////////////////////////////////////////
+		// Time planning related commands
 		commandList.put("/registertime", new CommandInfo("Register time for a workactivity", new Command() {
 			public void runCommand() {
 				registerTime();
+			};
+		}));
+		
+		commandList.put("/plantimeallocation", new CommandInfo("Plan an employees time allocation", new Command() {
+			public void runCommand() {
+				planTimeAllocation();
+			};
+		}));
+		
+		commandList.put("/viewtimeallocation", new CommandInfo("View time allocation for employees", new Command() {
+			public void runCommand() {
+				viewTimeAllocation();
 			};
 		}));
 	}
