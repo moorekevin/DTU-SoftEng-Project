@@ -123,9 +123,8 @@ public class App {
 
 	public void removeEmployeeFromProject(Project project, Employee em) throws Exception {
 
-		if (!em.getAssignedProjects().contains(project))
+		if (!project.getAssignedEmployees().contains(em))
 			throw new Exception("ERROR: Project is not assigned to employee");
-		em.removeProject(project);
 		project.removeEmployeeFromProject(em);
 
 	}
@@ -233,33 +232,56 @@ public class App {
 		workActivity.addEmployee(em);
 	}
 
-	// When the Project Manager allocates 10 hour(s) for the Employee for the
-	// Activity for Week 0120
-
-	public void allocateTimeForEmployee(Employee pm, Employee em, Double hours, Activity activity, String weekYear) {
-
-		// HUSK FEJLHÅNDTERING
-		Week week = new Week(weekYear);
-		PlannedWeek plannedWeek = new PlannedWeek(week);
-
-		if (!em.getPlannedWeeks().contains(plannedWeek)) {
-			em.addPlannedWeek(plannedWeek);
+	public void allocateTimeForEmployee(Employee pm, Employee em, Double hours, 
+			Project project, Activity activity, String yearWeek) throws Exception {
+		
+		//HUSK FEJLHÅNDTERING
+		
+		if(!project.getAssignedEmployees().contains(em))
+			throw new Exception("Employee not assigned to project");
+	
+		if(Integer.parseInt(yearWeek) > Integer.parseInt(activity.getEndWeek().getYearWeek())) {
+			throw new Exception("Activity has not begun/is ended for planned time");
 		}
-		int indexOfPlannedWeek = em.getPlannedWeeks().indexOf(plannedWeek);
-		em.getPlannedWeeks().get(indexOfPlannedWeek).addHoursForActivity(activity, hours);
-
-	}
-
-	public double calculatePlannedHours(Employee pm, Employee em, String week) {
-
-		// HUSK FEJLHÅNDTERING
+					
+		PlannedWeek thisPlannedWeek = null;
+		
 		for (PlannedWeek plannedWeek : em.getPlannedWeeks()) {
-			if (plannedWeek.getWeek().getYearWeek().equals(week)) {
+			if (plannedWeek.getYearWeek().equals(yearWeek)) {
+				thisPlannedWeek = plannedWeek;
+			}
+		}
+		
+		if (thisPlannedWeek == null) {
+			thisPlannedWeek = new PlannedWeek(yearWeek);
+			thisPlannedWeek.addActivityToWeek(activity, hours);
+			em.addPlannedWeek(thisPlannedWeek);
+		}
+		
+		if(thisPlannedWeek.getTotalPlannedHours() + hours > 168.0)
+			throw new Exception("Not enough available time for week");
+		thisPlannedWeek.addHoursForActivity(activity, hours);
+		
+			
+		}
+		
+	
+	
+	public double calculatePlannedHours(Employee pm, Employee em, String week) {
+		
+		//HUSK FEJLHÅNDTERING
+		
+		for (PlannedWeek plannedWeek : em.getPlannedWeeks()) {
+			if (plannedWeek.getYearWeek().equals(week)) {
 				return plannedWeek.getTotalPlannedHours();
 			}
 		}
 
 		return 0;
+	}
+	
+	public void registerTime(Project project, Activity activity, Employee em, Double hours) {
+			
 	}
 
 }
