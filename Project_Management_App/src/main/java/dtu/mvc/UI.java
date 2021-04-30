@@ -64,7 +64,7 @@ public class UI {
 	
 	public void printEmployees(List<Employee> employees) {
 		if (employees.size() == 0)
-			System.out.println("\nThere are no employees currently");
+			System.out.println("\nThere aren't any employees currently");
 		else {
 			System.out.println("\nThere exist " + employees.size() + " employee(s):");
 			System.out.println("-------");
@@ -76,9 +76,9 @@ public class UI {
 	
 	public void printActivities(List<WorkActivity> activities) {
 		if (activities.size() == 0)
-			System.out.println("\nThere are no activities currently");
+			System.out.println("\nThere aren't any activities for the project currently");
 		else {
-			System.out.println("\nThere exist " + activities.size() + " activity(ies):");
+			System.out.println("\nThere exist " + activities.size() + " activity(ies) for the project:");
 			System.out.format("%-12s%-6s%-6s%n", "  Name", " Start", " End");
 			System.out.println("  -----------------------------------");
 			for (Activity act: activities) {
