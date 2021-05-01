@@ -268,7 +268,7 @@ public class App {
 
 		if (thisPlannedWeek == null) {
 			thisPlannedWeek = new PlannedWeek(yearWeek);
-			thisPlannedWeek.addActivityToWeek(activity, hours);
+			thisPlannedWeek.addActivityToWeek(activity);
 			em.addPlannedWeek(thisPlannedWeek);
 		}
 
@@ -290,7 +290,7 @@ public class App {
 			}
 		}
 
-		return 0;
+		return 0.0;
 	}
 
 	public void assignToNonWorkActivity(Employee em, NonWorkActivity activity, Integer days, String yearWeek){

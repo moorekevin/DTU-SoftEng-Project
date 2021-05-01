@@ -69,7 +69,8 @@ public class EmployeeHelper {
 		PlannedWeek plannedWeek = new PlannedWeek(yearWeek);
 		em.addPlannedWeek(plannedWeek);
 		int i = em.getPlannedWeeks().indexOf(plannedWeek);
-		em.getPlannedWeeks().get(i).addActivityToWeek(testActivity, hours);
+		em.getPlannedWeeks().get(i).addActivityToWeek(testActivity);
+		em.getPlannedWeeks().get(i).addHoursForActivity(testActivity, hours);
 		
 	}
 }

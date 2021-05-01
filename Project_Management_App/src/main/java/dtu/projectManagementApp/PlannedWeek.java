@@ -10,19 +10,19 @@ public class PlannedWeek extends Week {
 	public PlannedWeek(String name) {
 		super(name);
 		this.plannedActivities = new HashMap<Activity,Double>();
-		addActivityToWeek(new NonWorkActivity("Holiday"), 0.0);
-		addActivityToWeek(new NonWorkActivity("Sickness"), 0.0);
-		addActivityToWeek(new NonWorkActivity("Courses"), 0.0);
-		addActivityToWeek(new NonWorkActivity("Other"), 0.0);
+		addActivityToWeek(new NonWorkActivity("Holiday"));
+		addActivityToWeek(new NonWorkActivity("Sickness"));
+		addActivityToWeek(new NonWorkActivity("Courses"));
+		addActivityToWeek(new NonWorkActivity("Other"));
 	}
 	
-	public void addActivityToWeek(Activity activity, Double hours) {
-		plannedActivities.put(activity, hours);
+	public void addActivityToWeek(Activity activity) {
+		plannedActivities.put(activity, 0.0);
 	}
 	
 	public void addHoursForActivity(Activity activity, Double hours) {
 		if (plannedActivities.get(activity) == null) {
-			addActivityToWeek(activity, 0.0);
+			addActivityToWeek(activity);
 		}
 		
 		Double registeredHours = plannedActivities.get(activity);
