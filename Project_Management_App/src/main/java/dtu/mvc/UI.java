@@ -81,7 +81,7 @@ public class UI {
 			System.out.println("\nThere exist " + activities.size() + " activity(ies):");
 			System.out.format("%-12s%-6s%-6s%n", "  Name", " Start", " End");
 			System.out.println("  -----------------------------------");
-			for (Activity act: activities) {
+			for (WorkActivity act: activities) {
 				System.out.format("%-12s%-6s%-6s%n", "  " + act.getName(), " " + act.getStartWeek().getYearWeek(), " " + act.getEndWeek().getYearWeek());
 			}
 		}

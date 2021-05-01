@@ -11,5 +11,5 @@ Scenario: Delete non-existing Project as Employee
 	And  there is a Project with id 111111
 	And  there is not a Project with id 222222 in the list of Projects
 	When the Employee deletes the Project
-	Then a Project with id 211111 is not in the list of Projects
+	Then a Project with id 222222 is not in the list of Projects
 	And  the error is thrown "ERROR: Project does not exist"

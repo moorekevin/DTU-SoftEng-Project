@@ -5,22 +5,25 @@ import dtu.projectManagementApp.Activity;
 import dtu.projectManagementApp.App;
 import dtu.projectManagementApp.DateServer;
 import dtu.projectManagementApp.Employee;
+import dtu.projectManagementApp.NonWorkActivity;
 import dtu.projectManagementApp.Project;
 import dtu.projectManagementApp.Week;
 
 public class ActivityHelper {
 	private App app;
 	private WorkActivity workActivity;
+	private NonWorkActivity nonWorkActivity;
 
 	public ActivityHelper(App app) {
 		this.app = app;
 	}
 
-	public WorkActivity getWorkActivity() throws Exception {
-//		if (workActivity == null) {
-//			workActivity = createWorkActivity("AAAA");
-//		}
+	public WorkActivity getWorkActivity() {
 		return workActivity;
+	}
+	
+	public NonWorkActivity getNonWorkActivity() {
+		return nonWorkActivity;
 	}
 
 
@@ -54,6 +57,8 @@ public class ActivityHelper {
 		workActivity = app.createWorkActivity(project, pm, name, start, end);
 		return workActivity;
 	}
+	
+	
 	
 	 
 }

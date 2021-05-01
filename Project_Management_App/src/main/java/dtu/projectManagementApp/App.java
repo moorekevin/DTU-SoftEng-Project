@@ -149,6 +149,7 @@ public class App {
 
 		return activity;
 	}
+	
 
 	public void editActivity(WorkActivity activity, Project project, Employee pm, String name, String start, String end)
 			throws Exception {
@@ -233,7 +234,7 @@ public class App {
 	}
 
 	public void allocateTimeForEmployee(Employee pm, Employee em, Double hours, 
-			Project project, Activity activity, String yearWeek) throws Exception {
+			Project project, WorkActivity activity, String yearWeek) throws Exception {
 		
 		//HUSK FEJLHÅNDTERING
 		
@@ -258,7 +259,7 @@ public class App {
 			em.addPlannedWeek(thisPlannedWeek);
 		}
 		
-		if(thisPlannedWeek.getTotalPlannedHours() + hours > 168.0)
+		if(thisPlannedWeek.calculateTotalPlannedHours() + hours > 168.0)
 			throw new Exception("Not enough available time for week");
 		thisPlannedWeek.addHoursForActivity(activity, hours);
 		
@@ -273,7 +274,7 @@ public class App {
 		
 		for (PlannedWeek plannedWeek : em.getPlannedWeeks()) {
 			if (plannedWeek.getYearWeek().equals(week)) {
-				return plannedWeek.getTotalPlannedHours();
+				return plannedWeek.calculateTotalPlannedHours();
 			}
 		}
 
