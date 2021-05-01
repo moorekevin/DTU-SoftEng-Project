@@ -37,6 +37,10 @@ public class PlannedWeek extends Week {
 		}
 		return plannedWork;
 	}
+	
+	public Map<Activity,Double> getPlannedActivities() {
+		return plannedActivities;
+	}
 
 	
 	

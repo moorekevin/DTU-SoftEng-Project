@@ -351,7 +351,8 @@ public class Controller {
 				String week = getInput();
 				if (week != null) {
 					try {
-						ui.printTimeAllocation(app.calculatePlannedHours(pm, em, week));
+						
+						ui.printTimeAllocation(app.calculatePlannedHours(pm, em, week), app.findPlannedWeek(em, week).getPlannedActivities());
 					} catch (Exception e) {
 						ui.print(e.getMessage());
 					}

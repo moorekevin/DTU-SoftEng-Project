@@ -90,12 +90,16 @@ public class UI {
 		}
 	}
 	
-	public void printTimeAllocation(double plannedHours) {
+	public void printTimeAllocation(double plannedHours, Map<Activity,Double> plannedActivities) {
 		if (plannedHours == 0.0) {
 			System.out.println("\nThere aren't any planned hours for the week");
 		} else {
-			System.out.println("\nThere are " + plannedHours + " hour(s) planned for the chosen week");
-			System.out.println("ok");
+			System.out.println("\nThere are a total of " + plannedHours + " hour(s) planned for the chosen week:");
+			System.out.format("%-10s%-10s%n", "  Name", " Expected hours");
+			System.out.println("  -----------------------");
+			for (Activity act : plannedActivities.keySet()) {
+				System.out.format("%-10s%-10s%n", "  " + act.getName(), " " + plannedActivities.get(act));
+			}
 		}
 	}
 }

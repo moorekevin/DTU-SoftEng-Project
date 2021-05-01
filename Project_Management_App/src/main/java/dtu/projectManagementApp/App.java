@@ -29,7 +29,7 @@ public class App {
 		return projectCreated;
 	}
 
-	public int makeProjectId() {
+	public int makeProjectId() { // TODO PUT THIS IN PROJECT
 		date = new Date();
 		localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		String projectIDString = "" + localDate.getYear();
@@ -154,7 +154,6 @@ public class App {
 
 		return activity;
 	}
-	
 
 	public void editActivity(WorkActivity activity, Project project, Employee pm, String name, String start, String end)
 			throws Exception {
@@ -274,35 +273,41 @@ public class App {
 
 		if (thisPlannedWeek.calculateTotalPlannedHours() + hours > 168.0)
 			throw new Exception("Not enough available time for week");
-		
+
 		thisPlannedWeek.addHoursForActivity(activity, hours);
 
 	}
 
 	public double calculatePlannedHours(Employee pm, Employee em, String week) throws Exception {
+		if (!pm.isProjectManger())
+			throw new Exception("ERROR: Employee is not project manager");
 
-		// HUSK FEJLHÅNDTERING
+		PlannedWeek foundPlannedWeek = findPlannedWeek(em, week);
+		if (foundPlannedWeek == null) {
+			return 0.0;
+		}
+		return foundPlannedWeek.calculateTotalPlannedHours();
+	}
+
+	public PlannedWeek findPlannedWeek(Employee em, String week) throws Exception {
 		isYearWeekValid(week);
 
 		for (PlannedWeek plannedWeek : em.getPlannedWeeks()) {
 			if (plannedWeek.getYearWeek().equals(week)) {
-				return plannedWeek.calculateTotalPlannedHours();
+				return plannedWeek;
 			}
 		}
-
-		return 0.0;
+		return null;
 	}
 
-	public void assignToNonWorkActivity(Employee em, NonWorkActivity activity, Integer days, String yearWeek){
-        
-        int hours = days * 10;
-		//gør noget med integer
-		
+	public void assignToNonWorkActivity(Employee em, NonWorkActivity activity, Integer days, String yearWeek) {
+
+		int hours = days * 10;
+		// gør noget med integer
 
 		for (PlannedWeek plannedWeek : em.getPlannedWeeks()) {
 			if (plannedWeek.getYearWeek().equals(yearWeek)) {
-				
-				
+
 			}
 		}
 	}
