@@ -68,8 +68,9 @@ public class App {
 		throw new Exception("ERROR: Activity is not assigned to the project");
 	}
 
-	public void deleteProject(int id) throws Exception {
-		Project p = findProject(id);
+	// TODO Should receive project instead
+	public void deleteProject(Project project) throws Exception {
+		Project p = findProject(project.getId());
 		projectRepository.remove(p);
 	}
 
@@ -153,7 +154,13 @@ public class App {
 
 	public void editActivity(WorkActivity activity, Project project, Employee pm, String name, String start, String end)
 			throws Exception {
-		// TODO Fix if one is left blank 
+
+		// Use old weeks if no information was typed
+		if (start.equals(""))
+			start = activity.getStartWeek().getYearWeek();
+		if (end.equals(""))
+			end = activity.getEndWeek().getYearWeek();
+
 		validateYearWeeks(start, end);
 
 		if (project.getProjectManager() != pm)
@@ -162,10 +169,8 @@ public class App {
 		// Should only be updated if user typed information
 		if (!name.equals(""))
 			activity.setName(name);
-		if (!start.equals(""))
-			activity.setStart(start);
-		if (!end.equals(""))
-			activity.setEnd(end);
+		activity.setStart(start);
+		activity.setEnd(end);
 	}
 
 	public void setExpectedHours(WorkActivity activity, double exptectedHours) {
@@ -233,45 +238,57 @@ public class App {
 		workActivity.addEmployee(em);
 	}
 
+
 	public void allocateTimeForEmployee(Employee pm, Employee em, Double hours, 
 			Project project, WorkActivity activity, String yearWeek) throws Exception {
 		
 		//HUSK FEJLHÅNDTERING
 		
 		if(!project.getAssignedEmployees().contains(em))
+
+	public void allocateTimeForEmployee(Employee pm, Employee em, Double hours, Project project, Activity activity,
+			String yearWeek) throws Exception {
+
+		// HUSK FEJLHÅNDTERING
+
+		if (!project.getAssignedEmployees().contains(em))
+
 			throw new Exception("Employee not assigned to project");
-	
-		if(Integer.parseInt(yearWeek) > Integer.parseInt(activity.getEndWeek().getYearWeek())) {
+		
+		if (!project.getProjectManager().equals(pm))
+			throw new Exception("ERROR: Project Manager is not assigned to the Project");
+
+		if (Integer.parseInt(yearWeek) > Integer.parseInt(activity.getEndWeek().getYearWeek())) {
 			throw new Exception("Activity has not begun/is ended for planned time");
 		}
-					
+
 		PlannedWeek thisPlannedWeek = null;
-		
+
 		for (PlannedWeek plannedWeek : em.getPlannedWeeks()) {
 			if (plannedWeek.getYearWeek().equals(yearWeek)) {
 				thisPlannedWeek = plannedWeek;
 			}
 		}
-		
+
 		if (thisPlannedWeek == null) {
 			thisPlannedWeek = new PlannedWeek(yearWeek);
 			thisPlannedWeek.addActivityToWeek(activity, hours);
 			em.addPlannedWeek(thisPlannedWeek);
 		}
+
 		
 		if(thisPlannedWeek.calculateTotalPlannedHours() + hours > 168.0)
+
+		if (thisPlannedWeek.getTotalPlannedHours() + hours > 168.0)
 			throw new Exception("Not enough available time for week");
 		thisPlannedWeek.addHoursForActivity(activity, hours);
-		
-			
-		}
-		
-	
-	
+
+	}
+
 	public double calculatePlannedHours(Employee pm, Employee em, String week) {
-		
-		//HUSK FEJLHÅNDTERING
-		
+
+		// HUSK FEJLHÅNDTERING
+
 		for (PlannedWeek plannedWeek : em.getPlannedWeeks()) {
 			if (plannedWeek.getYearWeek().equals(week)) {
 				return plannedWeek.calculateTotalPlannedHours();
@@ -280,9 +297,9 @@ public class App {
 
 		return 0;
 	}
-	
+
 	public void registerTime(Project project, Activity activity, Employee em, Double hours) {
-			
+
 	}
 
 }

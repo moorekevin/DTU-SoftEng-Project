@@ -18,7 +18,7 @@ public class Employee {
 	}
 
 	public boolean isProjectManger() {
-		return 0 < managingProjects.size();
+		return managingProjects.size() > 0;
 	}
 
 	public void setProjectManager(Project project) {

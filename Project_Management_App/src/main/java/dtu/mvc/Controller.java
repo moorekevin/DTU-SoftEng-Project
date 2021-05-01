@@ -32,7 +32,7 @@ public class Controller {
 			app.createProject("Number2");
 			app.assignProjectManager(app.findProject(210001), app.findEmployee("pm"));
 			app.assignEmployeeToProject(app.findProject(210001), app.findEmployee("pm"), app.findEmployee("em"));
-			app.createWorkActivity(app.findProject(210001), app.findEmployee("pm"), "Activity01", "2201", "2210");
+			app.createWorkActivity(app.findProject(210001), app.findEmployee("pm"), "act1", "2201", "2210");
 		} catch (Exception e) {
 			ui.print(e.getMessage());
 		}
@@ -75,7 +75,8 @@ public class Controller {
 		Project project = requestProject("\nWhat is the project's ID?");
 		if (project != null) {
 			try {
-				app.deleteProject(project.getId());
+				app.deleteProject(project);
+				ui.print("\nSUCCESS: Project deleted!");
 			} catch (Exception e) {
 				ui.print(e.getMessage());
 			}
@@ -102,11 +103,13 @@ public class Controller {
 			Employee em = requestEmployee("\nWhat are the initials of the employee who should be assigned?");
 			if (em != null) {
 				Project project = requestProject("\nWhat is the ID of the project the employee should be assigned to?");
-				try {
-					app.assignEmployeeToProject(project, pm, em);
-					System.out.println("\nSUCCESS: Employee assigned to project!");
-				} catch (Exception e) {
-					ui.print(e.getMessage());
+				if (project != null) {
+					try {
+						app.assignEmployeeToProject(project, pm, em);
+						System.out.println("\nSUCCESS: Employee assigned to project!");
+					} catch (Exception e) {
+						ui.print(e.getMessage());
+					}
 				}
 			}
 		}
@@ -117,11 +120,13 @@ public class Controller {
 		if (em != null) {
 			Project project = requestProject(
 					"\nWhat is the ID of the project the project manager should be assigned to?");
-			try {
-				app.assignProjectManager(project, em);
-				ui.print("\nSUCCESS: Project manager assigned!");
-			} catch (Exception e) {
-				ui.print(e.getMessage());
+			if (project != null) {
+				try {
+					app.assignProjectManager(project, em);
+					ui.print("\nSUCCESS: Project manager assigned!");
+				} catch (Exception e) {
+					ui.print(e.getMessage());
+				}
 			}
 		}
 	}
@@ -188,6 +193,71 @@ public class Controller {
 		}
 	}
 
+	private void assignEmployeeToActivity() {
+		Employee pm = requestEmployee("\nWhat are the initials of the project manager who is assigning?");
+		if (pm != null) {
+			Employee em = requestEmployee("\nWhat are the initials of the employee who should be assigned?");
+			if (em != null) {
+				Project project = requestProject("\nWhat is the ID of the project the activity is assigned to?");
+				if (project != null) {
+					WorkActivity activity = requestActivity(project,
+							"\nWhat is the activity the employee should be assigned to?");
+					if (activity != null) {
+						try {
+							app.assignEmployeeToActivity(project, activity, pm, em);
+							System.out.println("\nSUCCESS: Employee assigned to activity!");
+						} catch (Exception e) {
+							ui.print(e.getMessage());
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void planTimeAllocation() {
+		Employee pm = requestEmployee("\nWhat are the initials of the project manager who is planning?");
+		if (pm != null) {
+			Employee em = requestEmployee("\nWhat are the initials of the employee who's time should be panned?");
+			if (em != null) {
+				Project project = requestProject("\nWhat is the ID of the project the activity is assigned to?");
+				if (project != null) {
+					WorkActivity activity = requestActivity(project,
+							"\nWhat is the activity the employee's time should be planned to?");
+					if (activity != null) {
+						ui.print(
+								"\nWhat week should be planned to?\n Enter week on form yyww (e.g. 2101 for first week of 2021)");
+						String yearWeek = getInput();
+						if (yearWeek != null) {
+							while (true) {
+								ui.print("\nHow many hours should be assigned to the employee for the week?");
+								String input = getInput();
+								if (input == null) {
+									break;
+								} else {
+									try {
+										double hours = Double.parseDouble(input);
+										app.allocateTimeForEmployee(pm, em, hours, project, activity, yearWeek);
+										ui.print("\nSUCCESS: Time allocated!");
+										break;
+									} catch (NumberFormatException e) {
+										ui.print("ERROR: Please enter number of hours as a decimal");
+									} catch (Exception e) {
+										ui.print(e.getMessage());
+										break;
+									}
+								}
+							}	
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void viewTimeAllocation() {
+	}
+
 	private void registerTime() {
 	}
 
@@ -197,15 +267,29 @@ public class Controller {
 
 	private void viewEmployees() {
 		// TODO use requestproject() somehow
+//		ui.print(
+//				"\nWould you like a list of all employees (1) or a list of all employees assigned to a project (2)?");
+//		String choice = ui.getUserInput();
+//		if (choice != null) {
+//			if (choice.equals("2")) {
+//				Project project = requestProject(
+//						"\nPlease input ID for which project you want to view assigned employees for");
+//				if (project != null) {
+//					ui.printEmployees(project.getAssignedEmployees());
+//				}
+//			} else {
+//				ui.printEmployees(app.getEmployees());
+//			}
+//		}
 
-		boolean tryAgain = true;
-		while (tryAgain) {
-			tryAgain = false;
+		while (true) {
 			ui.print(
-					"\nPlease input ID for which project you want to view all employees for.\n TIP: To view all employees for the company just press enter");
+					"\nPlease input ID for which project you want to view assigned employees for.\n TIP: To view all employees for the company just press enter");
 
 			String id = getInput();
-			if (id != null) {
+			if (id == null) {
+				break;
+			} else {
 				if (id.equals("")) {
 					ui.printEmployees(app.getEmployees());
 				} else {
@@ -213,10 +297,8 @@ public class Controller {
 						ui.printEmployees(app.findProject(Integer.parseInt(id)).getAssignedEmployees());
 					} catch (NumberFormatException e) {
 						ui.print("ERROR: Please enter numbers as Project ID");
-						tryAgain = true;
 					} catch (Exception e) {
 						ui.print(e.getMessage());
-						tryAgain = true;
 					}
 				}
 			}
@@ -232,18 +314,17 @@ public class Controller {
 
 	// TODO Reduce redundancy
 	private Employee requestEmployee(String msg) {
-		boolean tryAgain = true;
-		while (tryAgain) {
-			tryAgain = false;
+		while (true) {
 			ui.print(msg);
 
 			String initials = getInput();
-			if (initials != null) {
+			if (initials == null) { // If user typed "/exit" then stop the method
+				break;
+			} else {
 				try {
 					return app.findEmployee(initials);
 				} catch (Exception e) {
 					ui.print(e.getMessage());
-					tryAgain = true;
 				}
 			}
 		}
@@ -251,25 +332,20 @@ public class Controller {
 	}
 
 	private Project requestProject(String msg) {
-		boolean tryAgain = true;
-		while (tryAgain) {
-			tryAgain = false;
+		while (true) {
 			ui.print(msg);
 
 			String userInput = getInput();
-			if (userInput != null) {
+			if (userInput == null) {
+				break;
+			} else {
 				try {
 					int projectID = Integer.parseInt(userInput);
-
-					try {
-						return app.findProject(projectID);
-					} catch (Exception e) {
-						ui.print(e.getMessage());
-						tryAgain = true;
-					}
+					return app.findProject(projectID);
 				} catch (NumberFormatException e) {
 					ui.print("ERROR: Please enter numbers as Project ID");
-					tryAgain = true;
+				} catch (Exception e) {
+					ui.print(e.getMessage());
 				}
 			}
 		}
@@ -277,18 +353,17 @@ public class Controller {
 	}
 
 	private WorkActivity requestActivity(Project project, String msg) {
-		boolean tryAgain = true;
-		while (tryAgain) {
-			tryAgain = false;
+		while (true) {
 			ui.print(msg);
 
 			String name = getInput();
-			if (name != null) {
+			if (name == null) {
+				break;
+			} else {
 				try {
 					return app.findActivity(project, name);
 				} catch (Exception e) {
 					ui.print(e.getMessage());
-					tryAgain = true;
 				}
 			}
 		}
@@ -352,28 +427,49 @@ public class Controller {
 				}));
 
 		//////////////////////////////////////////////
-		// Activity commands //
-		commandList.put("/createactivity", new CommandInfo("Create a new activity", new Command() {
+		// Workactivity commands //
+		commandList.put("/createactivity", new CommandInfo("Create a new workactivity", new Command() {
 			public void runCommand() {
 				createActivity();
 			};
 		}));
 
-		commandList.put("/editactivity", new CommandInfo("Edit an activity's information", new Command() {
+		commandList.put("/editactivity", new CommandInfo("Edit a workactivity's information", new Command() {
 			public void runCommand() {
 				editActivity();
 			};
 		}));
 
-		commandList.put("/viewactivities", new CommandInfo("View list of activities for a project", new Command() {
+		commandList.put("/assigntoactivity", new CommandInfo("Assign an employee to a workactivity", new Command() {
 			public void runCommand() {
-				viewActivities();
+				assignEmployeeToActivity();
 			};
 		}));
 
-		commandList.put("/registertime", new CommandInfo("Register time for an activity", new Command() {
+		commandList.put("/viewactivities",
+				new CommandInfo("View list of all workactivities or for a specific project", new Command() {
+					public void runCommand() {
+						viewActivities();
+					};
+				}));
+
+		//////////////////////////////////////////////
+		// Time planning related commands
+		commandList.put("/registertime", new CommandInfo("Register time for a workactivity", new Command() {
 			public void runCommand() {
 				registerTime();
+			};
+		}));
+
+		commandList.put("/plantimeallocation", new CommandInfo("Plan an employees time allocation", new Command() {
+			public void runCommand() {
+				planTimeAllocation();
+			};
+		}));
+
+		commandList.put("/viewtimeallocation", new CommandInfo("View time allocation for employees", new Command() {
+			public void runCommand() {
+				viewTimeAllocation();
 			};
 		}));
 	}
