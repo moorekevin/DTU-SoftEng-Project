@@ -27,6 +27,9 @@ public class UI {
 		System.out.println(" TIP: If you ever want to exit a command type \"/exit\"");
 	}
 
+	public void print(String methodName, String printingInfo) {
+		System.out.println(methodName + printingInfo);
+	}
 	public void print(String printingInfo) {
 		System.out.println(printingInfo);
 	}
@@ -79,10 +82,10 @@ public class UI {
 			System.out.println("\nThere aren't any activities for the project currently");
 		else {
 			System.out.println("\nThere exist " + activities.size() + " activity(ies) for the project:");
-			System.out.format("%-12s%-6s%-6s%n", "  Name", " Start", " End");
-			System.out.println("  -----------------------------------");
-			for (Activity act: activities) {
-				System.out.format("%-12s%-6s%-6s%n", "  " + act.getName(), " " + act.getStartWeek().getYearWeek(), " " + act.getEndWeek().getYearWeek());
+			System.out.format("%-12s%-6s%-6s%-6s%n", "  Name", " Start", " End", " Expected hours");
+			System.out.println("  -------------------------------------");
+			for (WorkActivity act: activities) {
+				System.out.format("%-12s%-6s%-6s%-6s%n", "  " + act.getName(), " " + act.getStartWeek().getYearWeek(), " " + act.getEndWeek().getYearWeek(), " " + act.getExpectedHours());
 			}
 		}
 	}

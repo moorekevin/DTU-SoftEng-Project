@@ -10,7 +10,7 @@ public class Employee {
 	private List<PlannedWeek> plannedWeekRepository;
 
 	public Employee(String initials) {
-		this.initials = initials;
+		this.initials = initials.toUpperCase();
 		managingProjects = new ArrayList<>();
 		plannedWeekRepository = new ArrayList<>();
 	}

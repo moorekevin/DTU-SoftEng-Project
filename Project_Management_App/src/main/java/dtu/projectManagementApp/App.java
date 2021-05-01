@@ -52,7 +52,7 @@ public class App {
 
 	public Employee findEmployee(String initials) throws Exception {
 		for (Employee employee : employeeRepository) {
-			if (employee.getInitials().equals(initials)) {
+			if (employee.getInitials().equals(initials.toUpperCase())) {
 				return employee;
 			}
 		}
@@ -96,10 +96,14 @@ public class App {
 		findEmployee(pm.getInitials());
 		findEmployee(em.getInitials());
 
-		if (!pm.isProjectManger())
+		if (!pm.isProjectManger()) {
 			throw new Exception("ERROR: Employee is not project manager");
+		}
 		if (project.getProjectManager() != pm) {
 			throw new Exception("ERROR: Project Manager is not assigned to the Project");
+		}
+		if (project.getAssignedEmployees().contains(em)) {
+			throw new Exception("ERROR: Employee is already assigned to the project");
 		}
 
 		project.assignEmployeeToProject(em);
@@ -244,7 +248,7 @@ public class App {
 
 		if (!project.getAssignedEmployees().contains(em))
 			throw new Exception("Employee not assigned to project");
-		
+
 		if (!project.getProjectManager().equals(pm))
 			throw new Exception("ERROR: Project Manager is not assigned to the Project");
 

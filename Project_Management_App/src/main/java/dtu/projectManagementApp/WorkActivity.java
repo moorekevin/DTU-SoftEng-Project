@@ -11,6 +11,7 @@ public class WorkActivity extends Activity {
 	
 	public WorkActivity(String name, Week startWeek, Week endWeek) {
 		super(name, startWeek, endWeek);
+		expectedHours = 0;
 	}
 	
 	public double calculateResidualHours(){
@@ -33,7 +34,7 @@ public class WorkActivity extends Activity {
 		assignedEmployees.add(em);
 	}
 	
-	public double getExpectedHours(){
+	public double getExpectedHours() {
 		return expectedHours;
 	}
 	
