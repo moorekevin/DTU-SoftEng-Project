@@ -95,6 +95,7 @@ public class UI {
 			System.out.println("\nThere aren't any planned hours for the week");
 		} else {
 			System.out.println("\nThere are " + plannedHours + " hour(s) planned for the chosen week");
+			System.out.println("ok");
 		}
 	}
 }
