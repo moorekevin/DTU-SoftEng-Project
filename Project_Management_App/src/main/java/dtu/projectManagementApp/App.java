@@ -272,11 +272,9 @@ public class App {
 			em.addPlannedWeek(thisPlannedWeek);
 		}
 
-		
-		if(thisPlannedWeek.calculateTotalPlannedHours() + hours > 168.0)
-
 		if (thisPlannedWeek.calculateTotalPlannedHours() + hours > 168.0)
 			throw new Exception("Not enough available time for week");
+		
 		thisPlannedWeek.addHoursForActivity(activity, hours);
 
 	}
@@ -295,8 +293,18 @@ public class App {
 		return 0;
 	}
 
-	public void registerTime(Project project, Activity activity, Employee em, Double hours) {
+	public void assignToNonWorkActivity(Employee em, NonWorkActivity activity, Integer days, String yearWeek){
+        
+        int hours = days * 10;
+		//gør noget med integer
+		
 
+		for (PlannedWeek plannedWeek : em.getPlannedWeeks()) {
+			if (plannedWeek.getYearWeek().equals(yearWeek)) {
+				
+				
+			}
+		}
 	}
 
 }
