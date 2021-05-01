@@ -279,8 +279,8 @@ public class App {
 	}
 
 	public double calculatePlannedHours(Employee pm, Employee em, String week) throws Exception {
-		if (!pm.isProjectManger())
-			throw new Exception("ERROR: Employee is not project manager");
+//		if (!pm.isProjectManger())
+//			throw new Exception("ERROR: Employee is not project manager");
 
 		PlannedWeek foundPlannedWeek = findPlannedWeek(em, week);
 		if (foundPlannedWeek == null) {
@@ -300,32 +300,23 @@ public class App {
 		return null;
 	}
 
-<<<<<<< HEAD
-	public void assignToNonWorkActivity(Employee em, NonWorkActivity activity, Integer days, String yearWeek) {
+	public void assignToNonWorkActivity(Employee em, String activityName, Integer days, String yearWeek) throws Exception {
 
 		int hours = days * 10;
 		// gør noget med integer
 
-=======
-	public void assignToNonWorkActivity(Employee em, String nonWorkActivity, Integer days, String yearWeek) throws Exception{
-        
->>>>>>> 6a85d74aa4c61fc15ec2aa09b5263e6735074fd3
 		for (PlannedWeek plannedWeek : em.getPlannedWeeks()) {
 			double weekHours = days * plannedWeek.getWPD();
 			if (plannedWeek.getYearWeek().equals(yearWeek)) {
-<<<<<<< HEAD
-
-=======
 				if (plannedWeek.calculateTotalPlannedHours() + weekHours > plannedWeek.getWPW()) {
 				    throw new Exception("WARNING: The total planned work exceeds 50 hours for the week."
 				    		+ " Please contact a Project Manager");
 				}
 				for (Activity activity : plannedWeek.getPlannedActivities().keySet()) {
-					if (activity.getName().equals(nonWorkActivity)) {
+					if (activity.getName().equals(activityName)) {
 						plannedWeek.addHoursForActivity(activity, weekHours);
 					}
 				}
->>>>>>> 6a85d74aa4c61fc15ec2aa09b5263e6735074fd3
 			}
 		}
 	}

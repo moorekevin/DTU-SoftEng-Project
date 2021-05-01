@@ -42,10 +42,6 @@ public class PlannedWeek extends Week {
 	public Map<Activity,Double> getPlannedActivities() {
 		return plannedActivities;
 	}
-
-	public Map<Activity,Double> getPlannedActivities(){
-		return plannedActivities;
-	}
 	
 	public double getWPW() { // Work Hours Per Week
 		return WORKHOURS_PER_DAY*5;
