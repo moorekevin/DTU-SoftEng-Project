@@ -136,7 +136,7 @@ public class ActivitySteps {
 	
 	@Given("the WorkActivity's expected hours is set to {double}")
 	public void the_work_activity_s_expected_hours_is_set_to(Double expectedHours) {
-	    activity.setExpectedHours(expectedHours);
+		projectApp.setExpectedHours(activity, expectedHours);
 	}
 	
 	@When("the Project Manager edits the Activity to name {string}, start-week {string} and end-week {string}")
@@ -154,5 +154,6 @@ public class ActivitySteps {
 	   assertTrue(activity.getStartWeek().getYearWeek().equals(start));
 	   assertTrue(activity.getEndWeek().getYearWeek().equals(end));
 	}
+	
 	
 }

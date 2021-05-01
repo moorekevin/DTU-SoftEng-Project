@@ -7,11 +7,19 @@ public class WorkActivity extends Activity {
 	private int projectId;
 	private double expectedHours;
 	private double workedHours;
+	private Week start;
+	private Week end;
 	private List<Employee> assignedEmployees = new ArrayList<>();
 	
 	public WorkActivity(String name, Week startWeek, Week endWeek) {
-		super(name, startWeek, endWeek);
+		super(name);
+		this.start = startWeek;
+		this.end = endWeek;
 		expectedHours = 0;
+	}
+	
+	public Week getStartWeek() {
+		return start;
 	}
 	
 	public double calculateResidualHours(){
@@ -41,4 +49,20 @@ public class WorkActivity extends Activity {
 	public void setExpectedHours(double expectedHours){
 		this.expectedHours = expectedHours;
 	}
+	public Week getStart() {
+		return start;
+	}
+	public void setStart(String startYearWeek) {
+		start.setYearWeek(startYearWeek);
+	}
+	
+	public Week getEndWeek() {
+		return end;
+	}
+	
+	public void setEnd(String endYearWeek) {
+		end.setYearWeek(endYearWeek);
+	}
+	
+	
 }

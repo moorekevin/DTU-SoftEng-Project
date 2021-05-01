@@ -4,7 +4,7 @@ Actors: Project Manager
 
 Scenario: Add Activity to Project succesfully
  	Given a Project Manager with initials "AAAA" is assigned to a Project
-	When the Project Manager creates a WorkActivity with name "Activity", start-week "9001" and end-week "9002"
+	When the Project Manager creates a WorkActivity with name "Activity", start-week "9001" and end-week "9002" 
 	And sets the expected hours to 10.0 for the WorkActivity
 	Then the WorkActivity is assigned to the Project
 	And the expected hours is 10.0 for the WorkActivity
