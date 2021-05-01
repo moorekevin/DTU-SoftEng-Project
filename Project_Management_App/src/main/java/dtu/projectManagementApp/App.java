@@ -281,9 +281,10 @@ public class App {
 
 	}
 
-	public double calculatePlannedHours(Employee pm, Employee em, String week) {
+	public double calculatePlannedHours(Employee pm, Employee em, String week) throws Exception {
 
 		// HUSK FEJLHÅNDTERING
+		isYearWeekValid(week);
 
 		for (PlannedWeek plannedWeek : em.getPlannedWeeks()) {
 			if (plannedWeek.getYearWeek().equals(week)) {

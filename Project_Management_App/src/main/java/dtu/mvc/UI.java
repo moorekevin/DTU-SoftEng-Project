@@ -89,4 +89,12 @@ public class UI {
 			}
 		}
 	}
+	
+	public void printTimeAllocation(double plannedHours) {
+		if (plannedHours == 0.0) {
+			System.out.println("\nThere aren't any planned hours for the week");
+		} else {
+			System.out.println("\nThere are " + plannedHours + " hour(s) planned for the chosen week");
+		}
+	}
 }
