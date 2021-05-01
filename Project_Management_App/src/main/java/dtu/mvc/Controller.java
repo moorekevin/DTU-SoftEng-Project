@@ -195,7 +195,7 @@ public class Controller {
 
 	private void assignEmployeeToActivity() {
 		Employee pm = requestEmployee("\nWhat are the initials of the project manager who is assigning?");
-		if (pm != null) { // Continue only if user didn't type /exit
+		if (pm != null) {
 			Employee em = requestEmployee("\nWhat are the initials of the employee who should be assigned?");
 			if (em != null) {
 				Project project = requestProject("\nWhat is the ID of the project the activity is assigned to?");
@@ -214,10 +214,47 @@ public class Controller {
 			}
 		}
 	}
-	
+
 	private void planTimeAllocation() {
+		Employee pm = requestEmployee("\nWhat are the initials of the project manager who is planning?");
+		if (pm != null) {
+			Employee em = requestEmployee("\nWhat are the initials of the employee who's time should be panned?");
+			if (em != null) {
+				Project project = requestProject("\nWhat is the ID of the project the activity is assigned to?");
+				if (project != null) {
+					WorkActivity activity = requestActivity(project,
+							"\nWhat is the activity the employee's time should be planned to?");
+					if (activity != null) {
+						ui.print(
+								"\nWhat week should be planned to?\n Enter week on form yyww (e.g. 2101 for first week of 2021)");
+						String yearWeek = getInput();
+						if (yearWeek != null) {
+							while (true) {
+								ui.print("\nHow many hours should be assigned to the employee for the week?");
+								String input = getInput();
+								if (input == null) {
+									break;
+								} else {
+									try {
+										double hours = Double.parseDouble(input);
+										app.allocateTimeForEmployee(pm, em, hours, project, activity, yearWeek);
+										ui.print("\nSUCCESS: Time allocated!");
+										break;
+									} catch (NumberFormatException e) {
+										ui.print("ERROR: Please enter number of hours as a decimal");
+									} catch (Exception e) {
+										ui.print(e.getMessage());
+										break;
+									}
+								}
+							}	
+						}
+					}
+				}
+			}
+		}
 	}
-	
+
 	private void viewTimeAllocation() {
 	}
 
@@ -415,7 +452,7 @@ public class Controller {
 						viewActivities();
 					};
 				}));
-		
+
 		//////////////////////////////////////////////
 		// Time planning related commands
 		commandList.put("/registertime", new CommandInfo("Register time for a workactivity", new Command() {
@@ -423,13 +460,13 @@ public class Controller {
 				registerTime();
 			};
 		}));
-		
+
 		commandList.put("/plantimeallocation", new CommandInfo("Plan an employees time allocation", new Command() {
 			public void runCommand() {
 				planTimeAllocation();
 			};
 		}));
-		
+
 		commandList.put("/viewtimeallocation", new CommandInfo("View time allocation for employees", new Command() {
 			public void runCommand() {
 				viewTimeAllocation();

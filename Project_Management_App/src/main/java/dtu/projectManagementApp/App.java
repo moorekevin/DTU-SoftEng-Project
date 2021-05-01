@@ -244,6 +244,9 @@ public class App {
 
 		if (!project.getAssignedEmployees().contains(em))
 			throw new Exception("Employee not assigned to project");
+		
+		if (!project.getProjectManager().equals(pm))
+			throw new Exception("ERROR: Project Manager is not assigned to the Project");
 
 		if (Integer.parseInt(yearWeek) > Integer.parseInt(activity.getEndWeek().getYearWeek())) {
 			throw new Exception("Activity has not begun/is ended for planned time");
