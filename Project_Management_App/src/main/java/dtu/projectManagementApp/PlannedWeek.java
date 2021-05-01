@@ -3,24 +3,19 @@ package dtu.projectManagementApp;
 import java.util.Map;
 import java.util.HashMap;
 
-public class PlannedWeek {
-	private Week week;
+public class PlannedWeek extends Week {
 	private Map<Activity,Double> plannedActivities;
-
-	public PlannedWeek(Week week) {
-		this.week = week;
+	
+	public PlannedWeek(String name) {
+		super(name);
 		this.plannedActivities = new HashMap<Activity,Double>();
 	}
 	
-	public Week getWeek() {
-		return week;
+	public void addActivityToWeek(Activity activity, Double hours) {
+		plannedActivities.put(activity, hours);
 	}
 	
-
 	public void addHoursForActivity(Activity activity, Double hours) {
-		if(!plannedActivities.containsKey(activity)) {
-			plannedActivities.put(activity, 0.0);
-		}
 		
 		Double registeredHours = plannedActivities.get(activity);
 		
@@ -35,19 +30,19 @@ public class PlannedWeek {
 		return totalPlannedHours;
 	}
 
-	@Override
-    public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-  
-        if (!(obj instanceof PlannedWeek)) {
-            return false;
-        }
-          
-        PlannedWeek plannedWeekComparison = (PlannedWeek) obj;
-          
-        return this.getWeek().equals(plannedWeekComparison.getWeek());
-    }
+//	@Override
+//    public boolean equals(Object obj) {
+//        if (obj == this) {
+//            return true;
+//        }
+//  
+//        if (!(obj instanceof PlannedWeek)) {
+//            return false;
+//        }
+//          
+//        PlannedWeek plannedWeekComparison = (PlannedWeek) obj;
+//          
+//        return this.getWeek().equals(plannedWeekComparison.getWeek());
+//    }
 
 }

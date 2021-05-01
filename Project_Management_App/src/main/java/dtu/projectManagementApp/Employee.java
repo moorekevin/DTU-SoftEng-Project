@@ -6,13 +6,11 @@ import java.util.List;
 public class Employee {
 	private String initials;
 	private double registeredHoursToday;
-	private List<Project> assignedProjects;
 	private List<Project> managingProjects;
 	private List<PlannedWeek> plannedWeekRepository;
 
 	public Employee(String initials) {
 		this.initials = initials;
-		assignedProjects = new ArrayList<>();
 		managingProjects = new ArrayList<>();
 		plannedWeekRepository = new ArrayList<>();
 	}
@@ -27,18 +25,6 @@ public class Employee {
 	
 	public void removeProjectManager(Project project) {
 		managingProjects.remove(project);
-	}
-
-	public void assignToProject(Project project) {
-		assignedProjects.add(project);
-	}
-
-	public void removeProject(Project project) {
-		assignedProjects.remove(project);
-	}
-
-	public List<Project> getAssignedProjects() {
-		return assignedProjects;
 	}
 
 	public String getInitials() {

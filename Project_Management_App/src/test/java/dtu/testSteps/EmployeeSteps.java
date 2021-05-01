@@ -77,7 +77,7 @@ public class EmployeeSteps {
 		eh.createAdditionalEmployee(initials);
 		eh.makeEmployeeProjectManager(eh.getAdditionalEmployee());
 		pm = eh.getAdditionalEmployee();
-		assertFalse(pm.getAssignedProjects().contains(ph.getProject()));
+		assertFalse(ph.getProject().getAssignedEmployees().contains(pm));
 	}
 
 	@Then("the Employee is not assigned to the Project")
