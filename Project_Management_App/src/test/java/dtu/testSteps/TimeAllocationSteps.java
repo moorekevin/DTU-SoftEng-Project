@@ -79,14 +79,10 @@ public class TimeAllocationSteps {
 	@When("the Employee assigns {int} days for the NonWorkActivity {string} for Week {string}")
 	public void the_employee_assigns_days_for_the_non_work_activity_for_week(Integer days, String name,
 			String yearWeek) {
-		
-		
+		try {
+			projectApp.assignToNonWorkActivity(employeeHelper.getEmployee(), name, days, yearWeek);
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
 	}
-
-	@Then("the NonWorkActivity {string} is set to {double} hours for Week {string}")
-	public void the_non_work_activity_is_set_to_hours_for_week(String name, Double hours, String yearWeek) {
-		// Write code here that turns the phrase above into concrete actions
-		throw new io.cucumber.java.PendingException();
-	}
-
 }

@@ -293,18 +293,21 @@ public class App {
 		return 0.0;
 	}
 
-	public void assignToNonWorkActivity(Employee em, NonWorkActivity activity, Integer days, String yearWeek){
+	public void assignToNonWorkActivity(Employee em, String nonWorkActivity, Integer days, String yearWeek) throws Exception{
         
-        int hours = days * 10;
-		//gør noget med integer
-		
-
 		for (PlannedWeek plannedWeek : em.getPlannedWeeks()) {
+			double weekHours = days * plannedWeek.getWPD();
 			if (plannedWeek.getYearWeek().equals(yearWeek)) {
-				
-				
+				if (plannedWeek.calculateTotalPlannedHours() + weekHours > plannedWeek.getWPW()) {
+				    throw new Exception("WARNING: The total planned work exceeds 50 hours for the week."
+				    		+ " Please contact a Project Manager");
+				}
+				for (Activity activity : plannedWeek.getPlannedActivities().keySet()) {
+					if (activity.getName().equals(nonWorkActivity)) {
+						plannedWeek.addHoursForActivity(activity, weekHours);
+					}
+				}
 			}
 		}
 	}
-
 }

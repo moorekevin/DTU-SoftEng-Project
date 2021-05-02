@@ -63,7 +63,7 @@ public class EmployeeHelper {
 		
 	}
 
-	public void setTimeAllocation(Employee em, String yearWeek, Double hours) {
+	public void setTimeAllocation(Employee em, String yearWeek, Double hours) throws Exception {
 		
 		NonWorkActivity testActivity = new NonWorkActivity("Activity");
 		PlannedWeek plannedWeek = new PlannedWeek(yearWeek);
