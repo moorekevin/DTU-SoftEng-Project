@@ -1,19 +1,14 @@
 package dtu.testSteps;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.runner.RunWith;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
-import io.cucumber.junit.Cucumber;
-import io.cucumber.junit.CucumberOptions;
 import dtu.projectManagementApp.App;
 import dtu.projectManagementApp.Employee;
 import dtu.projectManagementApp.Project;
 import dtu.projectManagementApp.WorkActivity;
-import dtu.projectManagementApp.Activity;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 public class TimeAllocationSteps {
 	private App projectApp;

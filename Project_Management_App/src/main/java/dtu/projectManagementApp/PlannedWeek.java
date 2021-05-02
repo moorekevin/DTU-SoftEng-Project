@@ -5,7 +5,9 @@ import java.util.HashMap;
 
 public class PlannedWeek extends Week {
 	private Map<Activity,Double> plannedActivities;
-	private final double WORKHOURS_PER_DAY = 10.0;
+	public static final double WORKHOURS_PER_DAY = 10.0;
+	public static final int DAYS_PER_WEEK = 5;
+	public static final double MAX_HOURS_PER_WEEK = 168.0;
 	
 	public PlannedWeek(String name) {
 		super(name);
@@ -42,15 +44,6 @@ public class PlannedWeek extends Week {
 	public Map<Activity,Double> getPlannedActivities() {
 		return plannedActivities;
 	}
-	
-	public double getWPW() { // Work Hours Per Week
-		return WORKHOURS_PER_DAY*5;
-	}
-	
-	public double getWPD() { // Work Hours Per Day
-		return WORKHOURS_PER_DAY;
-	}
-	
 	
 //	@Override
 //    public boolean equals(Object obj) {

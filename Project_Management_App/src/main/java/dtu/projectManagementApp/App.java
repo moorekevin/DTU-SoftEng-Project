@@ -3,12 +3,10 @@ package dtu.projectManagementApp;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
-import dtu.exceptions.*;
+import dtu.exceptions.EmployeeNotFoundException;
 
 public class App {
 	private List<Employee> employeeRepository;
@@ -126,6 +124,7 @@ public class App {
 
 	}
 
+	// TODO bliver ikke brugt
 	public void removeEmployeeFromProject(Project project, Employee em) throws Exception {
 
 		if (!project.getAssignedEmployees().contains(em))
@@ -244,7 +243,6 @@ public class App {
 	public void allocateTimeForEmployee(Employee pm, Employee em, Double hours, Project project, WorkActivity activity,
 			String yearWeek) throws Exception {
 
-
 		if (!project.getAssignedEmployees().contains(em))
 
 			throw new Exception("Employee not assigned to project");
@@ -270,7 +268,7 @@ public class App {
 			em.addPlannedWeek(thisPlannedWeek);
 		}
 
-		if (thisPlannedWeek.calculateTotalPlannedHours() + hours > 168.0)
+		if (thisPlannedWeek.calculateTotalPlannedHours() + hours > PlannedWeek.MAX_HOURS_PER_WEEK)
 			throw new Exception("Not enough available time for week");
 
 		thisPlannedWeek.addHoursForActivity(activity, hours);
@@ -303,17 +301,15 @@ public class App {
 		return null;
 	}
 
-	public void assignToNonWorkActivity(Employee em, String activityName, Integer days, String yearWeek) throws Exception {
-
-		int hours = days * 10;
-		// gør noget med integer
+	public void assignToNonWorkActivity(Employee em, String activityName, Integer days, String yearWeek)
+			throws Exception {
 
 		for (PlannedWeek plannedWeek : em.getPlannedWeeks()) {
-			double weekHours = days * plannedWeek.getWPD();
+			double weekHours = days * PlannedWeek.WORKHOURS_PER_DAY;
 			if (plannedWeek.getYearWeek().equals(yearWeek)) {
-				if (plannedWeek.calculateTotalPlannedHours() + weekHours > plannedWeek.getWPW()) {
-				    throw new Exception("WARNING: The total planned work exceeds 50 hours for the week."
-				    		+ " Please contact a Project Manager");
+				if (plannedWeek.calculateTotalPlannedHours() + weekHours > PlannedWeek.WORKHOURS_PER_DAY * PlannedWeek.DAYS_PER_WEEK) {
+					throw new Exception("WARNING: The total planned work exceeds allowed hours for the week."
+							+ " Please contact a Project Manager");
 				}
 				for (Activity activity : plannedWeek.getPlannedActivities().keySet()) {
 					if (activity.getName().equals(activityName)) {

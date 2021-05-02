@@ -296,6 +296,14 @@ public class Controller {
 
 	private void registerTime() {
 	}
+	
+	private void planNonWorkActivity() {
+		String methodName = "\n[Plan non-work activity] ";
+		Employee em = requestEmployee(methodName, "What are the initials of the employee who is planning?");
+		if (em != null) {
+			
+		}
+	}
 
 	private void viewProjects() {
 		ui.printProjects(app.getProjects());
@@ -514,6 +522,12 @@ public class Controller {
 		commandList.put("/registertime", new CommandInfo("Register time for a workactivity", new Command() {
 			public void runCommand() {
 				registerTime();
+			};
+		}));
+		
+		commandList.put("/plannonwork", new CommandInfo("Register time for a non-work activity", new Command() {
+			public void runCommand() {
+				planNonWorkActivity();
 			};
 		}));
 

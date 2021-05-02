@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class WorkActivity extends Activity {
-	private int projectId;
 	private double expectedHours;
 	private double workedHours;
 	private Week start;
