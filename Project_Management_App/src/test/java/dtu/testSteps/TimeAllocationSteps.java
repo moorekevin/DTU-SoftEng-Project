@@ -39,7 +39,10 @@ public class TimeAllocationSteps {
 	public void there_is_an_employee_with_initials_assigned_to_the_work_activity(String name) throws Exception {
 		activity = activityHelper.getWorkActivity();
 		employeeHelper.createEmployee(name);
+
 		pm = employeeHelper.getAdditionalEmployee();
+
+		
 		projectApp.assignEmployeeToProject(projectHelper.getProject(), pm, employeeHelper.getEmployee());
 		projectApp.assignEmployeeToActivity(projectHelper.getProject(), activity, pm, employeeHelper.getEmployee());
 
@@ -48,8 +51,8 @@ public class TimeAllocationSteps {
 	@Given("the Employee has {double} total hours Planned Work for Week {string}")
 	public void the_employee_has_total_hours_planned_work_for_week(Double hours, String yearWeek) throws Exception {
 		employeeHelper.setTimeAllocation(employeeHelper.getEmployee(), yearWeek, hours);
-		assertTrue(hours == projectApp.calculatePlannedHours(pm, employeeHelper.getEmployee(), yearWeek));
 
+		assertTrue(hours == projectApp.calculatePlannedHours(employeeHelper.getAdditionalEmployee(), employeeHelper.getEmployee(), yearWeek));
 	}
 
 	@When("the Project Manager allocates {double} hours for the Employee for the WorkActivity for Week {string}")
@@ -58,7 +61,7 @@ public class TimeAllocationSteps {
 
 		try {
 			
-			projectApp.allocateTimeForEmployee(pm, employeeHelper.getEmployee(), hours, projectHelper.getProject(),
+			projectApp.allocateTimeForEmployee(employeeHelper.getAdditionalEmployee(), employeeHelper.getEmployee(), hours, projectHelper.getProject(),
 					activity, yearWeek);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -69,8 +72,8 @@ public class TimeAllocationSteps {
 	@Then("the Employee has a total of {double} hours Planned Work for Week {string}")
 	public void the_employee_has_a_total_of_hours_planned_work_for_week(Double hours, String yearWeek)
 			throws Exception {
-		System.out.println(hours + " " + projectApp.calculatePlannedHours(pm, employeeHelper.getEmployee(), yearWeek));
-		assertTrue(hours == projectApp.calculatePlannedHours(pm, employeeHelper.getEmployee(), yearWeek));
+		System.out.println(hours + " " + projectApp.calculatePlannedHours(employeeHelper.getAdditionalEmployee(), employeeHelper.getEmployee(), yearWeek));
+		assertTrue(hours == projectApp.calculatePlannedHours(employeeHelper.getAdditionalEmployee(), employeeHelper.getEmployee(), yearWeek));
 
 	}
 

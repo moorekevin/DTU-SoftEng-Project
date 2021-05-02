@@ -26,7 +26,7 @@ public class EmployeeHelper {
 
 	public Employee getAdditionalEmployee() throws Exception {
 		if (additionalEmployee == null) {
-			additionalEmployee = createAdditionalEmployee("AAAA");
+			additionalEmployee = createAdditionalEmployee("ABCD");
 		}
 		return additionalEmployee;
 	}

@@ -244,7 +244,6 @@ public class App {
 	public void allocateTimeForEmployee(Employee pm, Employee em, Double hours, Project project, WorkActivity activity,
 			String yearWeek) throws Exception {
 
-		// HUSK FEJLHÅNDTERING
 
 		if (!project.getAssignedEmployees().contains(em))
 
@@ -279,6 +278,10 @@ public class App {
 	}
 
 	public double calculatePlannedHours(Employee pm, Employee em, String week) throws Exception {
+		if (pm == null || em == null) {
+			throw new Exception("ERROR: Employee(s) do not exist");
+		}
+
 //		if (!pm.isProjectManger())
 //			throw new Exception("ERROR: Employee is not project manager");
 
