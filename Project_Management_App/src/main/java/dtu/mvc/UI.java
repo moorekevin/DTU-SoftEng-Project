@@ -28,8 +28,9 @@ public class UI {
 	}
 
 	public void print(String methodName, String printingInfo) {
-		System.out.println(methodName + printingInfo);
+		System.out.println("\n[" + methodName + "] " + printingInfo);
 	}
+	
 	public void print(String printingInfo) {
 		System.out.println(printingInfo);
 	}
@@ -90,6 +91,7 @@ public class UI {
 		}
 	}
 	
+	// TODO Sort
 	public void printTimeAllocation(double plannedHours, Map<Activity,Double> plannedActivities) {
 		if (plannedHours == 0.0) {
 			System.out.println("\nThere aren't any planned hours for the week");

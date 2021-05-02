@@ -65,7 +65,7 @@ public class Controller {
 	}
 
 	private void createProject() {
-		String methodName = "\n[Create project] ";
+		String methodName = "Create project";
 		ui.print(methodName, "What should the name of the project be?");
 		String nameOfProject = getInput();
 		if (nameOfProject != null) {
@@ -75,7 +75,7 @@ public class Controller {
 	}
 
 	private void deleteProject() {
-		String methodName = "\n[Delete project] ";
+		String methodName = "Delete project";
 		Project project = requestProject(methodName, "What is the project's ID?");
 		if (project != null) {
 			try {
@@ -88,7 +88,7 @@ public class Controller {
 	}
 
 	private void addEmployee() {
-		String methodName = "\n[Add employee] ";
+		String methodName = "Add employee";
 		ui.print(methodName, "What are the initials of the employee?");
 
 		String initials = getInput();
@@ -103,7 +103,7 @@ public class Controller {
 	}
 
 	private void assignEmployee() {
-		String methodName = "\n[Assign to project] ";
+		String methodName = "Assign to project";
 		Employee pm = requestEmployee(methodName, "What are the initials of the project manager who is assigning?");
 		if (pm != null) { // Continue only if user didn't type /exit
 			Employee em = requestEmployee(methodName, "What are the initials of the employee who should be assigned?");
@@ -123,7 +123,7 @@ public class Controller {
 	}
 
 	private void assignProjectManager() {
-		String methodName = "\n[Assign project manager] ";
+		String methodName = "Assign project manager";
 		Employee em = requestEmployee(methodName,
 				"What are the initials of the employee who should be project manager?");
 		if (em != null) {
@@ -141,7 +141,7 @@ public class Controller {
 	}
 
 	private void createActivity() {
-		String methodName = "\n[Create activity] ";
+		String methodName = "Create activity";
 		Employee pm = requestEmployee(methodName,
 				"What are the initials of the project manager who is creating the activity?");
 		if (pm != null) {
@@ -160,7 +160,7 @@ public class Controller {
 						if (endWeek != null) {
 							try {
 								app.createWorkActivity(project, pm, name, startWeek, endWeek);
-								ui.print("\nSUCCESS: Activity created!");
+								ui.print("\nSUCCESS: Activity \"" + name + "\" created!");
 							} catch (Exception e) {
 								ui.print(e.getMessage());
 							}
@@ -172,7 +172,7 @@ public class Controller {
 	}
 
 	private void editActivity() {
-		String methodName = "\n[Edit Activity] ";
+		String methodName = "Edit Activity";
 		Employee pm = requestEmployee(methodName,
 				"What are the initials of the project manager who is editing the activity?");
 		if (pm != null) {
@@ -207,7 +207,7 @@ public class Controller {
 	}
 
 	private void setExpectedHours() {
-		String methodName = "\n[Set expected hours] ";
+		String methodName = "Set expected hours";
 		Project project = requestProject(methodName, "What is the ID of the project the activity is assigned to?");
 		if (project != null) {
 			WorkActivity activity = requestActivity(methodName, project, "What is the name of the activity?");
@@ -228,7 +228,7 @@ public class Controller {
 	}
 
 	private void assignEmployeeToActivity() {
-		String methodName = "\n[Assign To Activity] ";
+		String methodName = "Assign To Activity";
 		Employee pm = requestEmployee(methodName, "What are the initials of the project manager who is assigning?");
 		if (pm != null) {
 			Employee em = requestEmployee(methodName, "What are the initials of the employee who should be assigned?");
@@ -252,7 +252,7 @@ public class Controller {
 	}
 
 	private void planTimeAllocation() {
-		String methodName = "\n[Time Allocation] ";
+		String methodName = "Time Allocation] ";
 		Employee pm = requestEmployee(methodName, "What are the initials of the project manager who is planning?");
 		if (pm != null) {
 			Employee em = requestEmployee(methodName,
@@ -296,12 +296,46 @@ public class Controller {
 
 	private void registerTime() {
 	}
-	
+
 	private void planNonWorkActivity() {
-		String methodName = "\n[Plan non-work activity] ";
+		String methodName = "Plan non-work activity";
 		Employee em = requestEmployee(methodName, "What are the initials of the employee who is planning?");
 		if (em != null) {
-			
+			ui.print(methodName, "What kind of activity should be planned? Choose between:");
+			for (int i = 0; i < PlannedWeek.NON_WORK_ACTIVITIES.length; i++) {
+				ui.print(" [" + (i + 1) + "] " + PlannedWeek.NON_WORK_ACTIVITIES[i]);
+			}
+			String activityChoice = getInput();
+			if (activityChoice != null) {
+				String activityName = null;
+				try {
+					int number = Integer.parseInt(activityChoice);
+					activityName = PlannedWeek.NON_WORK_ACTIVITIES[number - 1];
+				} catch (Exception e) {
+					ui.print("ERROR: Please enter a valid choice");
+				}
+
+				if (activityName != null) {
+					ui.print(methodName,
+							"What week should be planned to?\n Enter week on form yyww (e.g. 2101 for first week of 2021)");
+					String week = getInput();
+					if (week != null) {
+						ui.print(methodName, "How many days is the activity?");
+						String input = getInput();
+						if (input != null) {
+							try {
+								int days = Integer.parseInt(input);
+								app.assignToNonWorkActivity(em, activityName, days, week);
+								ui.print("SUCCESS: Non-work activity created");
+							} catch (NumberFormatException e) {
+								ui.print("ERROR: Please enter number of days as an integer");
+							} catch (Exception e) {
+								ui.print(e.getMessage());
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -310,7 +344,7 @@ public class Controller {
 	}
 
 	private void viewEmployees() {
-		String methodName = "\n[View employees] ";
+		String methodName = "View employees";
 		ui.print(methodName
 				+ "Please choose one of the following to view a list of all employees:\n [1] For whole company\n [2] For a project\n [3] For an activity");
 		String choice = getInput();
@@ -341,26 +375,28 @@ public class Controller {
 	}
 
 	private void viewActivities() {
-		String methodName = "\n[View activities] ";
+		String methodName = "View activities";
 		Project project = requestProject(methodName,
 				"What is the ID of the project you wish to see the activities for?");
 		if (project != null) {
 			ui.printActivities(project.getActivities());
 		}
 	}
-	
+
 	private void viewTimeAllocation() {
-		String methodName = "\n[View time allocation] ";
+		String methodName = "View time allocation";
 		Employee pm = requestEmployee(methodName, "What are the initials of the project manager viewing?");
 		if (pm != null) {
-			Employee em = requestEmployee(methodName, "What are the initials of the employee who's time allocation should be viewed?");
+			Employee em = requestEmployee(methodName,
+					"What are the initials of the employee who's time allocation should be viewed?");
 			if (em != null) {
 				ui.print(methodName, "What week do you want to view time allocation for?");
 				String week = getInput();
 				if (week != null) {
 					try {
-						
-						ui.printTimeAllocation(app.calculatePlannedHours(pm, em, week), app.findPlannedWeek(em, week).getPlannedActivities());
+
+						ui.printTimeAllocation(app.calculatePlannedHours(pm, em, week),
+								app.findPlannedWeek(em, week).getPlannedActivities());
 					} catch (Exception e) {
 						ui.print(e.getMessage());
 					}
@@ -524,7 +560,7 @@ public class Controller {
 				registerTime();
 			};
 		}));
-		
+
 		commandList.put("/plannonwork", new CommandInfo("Register time for a non-work activity", new Command() {
 			public void runCommand() {
 				planNonWorkActivity();

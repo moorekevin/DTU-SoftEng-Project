@@ -304,6 +304,8 @@ public class App {
 	public void assignToNonWorkActivity(Employee em, String activityName, Integer days, String yearWeek)
 			throws Exception {
 
+		
+
 		for (PlannedWeek plannedWeek : em.getPlannedWeeks()) {
 			double weekHours = days * PlannedWeek.WORKHOURS_PER_DAY;
 			if (plannedWeek.getYearWeek().equals(yearWeek)) {

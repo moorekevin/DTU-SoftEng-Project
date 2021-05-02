@@ -8,14 +8,15 @@ public class PlannedWeek extends Week {
 	public static final double WORKHOURS_PER_DAY = 10.0;
 	public static final int DAYS_PER_WEEK = 5;
 	public static final double MAX_HOURS_PER_WEEK = 168.0;
+	public static final String[] NON_WORK_ACTIVITIES = {"Holiday", "Sickness", "Courses", "Other"};
 	
 	public PlannedWeek(String name) {
 		super(name);
 		this.plannedActivities = new HashMap<Activity,Double>();
-		addActivityToWeek(new NonWorkActivity("Holiday"));
-		addActivityToWeek(new NonWorkActivity("Sickness"));
-		addActivityToWeek(new NonWorkActivity("Courses"));
-		addActivityToWeek(new NonWorkActivity("Other"));
+		
+		for (int i = 0; i < NON_WORK_ACTIVITIES.length; i++) {
+			addActivityToWeek(new NonWorkActivity(NON_WORK_ACTIVITIES[i]));
+		}
 	}
 	
 	public void addActivityToWeek(Activity activity) {
