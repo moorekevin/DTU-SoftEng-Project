@@ -112,8 +112,6 @@ public class ActivitySteps {
 
 	@Then("the expected hours is {double} for the WorkActivity")
 	public void the_expected_hours_is_for_the_work_activity(Double expectedHours) throws Exception {
-		System.out.println(expectedHours);
-		System.out.println(activity.getExpectedHours());
 		assertTrue(activity.getExpectedHours()==expectedHours);
 	}
 	

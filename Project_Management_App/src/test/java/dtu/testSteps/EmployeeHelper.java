@@ -1,9 +1,12 @@
 package dtu.testSteps;
 
+import dtu.projectManagementApp.Activity;
 import dtu.projectManagementApp.App;
 import dtu.projectManagementApp.Employee;
+import dtu.projectManagementApp.NonWorkActivity;
 import dtu.projectManagementApp.PlannedWeek;
 import dtu.projectManagementApp.Project;
+import dtu.projectManagementApp.WorkActivity;
 
 public class EmployeeHelper {
 	private App app;
@@ -61,11 +64,12 @@ public class EmployeeHelper {
 	}
 
 	public void setTimeAllocation(Employee em, String yearWeek, Double hours) {
+		
+		NonWorkActivity testActivity = new NonWorkActivity("Activity");
 		PlannedWeek plannedWeek = new PlannedWeek(yearWeek);
 		em.addPlannedWeek(plannedWeek);
-		
 		int i = em.getPlannedWeeks().indexOf(plannedWeek);
-		em.getPlannedWeeks().get(i).setPlannedWork(hours);
+		em.getPlannedWeeks().get(i).addActivityToWeek(testActivity, hours);
 		
 	}
 }

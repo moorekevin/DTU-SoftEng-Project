@@ -6,7 +6,6 @@ import java.util.HashMap;
 public class PlannedWeek extends Week {
 	private Map<Activity,Double> plannedActivities;
 	private final int NORMAL_WORKHOURS_PER_DAY = 10;
-	private Double plannedWork;
 	
 	public PlannedWeek(String name) {
 		super(name);
@@ -22,6 +21,9 @@ public class PlannedWeek extends Week {
 	}
 	
 	public void addHoursForActivity(Activity activity, Double hours) {
+		if (plannedActivities.get(activity) == null) {
+			addActivityToWeek(activity, 0.0);
+		}
 		
 		Double registeredHours = plannedActivities.get(activity);
 		
@@ -29,21 +31,13 @@ public class PlannedWeek extends Week {
 	}
 
 	public double calculateTotalPlannedHours() {
-		
+		double plannedWork = 0.0;
 		for (Activity checkActivity : plannedActivities.keySet()) {
 			plannedWork += plannedActivities.get(checkActivity);
 		}
 		return plannedWork;
-		
 	}
-	
-	public void setPlannedWork(Double hours) {
-		plannedWork = hours;
-	}
-	
-	public Double getPlannedWork() {
-		return plannedWork;
-	}
+
 	
 	
 
