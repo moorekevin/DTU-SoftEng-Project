@@ -8,6 +8,7 @@ import dtu.projectManagementApp.*;
 public class Controller {
 	private UI ui;
 	private App app;
+	private Indexer indexer;
 
 	private boolean isRunning = true;
 
@@ -18,6 +19,7 @@ public class Controller {
 
 		ui = new UI(commandList);
 		app = new App();
+		indexer = app.getIndexer();
 
 		createDataToTest();
 	}
@@ -26,15 +28,16 @@ public class Controller {
 	// Should be deleted once done testing GUI
 	private void createDataToTest() {
 		try {
-			app.addEmployee("EM");
-			app.addEmployee("PM");
-			app.createProject("Project01");
-			app.createProject("Number2");
-			app.assignProjectManager(app.findProject(210001), app.findEmployee("pm"));
-			app.assignEmployeeToProject(app.findProject(210001), app.findEmployee("pm"), app.findEmployee("em"));
-			app.createWorkActivity(app.findProject(210001), app.findEmployee("pm"), "act1", "2201", "2210");
-			app.allocateTimeForEmployee(app.findEmployee("pm"), app.findEmployee("em"), 12.0, app.findProject(210001),
-					app.findActivity(app.findProject(210001), "act1"), "2202");
+			indexer.addEmployee("EM");
+			indexer.addEmployee("PM");
+			indexer.createProject("Project01");
+			indexer.createProject("Number2");
+			app.assignProjectManager(indexer.findProject(210001), indexer.findEmployee("pm"));
+			app.assignEmployeeToProject(indexer.findProject(210001), indexer.findEmployee("pm"),
+					indexer.findEmployee("em"));
+			app.createWorkActivity(indexer.findProject(210001), indexer.findEmployee("pm"), "act1", "2201", "2210");
+			app.allocateTimeForEmployee(indexer.findEmployee("pm"), indexer.findEmployee("em"), 12.0,
+					indexer.findProject(210001), indexer.findActivity(indexer.findProject(210001), "act1"), "2202");
 		} catch (Exception e) {
 			ui.printError(e.getMessage());
 		}
@@ -60,7 +63,7 @@ public class Controller {
 		ui.print(methodName, "What should the name of the project be?");
 		String nameOfProject = ui.getUserInput();
 		if (nameOfProject != null) {
-			Project project = app.createProject(nameOfProject);
+			Project project = indexer.createProject(nameOfProject);
 			ui.print("Project \"" + project.getName() + "\" created with ID \"" + project.getId() + "\"!");
 			ui.printSuccess(methodName);
 		}
@@ -71,7 +74,7 @@ public class Controller {
 		Project project = requestProject(methodName, "What is the project's ID?");
 		if (project != null) {
 			try {
-				app.deleteProject(project);
+				indexer.deleteProject(project);
 				ui.printSuccess(methodName);
 			} catch (Exception e) {
 				ui.printError(e.getMessage());
@@ -86,7 +89,7 @@ public class Controller {
 		String initials = ui.getUserInput();
 		if (initials != null) {
 			try {
-				app.addEmployee(initials);
+				indexer.addEmployee(initials);
 				ui.print("\n Employee \"" + initials.toUpperCase() + "\" created!");
 				ui.printSuccess(methodName);
 			} catch (Exception e) {
@@ -94,9 +97,21 @@ public class Controller {
 			}
 		}
 	}
+	
+	private void removeEmployee() {
+		String methodName = "Remove employee";
+		Employee em = requestEmployee(methodName, "What are the initials of the employee?");
+		if (em != null) {
+			try {
+				indexer.removeEmployee(em);
+			} catch (Exception e) {
+				ui.printError(methodName);
+			}
+		}
+	}
 
-	private void assignEmployee() {
-		String methodName = "Assign to project";
+	private void assignEmployeeToProject() {
+		String methodName = "Assign employee to project";
 		Employee pm = requestEmployee(methodName, "What are the initials of the project manager who is assigning?");
 		if (pm != null) { // Continue only if user didn't type /exit
 			Employee em = requestEmployee(methodName, "What are the initials of the employee who should be assigned?");
@@ -110,6 +125,22 @@ public class Controller {
 					} catch (Exception e) {
 						ui.printError(e.getMessage());
 					}
+				}
+			}
+		}
+	}
+
+	private void removeEmployeeFromProject() {
+		String methodName = "Remove employee from project";
+		Employee pm = requestEmployee(methodName, "What are the initials of the project manager?");
+		if (pm != null) {
+			Project project = requestProject(methodName,
+					"What is the ID of the project the project manager should be removed from?");
+			if (project != null) {
+				try {
+					app.removeEmployeeFromProject(project, pm);
+				} catch (Exception e) {
+					ui.printError(e.getMessage());
 				}
 			}
 		}
@@ -132,7 +163,7 @@ public class Controller {
 			}
 		}
 	}
-	
+
 	private void removeProjectManager() {
 		String methodName = "Remove project manager";
 		Employee pm = requestEmployee(methodName, "What are the initials of the project manager?");
@@ -144,6 +175,24 @@ public class Controller {
 					ui.printSuccess(methodName);
 				} catch (Exception e) {
 					ui.printError(e.getMessage());
+				}
+			}
+		}
+	}
+
+	private void removeEmployeeFromActivity() {
+		String methodName = "Remove employee from activity";
+		Employee pm = requestEmployee(methodName, "What are the initials of the project manager?");
+		if (pm != null) {
+			Project project = requestProject(methodName, "What is the ID of the project the activity is assigned to?");
+			if (project != null) {
+				WorkActivity activity = requestActivity(methodName, project, "What is the name of the activity?");
+				if (activity != null) {
+					try {
+						app.removeEmployeeFromActivity(pm, activity);
+					} catch (Exception e) {
+						ui.printError(e.getMessage());
+					}
 				}
 			}
 		}
@@ -304,9 +353,6 @@ public class Controller {
 		}
 	}
 
-	private void registerTime() {
-	}
-
 	private void planNonWorkActivity() {
 		String methodName = "Plan non-work activity";
 		Employee em = requestEmployee(methodName, "What are the initials of the employee who is planning?");
@@ -350,7 +396,7 @@ public class Controller {
 	}
 
 	private void viewProjects() {
-		ui.printProjects(app.getProjects());
+		ui.printProjects(indexer.getProjects());
 	}
 
 	private void viewEmployees() {
@@ -363,7 +409,7 @@ public class Controller {
 			return;
 
 		if (choice.equals("1")) { // For whole company
-			ui.printEmployees(app.getEmployees());
+			ui.printEmployees(indexer.getEmployees());
 		} else if (choice.equals("2")) { // For a project
 			Project project = requestProject(methodName,
 					"Please input the ID of the project you wish to see assigned employees for");
@@ -406,7 +452,7 @@ public class Controller {
 					try {
 
 						ui.printTimeAllocation(app.calculatePlannedHours(pm, em, week),
-								app.findPlannedWeek(em, week).getPlannedActivities());
+								indexer.findPlannedWeek(em, week).getPlannedActivities());
 					} catch (Exception e) {
 						ui.printError(e.getMessage());
 					}
@@ -425,7 +471,7 @@ public class Controller {
 				break;
 			} else {
 				try {
-					return app.findEmployee(initials);
+					return indexer.findEmployee(initials);
 				} catch (Exception e) {
 					ui.printError(e.getMessage());
 				}
@@ -444,7 +490,7 @@ public class Controller {
 			} else {
 				try {
 					int projectID = Integer.parseInt(userInput);
-					return app.findProject(projectID);
+					return indexer.findProject(projectID);
 				} catch (NumberFormatException e) {
 					ui.printError("Please enter numbers as Project ID");
 				} catch (Exception e) {
@@ -464,7 +510,7 @@ public class Controller {
 				break;
 			} else {
 				try {
-					return app.findActivity(project, name);
+					return indexer.findActivity(project, name);
 				} catch (Exception e) {
 					ui.printError(e.getMessage());
 				}
@@ -508,9 +554,33 @@ public class Controller {
 			};
 		}));
 
-		commandList.put("/assignemployee", new CommandInfo("Assign an employee to a project", new Command() {
+		commandList.put("/removeemployee", new CommandInfo("Remove an existing employee from the system", new Command() {
 			public void runCommand() {
-				assignEmployee();
+				removeEmployee();
+			};
+		}));
+
+		commandList.put("/assigntoproject", new CommandInfo("Assign an employee to a project", new Command() {
+			public void runCommand() {
+				assignEmployeeToProject();
+			};
+		}));
+
+		commandList.put("/removefromproject", new CommandInfo("Remove an employee from a project", new Command() {
+			public void runCommand() {
+				removeEmployeeFromProject();
+			};
+		}));
+
+		commandList.put("/assigntoactivity", new CommandInfo("Assign an employee to a workactivity", new Command() {
+			public void runCommand() {
+				assignEmployeeToActivity();
+			};
+		}));
+
+		commandList.put("/removefromactivity", new CommandInfo("Remove an employee from a workactivity", new Command() {
+			public void runCommand() {
+				removeEmployeeFromActivity();
 			};
 		}));
 
@@ -557,12 +627,6 @@ public class Controller {
 					};
 				}));
 
-		commandList.put("/assigntoactivity", new CommandInfo("Assign an employee to a workactivity", new Command() {
-			public void runCommand() {
-				assignEmployeeToActivity();
-			};
-		}));
-
 		commandList.put("/viewactivities",
 				new CommandInfo("View list of all workactivities or for a specific project", new Command() {
 					public void runCommand() {
@@ -572,12 +636,6 @@ public class Controller {
 
 		//////////////////////////////////////////////
 		// Time planning related commands
-		commandList.put("/registertime", new CommandInfo("Register time for a workactivity", new Command() {
-			public void runCommand() {
-				registerTime();
-			};
-		}));
-
 		commandList.put("/plannonwork", new CommandInfo("Register time for a non-work activity", new Command() {
 			public void runCommand() {
 				planNonWorkActivity();

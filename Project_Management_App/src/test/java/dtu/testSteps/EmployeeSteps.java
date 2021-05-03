@@ -64,7 +64,7 @@ public class EmployeeSteps {
 		em = eh.createNonExistingEmployee(initials);
 		boolean errorThrown = false;
 		try { // Checks that employee indeed does not exist
-			projectApp.findEmployee(em.getInitials());
+			projectApp.getIndexer().findEmployee(em.getInitials());
 		} catch (Exception e) {
 			errorThrown = true;
 		}

@@ -30,7 +30,7 @@ public class ProjectSteps {
 	public void the_project_is_assigned_to_the_list_of_projects() {
 		boolean projectAssigned = false;
 		Project checkProject = ph.getProject();
-		for (Project proj: projectApp.getProjects()) {
+		for (Project proj: projectApp.getIndexer().getProjects()) {
 			if (proj.getId() == checkProject.getId() && proj.getName() == checkProject.getName()) {
 				projectAssigned = true;
 			}
@@ -52,19 +52,19 @@ public class ProjectSteps {
 	@Given("there is a Project with id {int}")
 	public void there_is_a_project_with_id(Integer id) {
 		ph.setProject(new Project("AAAA", id));
-		projectApp.getProjects().add(ph.getProject());
+		projectApp.getIndexer().getProjects().add(ph.getProject());
 	}
 
 	@When("the Employee creates a new Project with id {int}")
 	public void the_employee_creates_a_new_project_with_id(Integer id) {
-		projectApp.getProjects().add(new Project("AAAA", id));
+		projectApp.getIndexer().getProjects().add(new Project("AAAA", id));
 
 	}
 
 	@When("the Employee deletes the Project")
 	public void the_employee_deletes_the_project() {
 		try {
-			projectApp.deleteProject(ph.getProject());
+			projectApp.getIndexer().deleteProject(ph.getProject());
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -72,13 +72,14 @@ public class ProjectSteps {
 
 	@Then("a Project with id {int} is not in the list of Projects")
 	public void a_project_with_id_is_not_in_the_list_of_projects(Integer id) {
-		assertFalse(projectApp.getProjects().contains(ph.getProject()));
+		assertFalse(projectApp.getIndexer().getProjects().contains(ph.getProject()));
 	}
 
 	@Given("there is not a Project with id {int} in the list of Projects")
 	public void there_is_not_a_project_with_id_in_the_list_of_projects(Integer id) {
 		ph.setProject(new Project("AAAA", id));
-		assertFalse(projectApp.getProjects().contains(ph.getProject()));
+		assertFalse(projectApp.getIndexer().getProjects().contains(ph.getProject()));
+		
 	}
 
 	@Then("the error is thrown {string}")

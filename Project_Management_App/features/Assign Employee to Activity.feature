@@ -14,7 +14,7 @@ Scenario: Assign an Employee to a Activity
 Scenario: Assign a non-existing Employee to an Activity
 	Given there is not an Employee with initials "BBBB" 
 	When the Project Manager assigns the Employee to the Activity
-	Then the error is thrown "Employee(s) do not exist"
+	Then the error is thrown "Employee does not exist"
 	And the Employee with initials "BBBB" is not assigned to the Activity
 
 Scenario: Assign an Employee to an Activity when the Employee is not assigned to a Project

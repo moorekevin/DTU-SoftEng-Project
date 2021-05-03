@@ -62,7 +62,6 @@ public class ActivitySteps {
 
 	@When("the Project Manager assigns the Employee to the Activity")
 	public void the_project_manager_assigns_the_employee_to_the_activity() {
-
 		try {
 			projectApp.assignEmployeeToActivity(projectHelper.getProject(), activity,
 					employeeHelper.getAdditionalEmployee(), employeeHelper.getEmployee());
@@ -145,8 +144,8 @@ public class ActivitySteps {
 	@Then("the Activity has name {string}, start-week {string} and end-week {string}")
 	public void the_activity_has_name_start_week_and_end_week(String name, String start, String end) {
 	   assertTrue(activity.getName().equals(name));
-	   assertTrue(activity.getStartWeek().getYearWeek().equals(start));
-	   assertTrue(activity.getEndWeek().getYearWeek().equals(end));
+	   assertTrue(activity.getStart().equals(start));
+	   assertTrue(activity.getEnd().equals(end));
 	}
 	
 	

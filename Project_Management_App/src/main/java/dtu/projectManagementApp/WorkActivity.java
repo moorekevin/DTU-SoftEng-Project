@@ -5,21 +5,17 @@ import java.util.ArrayList;
 
 public class WorkActivity extends Activity {
 	private double expectedHours;
-	private double workedHours;
-	private Week start;
-	private Week end;
+	private String start;
+	private String end;
 	private List<Employee> assignedEmployees = new ArrayList<>();
 	
-	public WorkActivity(String name, Week startWeek, Week endWeek) {
+	public WorkActivity(String name, String startWeek, String endWeek) {
 		super(name);
 		this.start = startWeek;
 		this.end = endWeek;
 		expectedHours = 0;
 	}
 	
-	public Week getStartWeek() {
-		return start;
-	}
 	
 	public double calculateResidualHours(){
 		return 0;
@@ -29,7 +25,7 @@ public class WorkActivity extends Activity {
 		
 	}
 	
-	public void editActivity(String name, Week startWeek, Week endWeek, int something){
+	public void editActivity(String name, String startWeek, String endWeek, int something){
 		
 	}
 	
@@ -41,6 +37,10 @@ public class WorkActivity extends Activity {
 		assignedEmployees.add(em);
 	}
 	
+	public void removeEmployee(Employee em) {
+		assignedEmployees.remove(em);
+	}
+	
 	public double getExpectedHours() {
 		return expectedHours;
 	}
@@ -48,19 +48,19 @@ public class WorkActivity extends Activity {
 	public void setExpectedHours(double expectedHours){
 		this.expectedHours = expectedHours;
 	}
-	public Week getStart() {
+	public String getStart() {
 		return start;
 	}
 	public void setStart(String startYearWeek) {
-		start.setYearWeek(startYearWeek);
+		start = startYearWeek;
 	}
 	
-	public Week getEndWeek() {
+	public String getEnd() {
 		return end;
 	}
 	
 	public void setEnd(String endYearWeek) {
-		end.setYearWeek(endYearWeek);
+		end = endYearWeek;
 	}
 	
 	

@@ -99,7 +99,7 @@ public class UI {
 			System.out.format("%-12s%-6s%-6s%-6s%n", "  Name", " Start", " End", " Expected hours");
 			print("  -------------------------------------");
 			for (WorkActivity act: activities) {
-				System.out.format("%-12s%-6s%-6s%-6s%n", "  " + act.getName(), " " + act.getStartWeek().getYearWeek(), " " + act.getEndWeek().getYearWeek(), " " + act.getExpectedHours());
+				System.out.format("%-12s%-6s%-6s%-6s%n", "  " + act.getName(), " " + act.getStart(), " " + act.getEnd(), " " + act.getExpectedHours());
 			}
 		}
 	}

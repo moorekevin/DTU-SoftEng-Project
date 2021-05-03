@@ -19,7 +19,7 @@ public class ProjectHelper {
 	}
 
 	public Project createProject(String name) {
-		project = app.createProject(name);
+		project = app.getIndexer().createProject(name);
 		return project;
 	}
 

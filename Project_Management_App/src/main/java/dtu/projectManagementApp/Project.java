@@ -48,6 +48,9 @@ public class Project {
 	
 	public void removeEmployeeFromProject(Employee em) {
 		assignedEmployees.remove(em);
+		for (WorkActivity workActivity : activities) {
+			workActivity.removeEmployee(em);
+		}
 	}
 	
 	public List<Employee> getAssignedEmployees() {

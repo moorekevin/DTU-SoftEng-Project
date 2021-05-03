@@ -5,14 +5,17 @@ import dtu.projectManagementApp.Employee;
 import dtu.projectManagementApp.NonWorkActivity;
 import dtu.projectManagementApp.PlannedWeek;
 import dtu.projectManagementApp.Project;
+import dtu.projectManagementApp.Indexer;
 
 public class EmployeeHelper {
 	private App app;
 	private Employee employee;
 	private Employee additionalEmployee;
+	private Indexer indexer;
 
 	public EmployeeHelper(App app) {
 		this.app = app;
+		this.indexer = app.getIndexer();
 	}
 
 	public Employee getEmployee() throws Exception {
@@ -30,15 +33,15 @@ public class EmployeeHelper {
 	}
 
 	public Employee createEmployee(String name) throws Exception {
-		app.addEmployee(name);
-		employee = app.findEmployee(name);
+		indexer.addEmployee(name);
+		employee = indexer.findEmployee(name);
 		return employee;
 	}
 
 	// Nødt til at skelne fordi skal bruge begge seperate i senere test
 	public Employee createAdditionalEmployee(String name) throws Exception {
-		app.addEmployee(name);
-		additionalEmployee = app.findEmployee(name);
+		indexer.addEmployee(name);
+		additionalEmployee = app.getIndexer().findEmployee(name);
 		return additionalEmployee;
 	}
 

@@ -3,15 +3,16 @@ package dtu.projectManagementApp;
 import java.util.Map;
 import java.util.HashMap;
 
-public class PlannedWeek extends Week {
+public class PlannedWeek {
 	private Map<Activity,Double> plannedActivities;
+	private String yearWeek;
 	public static final double WORKHOURS_PER_DAY = 10.0;
 	public static final int DAYS_PER_WEEK = 5;
 	public static final double MAX_HOURS_PER_WEEK = 168.0;
 	public static final String[] NON_WORK_ACTIVITIES = {"Holiday", "Sickness", "Courses", "Other"};
 	
-	public PlannedWeek(String name) {
-		super(name);
+	public PlannedWeek(String yearWeek) {
+		this.yearWeek = yearWeek;
 		this.plannedActivities = new HashMap<Activity,Double>();
 		
 		for (int i = 0; i < NON_WORK_ACTIVITIES.length; i++) {
@@ -44,6 +45,10 @@ public class PlannedWeek extends Week {
 	
 	public Map<Activity,Double> getPlannedActivities() {
 		return plannedActivities;
+	}
+	
+	public String getYearWeek() {
+		return yearWeek;
 	}
 	
 //	@Override
