@@ -111,7 +111,7 @@ public class App {
 	public void allocateTimeForEmployee(Employee pm, Employee em, Double hours, Project project, WorkActivity activity,
 			String yearWeek) throws Exception {
 
-		indexer.validateEmployeeAssigned(em, project); indexer.validateProjectManager(pm, project);
+		indexer.validateEmployeeAssigned(em, project); indexer.validateProjectManager(pm);
 
 		if (Integer.parseInt(yearWeek) > Integer.parseInt(activity.getEnd())) {
 			throw new Exception("Activity has not begun/is ended for planned time");
@@ -125,18 +125,11 @@ public class App {
 			em.addPlannedWeek(plannedWeek);
 		}
 		
-		if(plannedWeek.calculateTotalPlannedHours() + hours > PlannedWeek.MAX_HOURS_PER_WEEK)
-			throw new Exception("Not enough available time for week");
-		
 		plannedWeek.addHoursForActivity(activity, hours);
-
 	}
 
-	public double calculatePlannedHours(Employee pm, Employee em, String week) throws Exception {
-		indexer.findEmployee(em.getInitials()); indexer.findEmployee(pm.getInitials());
-
-//		if (!pm.isProjectManger())
-//			throw new Exception("Employee is not project manager");
+	public double calculatePlannedHours(Employee em, String week) throws Exception {
+		indexer.findEmployee(em.getInitials());
 
 		PlannedWeek foundPlannedWeek = indexer.findPlannedWeek(em, week);
 		if (foundPlannedWeek == null) {
@@ -147,19 +140,10 @@ public class App {
 
 	public void assignToNonWorkActivity(Employee em, String activityName, Integer days, String yearWeek)
 			throws Exception {
-
 		double weekHours = days * PlannedWeek.WORKHOURS_PER_DAY;
 		PlannedWeek plannedWeek = indexer.findPlannedWeek(em, yearWeek);
-		if (plannedWeek.calculateTotalPlannedHours() + weekHours > PlannedWeek.WORKHOURS_PER_DAY
-				* PlannedWeek.DAYS_PER_WEEK) {
-			throw new Exception("WARNING: The total planned work exceeds allowed hours for the week."
-					+ " Please contact a Project Manager");
-		}
-		for (Activity activity : plannedWeek.getPlannedActivities().keySet()) {
-			if (activity.getName().equals(activityName)) {
-				plannedWeek.addHoursForActivity(activity, weekHours);
-			}
-		}
-
+		
+		Activity activityFound = plannedWeek.checkNonWorkActivity(activityName);
+		plannedWeek.addHoursForActivity(activityFound, weekHours);
 	}
 }
