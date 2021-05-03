@@ -53,12 +53,12 @@ public class PlannedWeek {
 			throw new Exception("Not enough available time for week");
 
 		plannedActivities.put(activity, registeredHours+hours);
-/*
+
 		if (calculatedTotalHoursBefore + hours > PlannedWeek.WORKHOURS_PER_DAY * PlannedWeek.DAYS_PER_WEEK) {
 			throw new WarningException("The total planned work exceeds allowed hours for the week."
 					+ " Time is allocated but please contact a Project Manager");
 		}
-		*/
+
 	}
 
 	public double calculateTotalPlannedHours() {

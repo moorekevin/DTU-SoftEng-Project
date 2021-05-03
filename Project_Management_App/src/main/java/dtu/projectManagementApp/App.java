@@ -1,5 +1,7 @@
 package dtu.projectManagementApp;
 
+import dtu.exceptions.OperationNotAllowedException;
+
 public class App {
 	private Indexer indexer;
 
@@ -140,6 +142,9 @@ public class App {
 
 	public void assignToNonWorkActivity(Employee em, String activityName, Integer days, String yearWeek)
 			throws Exception {
+		if (days > 7) {
+			throw new OperationNotAllowedException("There cannot be more than 7 days in a week");
+		}
 		double weekHours = days * PlannedWeek.WORKHOURS_PER_DAY;
 		PlannedWeek plannedWeek = indexer.findPlannedWeek(em, yearWeek);
 		

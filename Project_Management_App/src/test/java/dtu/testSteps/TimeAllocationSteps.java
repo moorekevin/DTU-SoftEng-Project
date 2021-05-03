@@ -45,13 +45,10 @@ public class TimeAllocationSteps {
 
 	@Given("the Employee has {double} total hours Planned Work for Week {string}")
 	public void the_employee_has_total_hours_planned_work_for_week(Double hours, String yearWeek) throws Exception {
-		System.out.println("0");
 		try {
 			employeeHelper.setTimeAllocation(employeeHelper.getEmployee(), yearWeek, hours);
-			System.out.println("1");
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
-			System.out.println("2");
 		}
 
 		assertTrue(hours == projectApp.calculatePlannedHours(employeeHelper.getEmployee(), yearWeek));
@@ -73,7 +70,6 @@ public class TimeAllocationSteps {
 	public void the_employee_has_a_total_of_hours_planned_work_for_week(Double hours, String yearWeek)
 			throws Exception {
 		assertTrue(hours == projectApp.calculatePlannedHours(employeeHelper.getEmployee(), yearWeek));
-
 	}
 
 	// Plan Non-Work related Activity Feature

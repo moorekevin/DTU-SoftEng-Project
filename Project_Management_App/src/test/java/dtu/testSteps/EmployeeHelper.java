@@ -70,10 +70,7 @@ public class EmployeeHelper {
 		PlannedWeek plannedWeek = new PlannedWeek(yearWeek);
 		em.addPlannedWeek(plannedWeek);
 
-		System.out.println(plannedWeek.calculateTotalPlannedHours());
-
 		Activity testActivity = plannedWeek.checkNonWorkActivity(PlannedWeek.NON_WORK_ACTIVITIES[0]);
 		plannedWeek.addHoursForActivity(testActivity, hours);
-		System.out.println(plannedWeek.calculateTotalPlannedHours());
 	}
 }
