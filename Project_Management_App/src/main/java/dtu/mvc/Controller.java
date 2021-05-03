@@ -1,8 +1,6 @@
 package dtu.mvc;
 
 import java.util.Map;
-
-import dtu.exceptions.WarningException;
 import dtu.projectManagementApp.*;
 
 public class Controller {
@@ -93,6 +91,7 @@ public class Controller {
 		if (initials != null) {
 			try {
 				indexer.addEmployee(initials);
+				ui.print("\n Employee \"" + initials.toUpperCase() + "\" created!");
 				ui.printSuccess(methodName);
 			} catch (Exception e) {
 				ui.printError(e.getMessage());
@@ -317,7 +316,7 @@ public class Controller {
 
 
 	public void planTimeAllocation() {
-		String methodName = "Time Allocation";
+		String methodName = "Time Allocation] ";
 		Employee pm = requestEmployee(methodName, "What are the initials of the project manager who is planning?");
 		if (pm != null) {
 			Employee em = requestEmployee(methodName,
@@ -346,9 +345,6 @@ public class Controller {
 										break;
 									} catch (NumberFormatException e) {
 										ui.printError("Please enter number of hours as a decimal");
-									} catch (WarningException e) {
-										ui.printWarning(e.getMessage());
-										ui.printSuccess(methodName);
 									} catch (Exception e) {
 										ui.printError(e.getMessage());
 										break;
@@ -394,9 +390,6 @@ public class Controller {
 								ui.printSuccess(methodName);
 							} catch (NumberFormatException e) {
 								ui.printError("Please enter number of days as an integer");
-							} catch (WarningException e) {
-								ui.printWarning(e.getMessage());
-								ui.printSuccess(methodName);
 							} catch (Exception e) {
 								ui.printError(e.getMessage());
 							}
@@ -451,20 +444,22 @@ public class Controller {
 		}
 	}
 
-	// TODO delete pm
 	public void viewTimeAllocation() {
 		String methodName = "View time allocation";
-		Employee em = requestEmployee(methodName,
-				"What are the initials of the employee who's time allocation should be viewed?");
-		if (em != null) {
-			ui.print(methodName, "What week do you want to view time allocation for?");
-			String week = ui.getUserInput();
-			if (week != null) {
-				try {
-					ui.printTimeAllocation(app.calculatePlannedHours(em, week),
-					indexer.findPlannedWeek(em, week).getPlannedActivities());
-				} catch (Exception e) {
-					ui.printError(e.getMessage());
+		Employee pm = requestEmployee(methodName, "What are the initials of the project manager viewing?");
+		if (pm != null) {
+			Employee em = requestEmployee(methodName,
+					"What are the initials of the employee who's time allocation should be viewed?");
+			if (em != null) {
+				ui.print(methodName, "What week do you want to view time allocation for?");
+				String week = ui.getUserInput();
+				if (week != null) {
+					try {
+						ui.printTimeAllocation(app.calculatePlannedHours(pm, em, week),
+								indexer.findPlannedWeek(em, week).getPlannedActivities());
+					} catch (Exception e) {
+						ui.printError(e.getMessage());
+					}
 				}
 			}
 		}

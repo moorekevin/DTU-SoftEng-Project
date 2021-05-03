@@ -3,9 +3,6 @@ package dtu.projectManagementApp;
 import java.util.Map;
 import java.util.HashMap;
 
-import dtu.exceptions.OperationNotAllowedException;
-import dtu.exceptions.WarningException;
-
 public class PlannedWeek {
 	private Map<Activity,Double> plannedActivities;
 	private String yearWeek;
@@ -22,43 +19,20 @@ public class PlannedWeek {
 			addActivityToWeek(new NonWorkActivity(NON_WORK_ACTIVITIES[i]));
 		}
 	}
-
-	public Activity checkNonWorkActivity(String activityName) throws OperationNotAllowedException{
-		for (String nonWorkActivityName : PlannedWeek.NON_WORK_ACTIVITIES) {
-			if (nonWorkActivityName.equals(activityName)) { // If nonwork activity found it is returned back as an activity object
-				for (Activity activity : plannedActivities.keySet()) {
-					if (activity.getName().equals(activityName)) {
-						return activity;
-					}
-				}
-				break;
-			}
-		}
-		throw new OperationNotAllowedException("Non-work Activity is not found in Planned Week");
-	}
 	
 	public void addActivityToWeek(Activity activity) {
 		plannedActivities.put(activity, 0.0);
 	}
 	
-	public void addHoursForActivity(Activity activity, Double hours) throws Exception {
+	public void addHoursForActivity(Activity activity, Double hours) {
 		if (plannedActivities.get(activity) == null) {
 			addActivityToWeek(activity);
 		}
 		
 		
 		Double registeredHours = plannedActivities.get(activity);
-		double calculatedTotalHoursBefore = calculateTotalPlannedHours();
-		if(calculatedTotalHoursBefore + hours > PlannedWeek.MAX_HOURS_PER_WEEK)
-			throw new Exception("Not enough available time for week");
-
+		
 		plannedActivities.put(activity, registeredHours+hours);
-/*
-		if (calculatedTotalHoursBefore + hours > PlannedWeek.WORKHOURS_PER_DAY * PlannedWeek.DAYS_PER_WEEK) {
-			throw new WarningException("The total planned work exceeds allowed hours for the week."
-					+ " Time is allocated but please contact a Project Manager");
-		}
-		*/
 	}
 
 	public double calculateTotalPlannedHours() {

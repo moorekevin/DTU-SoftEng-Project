@@ -1,12 +1,10 @@
 package dtu.testSteps;
 
-import dtu.projectManagementApp.Activity;
 import dtu.projectManagementApp.App;
 import dtu.projectManagementApp.Employee;
 import dtu.projectManagementApp.NonWorkActivity;
 import dtu.projectManagementApp.PlannedWeek;
 import dtu.projectManagementApp.Project;
-import dtu.projectManagementApp.WorkActivity;
 import dtu.projectManagementApp.Indexer;
 
 public class EmployeeHelper {
@@ -67,13 +65,13 @@ public class EmployeeHelper {
 	}
 
 	public void setTimeAllocation(Employee em, String yearWeek, Double hours) throws Exception {
+		
+		NonWorkActivity testActivity = new NonWorkActivity("Activity");
 		PlannedWeek plannedWeek = new PlannedWeek(yearWeek);
 		em.addPlannedWeek(plannedWeek);
-
-		System.out.println(plannedWeek.calculateTotalPlannedHours());
-
-		Activity testActivity = plannedWeek.checkNonWorkActivity(PlannedWeek.NON_WORK_ACTIVITIES[0]);
-		plannedWeek.addHoursForActivity(testActivity, hours);
-		System.out.println(plannedWeek.calculateTotalPlannedHours());
+		int i = em.getPlannedWeeks().indexOf(plannedWeek);
+		em.getPlannedWeeks().get(i).addActivityToWeek(testActivity);
+		em.getPlannedWeeks().get(i).addHoursForActivity(testActivity, hours);
+		
 	}
 }
