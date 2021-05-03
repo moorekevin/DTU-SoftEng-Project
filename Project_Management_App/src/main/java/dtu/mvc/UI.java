@@ -42,6 +42,10 @@ public class UI {
 	public void printError(String error) {
 		print("ERROR: " + error);
 	}
+	
+	public void printWarning(String warning) {
+		print("WARNING: " + warning);
+	}
 
 	public String getUserInput() {
 		String input = reader.nextLine();
