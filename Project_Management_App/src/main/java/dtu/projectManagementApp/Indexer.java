@@ -49,13 +49,7 @@ public class Indexer {
 		projectRepository.remove(findProject(project.getId()));
 	}
 	
-	 public String createWeek(String yearWeek) throws Exception {
-			validateYearWeek(yearWeek);
-			if(findWeek(yearWeek)==null) {
-				weekRepository.add(yearWeek);
-			}
-			return yearWeek;
-		}
+	 
     
     // Validations
 	public void validateProjectManager(Employee employeeToCheck) throws Exception {
@@ -71,10 +65,8 @@ public class Indexer {
 		}
 	}
 	public void validateEmployeeAssigned(Employee employeeToCheck, Project projectToCheck) throws Exception {
-		System.out.println("1");
 		if (!projectToCheck.getAssignedEmployees().contains(employeeToCheck)) {
-			System.out.println("2");
-			throw new Exception("Employee is not assigned to project");
+			throw new Exception("Employee is not assigned to the Project");
 		}
 	}
     public void validateYearWeek(String yearWeek) throws Exception {
@@ -135,24 +127,9 @@ public class Indexer {
 		}
 		throw new Exception("Activity is not assigned to the project");
 	}
-//	public Activity findActivity(String name, List<Activity> activities) {
-//		for(Activity activity: activities) {
-//			if(activity.getName().equals(name)) {
-//				return activity;
-//			}
-//		}
-//		return null;
-//	}
-
 	
-	public String findWeek(String yearWeek) throws Exception {
-		for (String week : weekRepository) {
-			if (week.equals(yearWeek)) {
-				return week;
-			}
-		}
-		return null;
-	}
+	
+
 	
 	public PlannedWeek findPlannedWeek(Employee em, String week) throws Exception {
 		validateYearWeek(week);

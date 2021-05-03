@@ -24,7 +24,7 @@ Scenario: The Project Manager plans an Employee's Time Allocation for an Employe
 	And the Employee has 0 total hours Planned Work for Week "9002"
 	When the Project Manager allocates 8.0 hours for the Employee for the WorkActivity for Week "9002"
 	Then the Employee has a total of 0.0 hours Planned Work for Week "9002"
-	And the error is thrown "Employee is not assigned to project"
+	And the error is thrown "Employee is not assigned to the Project"
 
 Scenario: The Project Manager plans an Employee's Time Allocation for an Activity that has ended	
 	When the Project Manager allocates 8.0 hours for the Employee for the WorkActivity for Week "9010"

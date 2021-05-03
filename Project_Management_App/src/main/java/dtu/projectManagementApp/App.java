@@ -57,7 +57,7 @@ public class App {
 			throws Exception {
 		indexer.validateWeekInterval(start, end); indexer.validateProjectManager(pm, project);
 		
-//		if(indexer.findActivity(name, project.getActivities() == null))
+		
 		for (WorkActivity activity : project.getActivities()) {
 			if (activity.getName().equals(name))
 				throw new Exception("This Activity is already assigned to the Project");

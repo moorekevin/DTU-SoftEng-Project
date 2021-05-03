@@ -1,11 +1,11 @@
 package dtu;
 
-import dtu.mvc.Controller;
+import dtu.mvc.CommandController;
 
 public class main {
     
     public static void main(String[] args) {
-        Controller controller = new Controller();
-        controller.start();
+        CommandController commandController = new CommandController();
+        commandController.start();
     }
 }

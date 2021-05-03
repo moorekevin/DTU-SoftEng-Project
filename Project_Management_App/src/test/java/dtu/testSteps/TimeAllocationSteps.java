@@ -59,7 +59,6 @@ public class TimeAllocationSteps {
 			projectApp.allocateTimeForEmployee(employeeHelper.getAdditionalEmployee(), employeeHelper.getEmployee(), hours, projectHelper.getProject(),
 					activity, yearWeek);
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
@@ -67,7 +66,6 @@ public class TimeAllocationSteps {
 	@Then("the Employee has a total of {double} hours Planned Work for Week {string}")
 	public void the_employee_has_a_total_of_hours_planned_work_for_week(Double hours, String yearWeek)
 			throws Exception {
-		System.out.println(hours + " " + projectApp.calculatePlannedHours(employeeHelper.getAdditionalEmployee(), employeeHelper.getEmployee(), yearWeek));
 		assertTrue(hours == projectApp.calculatePlannedHours(employeeHelper.getAdditionalEmployee(), employeeHelper.getEmployee(), yearWeek));
 
 	}

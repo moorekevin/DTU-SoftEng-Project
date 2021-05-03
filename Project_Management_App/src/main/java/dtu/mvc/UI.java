@@ -36,7 +36,7 @@ public class UI {
 	}
 	
 	public void printSuccess(String methodName) {
-		print("\nSUCCESS: " + methodName + " succeded!");
+		print("\nSUCCESS: [" + methodName + "] succeded!");
 	}
 	
 	public void printError(String error) {
