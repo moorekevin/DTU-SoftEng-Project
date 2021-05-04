@@ -32,19 +32,12 @@ public class ActivitySteps {
 	}
 
 	@Given("a WorkActivity with name {string} is assigned to the Project")
-	public void a_work_activity_with_name_is_assigned_to_the_project(String name) {
-
-		try {
-			
+	public void a_work_activity_with_name_is_assigned_to_the_project(String name) throws Exception {
+		
 			pm = employeeHelper.getAdditionalEmployee();
 			String start = activityHelper.getCurrentYearWeek();
-			String end = activityHelper.addToYearWeek(1, 0);
-//			
+			String end = activityHelper.addToYearWeek(1, 0);	
 			activity = projectApp.createWorkActivity(projectHelper.getProject(), pm, name, start, end);
-
-		} catch (Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
 	}
 
 	@Given("there is an Employee with initials {string} assigned to the project")
@@ -52,11 +45,7 @@ public class ActivitySteps {
 		pm = employeeHelper.getAdditionalEmployee();
 		em = employeeHelper.createEmployee(name);
 
-		try {
-			projectApp.assignEmployeeToProject(projectHelper.getProject(), pm, em);
-		} catch (Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
+		projectApp.assignEmployeeToProject(projectHelper.getProject(), pm, em);
 
 	}
 
@@ -85,7 +74,7 @@ public class ActivitySteps {
 	@When("the Project Manager creates a WorkActivity with name {string}, start-week {string} and end-week {string}")
 	public void the_project_manager_creates_a_work_activity_with_name_start_week_and_end_week(String name,
 			String startWeek, String endWeek) throws Exception {
-	
+
 		try {
 			pm = employeeHelper.getAdditionalEmployee();
 			activity = projectApp.createWorkActivity(projectHelper.getProject(), pm, name, startWeek, endWeek);
@@ -93,64 +82,62 @@ public class ActivitySteps {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
-
-
-	@When("sets the expected hours to {double} for the WorkActivity")
-	public void sets_the_expected_hours_to_for_the_work_activity(Double expectedHours) {
+	
+	@When("the Project Manager sets the expected hours to {double} for the WorkActivity")
+	public void the_project_manager_sets_the_expected_hours_to_for_the_work_activity(Double expectedHours) {
 		try {
 			projectApp.setExpectedHours(activity, expectedHours);
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
-	
+
 	@Then("the WorkActivity is assigned to the Project")
 	public void the_work_activity_is_assigned_to_the_project() throws Exception {
-	    assertTrue(projectHelper.getProject().getActivities().contains(activity));
+		assertTrue(projectHelper.getProject().getActivities().contains(activity));
 	}
 
 	@Then("the expected hours is {double} for the WorkActivity")
 	public void the_expected_hours_is_for_the_work_activity(Double expectedHours) throws Exception {
-		assertTrue(activity.getExpectedHours()==expectedHours);
+		assertTrue(activity.getExpectedHours().equals(expectedHours));
 	}
-	
+
 	@Then("the WorkActivity is not assigned to the Project")
 	public void the_work_activity_is_not_assigned_to_the_project() throws Exception {
 		assertFalse(projectHelper.getProject().getActivities().contains(activity));
 	}
-	
+
 	@Given("a WorkActivity with name {string}, start-week {string} and end-week {string} is assigned to the Project")
-	public void a_work_activity_with_name_start_week_and_end_week_is_assigned_to_the_project(String name, String start, String end) throws Exception {
+	public void a_work_activity_with_name_start_week_and_end_week_is_assigned_to_the_project(String name, String start,
+			String end) throws Exception {
 		project = projectHelper.getProject();
 		pm = employeeHelper.getAdditionalEmployee();
-		try {
+		
 			activity = projectApp.createWorkActivity(project, pm, name, start, end);
 			activityHelper.setWorkActivity(activity);
-		} catch (Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
+		
 	}
-	
+
 	@Given("the WorkActivity's expected hours is set to {double}")
 	public void the_work_activity_s_expected_hours_is_set_to(Double expectedHours) throws Exception {
 		projectApp.setExpectedHours(activity, expectedHours);
 	}
-	
+
 	@When("the Project Manager edits the Activity to name {string}, start-week {string} and end-week {string}")
-	public void the_project_manager_edits_the_activity_to_name_start_week_and_end_week(String name, String start, String end) {
-	    try {
+	public void the_project_manager_edits_the_activity_to_name_start_week_and_end_week(String name, String start,
+			String end) {
+		try {
 			projectApp.editActivity(activity, projectHelper.getProject(), pm, name, start, end);
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
-	
+
 	@Then("the Activity has name {string}, start-week {string} and end-week {string}")
 	public void the_activity_has_name_start_week_and_end_week(String name, String start, String end) {
-	   assertTrue(activity.getName().equals(name));
-	   assertTrue(activity.getStart().equals(start));
-	   assertTrue(activity.getEnd().equals(end));
+		assertTrue(activity.getName().equals(name));
+		assertTrue(activity.getStart().equals(start));
+		assertTrue(activity.getEnd().equals(end));
 	}
-	
-	
+
 }

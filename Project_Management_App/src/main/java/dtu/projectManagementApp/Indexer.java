@@ -18,9 +18,11 @@ public class Indexer {
     public List<Project> getProjects() {
 		return projectRepository;
 	}
+	
 	public List<Employee> getEmployees() {
 		return employeeRepository;
 	}
+	
 	public List<String> getWeeks() {
 		return weekRepository;
 	}
@@ -66,6 +68,7 @@ public class Indexer {
 			throw new Exception("Project Manager is not assigned to the Project");
 		}
 	}
+	
 	public void validateEmployeeAssigned(Employee employeeToCheck, Project projectToCheck) throws Exception {
 		findEmployee(employeeToCheck.getInitials());
 		findProject(projectToCheck.getId());
@@ -73,6 +76,7 @@ public class Indexer {
 			throw new Exception("Employee is not assigned to the Project");
 		}
 	}
+	
     public void validateYearWeek(String yearWeek) throws Exception {
 		DateServer date = new DateServer();
 		int actualYear = date.getYear() % 100;
@@ -115,6 +119,7 @@ public class Indexer {
 		}
 		throw new Exception("Project does not exist");
 	}
+	
 	public Employee findEmployee(String initials) throws Exception {
 		for (Employee employee : employeeRepository) {
 			if (employee.getInitials().equals(initials.toUpperCase())) {
@@ -123,6 +128,7 @@ public class Indexer {
 		}
 		throw new EmployeeNotFoundException("Employee does not exist");
 	}
+	
 	public WorkActivity findActivity(Project project, String name) throws Exception {
 		for (WorkActivity activity : project.getActivities()) {
 			if (activity.getName().equals(name)) {
@@ -131,7 +137,6 @@ public class Indexer {
 		}
 		throw new Exception("Activity is not assigned to the project");
 	}
-	
 	
 
 	public PlannedWeek findPlannedWeek(Employee em, String week) {

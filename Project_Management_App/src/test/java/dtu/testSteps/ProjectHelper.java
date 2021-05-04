@@ -12,9 +12,6 @@ public class ProjectHelper {
 	}
 
 	public Project getProject() {
-		if (project == null) {
-			project = this.createProject("AAAA");
-		}
 		return project;
 	}
 

@@ -55,11 +55,6 @@ public class ProjectSteps {
 		projectApp.getIndexer().getProjects().add(ph.getProject());
 	}
 
-	@When("the Employee creates a new Project with id {int}")
-	public void the_employee_creates_a_new_project_with_id(Integer id) {
-		projectApp.getIndexer().getProjects().add(new Project("AAAA", id));
-	}
-
 	@When("the Employee deletes the Project")
 	public void the_employee_deletes_the_project() {
 		try {

@@ -21,16 +21,10 @@ public class EmployeeHelper {
 	}
 
 	public Employee getEmployee() throws Exception {
-		if (employee == null) {
-			employee = createEmployee("AAAA");
-		}
 		return employee;
 	}
 
 	public Employee getAdditionalEmployee() throws Exception {
-		if (additionalEmployee == null) {
-			additionalEmployee = createAdditionalEmployee("ABCD");
-		}
 		return additionalEmployee;
 	}
 
@@ -56,14 +50,6 @@ public class EmployeeHelper {
 
 	public void makeEmployeeProjectManager(Employee em) {
 		em.setProjectManager(new Project("AAAA", 9));
-	}
-
-	public void setEmployee(Employee em) {
-		employee = em;
-	}
-	
-	public void setPlannedWeek() {
-		
 	}
 
 	public void setTimeAllocation(Employee em, String yearWeek, Double hours) throws Exception {

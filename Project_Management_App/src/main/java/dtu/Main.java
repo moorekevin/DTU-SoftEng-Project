@@ -2,9 +2,9 @@ package dtu;
 
 import dtu.mvc.CommandController;
 
-public class main {
+public class Main {
     
-    public static void main(String[] args) {
+    public static void Main(String[] args) {
         CommandController commandController = new CommandController();
         commandController.start();
     }

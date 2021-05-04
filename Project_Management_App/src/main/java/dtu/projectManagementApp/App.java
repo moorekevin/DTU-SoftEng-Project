@@ -23,7 +23,6 @@ public class App {
 		}
 
 		project.assignEmployeeToProject(em);
-
 	}
 
 	public void assignProjectManager(Project project, Employee em) throws Exception {
@@ -59,7 +58,6 @@ public class App {
 			throws Exception {
 		indexer.validateWeekInterval(start, end); 
 		indexer.validateProjectManager(pm, project);
-		
 		
 		for (WorkActivity activity : project.getActivities()) {
 			if (activity.getName().equals(name))
@@ -97,7 +95,6 @@ public class App {
 	}
 
 	public void setExpectedHours(WorkActivity activity, double expectedHours) throws Exception {
-		if (expectedHours < 0) throw new Exception("Hours cannot be negative");
 		if (activity != null) {
 			activity.setExpectedHours(expectedHours);
 		}
@@ -105,12 +102,9 @@ public class App {
 
 	public void assignEmployeeToActivity(Project project, WorkActivity workActivity, Employee pm, Employee em)
 			throws Exception {
-
 		indexer.findEmployee(pm.getInitials()); indexer.findEmployee(em.getInitials()); indexer.findProject(project.getId());
+		indexer.findActivity(project, workActivity.getName());
 		indexer.validateProjectManager(pm, project); indexer.validateEmployeeAssigned(em, project);
-	
-		if (!project.getActivities().contains(workActivity))
-			throw new Exception("Project does not have the Activity");
 		
 		workActivity.addEmployee(em);
 	}
@@ -142,6 +136,9 @@ public class App {
 			throws Exception {
 		if (days > 7) {
 			throw new OperationNotAllowedException("There cannot be more than 7 days in a week");
+		}
+		if (days < 0) {
+			throw new OperationNotAllowedException("Amount of days cannot be less than 0");
 		}
 		double weekHours = days * PlannedWeek.WORKHOURS_PER_DAY;
 		PlannedWeek plannedWeek = indexer.findPlannedWeek(em, yearWeek);

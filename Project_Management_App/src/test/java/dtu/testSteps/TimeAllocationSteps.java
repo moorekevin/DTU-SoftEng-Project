@@ -51,7 +51,6 @@ public class TimeAllocationSteps {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 
-		assertTrue(hours == projectApp.calculatePlannedHours(employeeHelper.getEmployee(), yearWeek));
 	}
 
 	@When("the Project Manager allocates {double} hours for the Employee for the WorkActivity for Week {string}")
@@ -69,7 +68,7 @@ public class TimeAllocationSteps {
 	@Then("the Employee has a total of {double} hours Planned Work for Week {string}")
 	public void the_employee_has_a_total_of_hours_planned_work_for_week(Double hours, String yearWeek)
 			throws Exception {
-		assertTrue(hours == projectApp.calculatePlannedHours(employeeHelper.getEmployee(), yearWeek));
+		assertTrue(hours.equals(projectApp.calculatePlannedHours(employeeHelper.getEmployee(), yearWeek)));
 	}
 
 	// Plan Non-Work related Activity Feature

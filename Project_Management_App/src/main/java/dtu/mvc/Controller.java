@@ -448,7 +448,6 @@ public class Controller {
 		}
 	}
 
-	// TODO delete pm
 	public void viewTimeAllocation() {
 		String methodName = "View time allocation";
 		Employee em = requestEmployee(methodName,
