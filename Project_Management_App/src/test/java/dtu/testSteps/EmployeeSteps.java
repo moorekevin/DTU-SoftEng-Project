@@ -48,7 +48,7 @@ public class EmployeeSteps {
 	@When("the Project Manager assigns the Employee to the Project")
 	public void the_project_manager_assigns_the_employee_to_the_project() {
 		try {
-			projectApp.assignEmployeeToProject(ph.getProject(), pm, em);
+			projectApp.assignEmployeeToProject(ph.getProject().getId(), pm.getInitials(), em.getInitials());
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -121,7 +121,7 @@ public class EmployeeSteps {
 	@When("the Employee assigns the Employee to the Project")
 	public void the_employee_assigns_the_employee_to_the_project() {
 		try {
-			projectApp.assignEmployeeToProject(ph.getProject(), eh.getEmployee(), eh.getEmployee());
+			projectApp.assignEmployeeToProject(ph.getProject().getId(), eh.getEmployee().getInitials(), eh.getEmployee().getInitials());
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}

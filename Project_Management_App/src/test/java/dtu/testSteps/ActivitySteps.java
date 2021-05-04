@@ -45,8 +45,7 @@ public class ActivitySteps {
 		pm = employeeHelper.getAdditionalEmployee();
 		em = employeeHelper.createEmployee(name);
 
-		projectApp.assignEmployeeToProject(projectHelper.getProject(), pm, em);
-
+		projectApp.assignEmployeeToProject(projectHelper.getProject().getId(), pm.getInitials(), em.getInitials());
 	}
 
 	@When("the Project Manager assigns the Employee to the Activity")

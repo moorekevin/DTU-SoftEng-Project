@@ -38,7 +38,7 @@ public class TimeAllocationSteps {
 		pm = employeeHelper.getAdditionalEmployee();
 
 		
-		projectApp.assignEmployeeToProject(projectHelper.getProject(), pm, employeeHelper.getEmployee());
+		projectApp.assignEmployeeToProject(projectHelper.getProject().getId(), pm.getInitials(), employeeHelper.getEmployee().getInitials());
 		projectApp.assignEmployeeToActivity(projectHelper.getProject(), activity, pm, employeeHelper.getEmployee());
 
 	}

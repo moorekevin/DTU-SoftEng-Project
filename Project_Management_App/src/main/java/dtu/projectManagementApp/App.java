@@ -14,8 +14,10 @@ public class App {
 	}
 
 	// Commands
-	public void assignEmployeeToProject(Project project, Employee pm, Employee em) throws Exception {
-		indexer.findEmployee(pm.getInitials()); indexer.findEmployee(em.getInitials());
+	public void assignEmployeeToProject(int projectID, String pmInitials, String emInitials) throws Exception {
+		Employee pm = indexer.findEmployee(pmInitials); 
+		Employee em = indexer.findEmployee(emInitials);
+		Project project = indexer.findProject(projectID);
 
 		indexer.validateProjectManager(pm, project);
 		if (project.getAssignedEmployees().contains(em)) {
