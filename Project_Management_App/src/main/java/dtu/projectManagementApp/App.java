@@ -57,7 +57,8 @@ public class App {
 
 	public WorkActivity createWorkActivity(Project project, Employee pm, String name, String start, String end)
 			throws Exception {
-		indexer.validateWeekInterval(start, end); indexer.validateProjectManager(pm, project);
+		indexer.validateWeekInterval(start, end); 
+		indexer.validateProjectManager(pm, project);
 		
 		
 		for (WorkActivity activity : project.getActivities()) {
@@ -77,24 +78,28 @@ public class App {
 			throws Exception {
 
 		// Use old weeks if no information was typed
-		if (start.equals(""))
+		if (start.equals("")) {
 			start = activity.getStart();
-		if (end.equals(""))
+		}
+		if (end.equals("")) {
 			end = activity.getEnd();
+		}
 
 		indexer.validateWeekInterval(start, end);
 		indexer.validateProjectManager(pm, project);
 
 		// Should only be updated if user typed information
-		if (!name.equals(""))
+		if (!name.equals("")) {
 			activity.setName(name);
+		}
 		activity.setStart(start);
 		activity.setEnd(end);
 	}
 
-	public void setExpectedHours(WorkActivity activity, double exptectedHours) {
+	public void setExpectedHours(WorkActivity activity, double expectedHours) throws Exception {
+		if (expectedHours < 0) throw new Exception("Hours cannot be negative");
 		if (activity != null) {
-			activity.setExpectedHours(exptectedHours);
+			activity.setExpectedHours(expectedHours);
 		}
 	}
 
@@ -112,31 +117,24 @@ public class App {
 
 	public void allocateTimeForEmployee(Employee pm, Employee em, Double hours, Project project, WorkActivity activity,
 			String yearWeek) throws Exception {
-
-		indexer.validateEmployeeAssigned(em, project); indexer.validateProjectManager(pm);
-
-		if (Integer.parseInt(yearWeek) > Integer.parseInt(activity.getEnd())) {
-			throw new Exception("Activity has not begun/is ended for planned time");
+		indexer.validateEmployeeAssigned(em, project); indexer.validateProjectManager(pm); indexer.validateYearWeek(yearWeek);
+		
+		if (Integer.parseInt(yearWeek) > Integer.parseInt(activity.getEnd()) 
+			||Integer.parseInt(yearWeek) < Integer.parseInt(activity.getStart())) {
+			throw new Exception("Activity has not begun/ended for planned time");
 		}
-
+		
 		PlannedWeek plannedWeek = indexer.findPlannedWeek(em, yearWeek);
 		
-		if(plannedWeek == null) {
-			plannedWeek = new PlannedWeek(yearWeek);
-			plannedWeek.addActivityToWeek(activity);
-			em.addPlannedWeek(plannedWeek);
-		}
-		
+		plannedWeek.addActivityToWeek(activity);
 		plannedWeek.addHoursForActivity(activity, hours);
 	}
 
-	public double calculatePlannedHours(Employee em, String week) throws Exception {
+	public double calculatePlannedHours(Employee em, String week) throws Exception  {
 		indexer.findEmployee(em.getInitials());
-
+		
 		PlannedWeek foundPlannedWeek = indexer.findPlannedWeek(em, week);
-		if (foundPlannedWeek == null) {
-			return 0.0;
-		}
+
 		return foundPlannedWeek.calculateTotalPlannedHours();
 	}
 
@@ -148,7 +146,7 @@ public class App {
 		double weekHours = days * PlannedWeek.WORKHOURS_PER_DAY;
 		PlannedWeek plannedWeek = indexer.findPlannedWeek(em, yearWeek);
 		
-		Activity activityFound = plannedWeek.checkNonWorkActivity(activityName);
+		NonWorkActivity activityFound = plannedWeek.findNonWorkActivity(activityName);
 		plannedWeek.addHoursForActivity(activityFound, weekHours);
 	}
 }

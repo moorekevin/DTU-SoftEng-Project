@@ -1,13 +1,17 @@
 package dtu.projectManagementApp;
 
 import java.util.Map;
+import java.util.Set;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import dtu.exceptions.OperationNotAllowedException;
 import dtu.exceptions.WarningException;
 
 public class PlannedWeek {
 	private Map<Activity,Double> plannedActivities;
+	private ArrayList<WorkActivity> invalidActivities = new ArrayList<WorkActivity>();
 	private String yearWeek;
 	public static final double WORKHOURS_PER_DAY = 10.0;
 	public static final int DAYS_PER_WEEK = 5;
@@ -23,12 +27,12 @@ public class PlannedWeek {
 		}
 	}
 
-	public Activity checkNonWorkActivity(String activityName) throws OperationNotAllowedException{
+	public NonWorkActivity findNonWorkActivity(String activityName) throws OperationNotAllowedException{
 		for (String nonWorkActivityName : PlannedWeek.NON_WORK_ACTIVITIES) {
 			if (nonWorkActivityName.equals(activityName)) { // If nonwork activity found it is returned back as an activity object
 				for (Activity activity : plannedActivities.keySet()) {
-					if (activity.getName().equals(activityName)) {
-						return activity;
+					if (activity.getName().equals(activityName) && activity instanceof NonWorkActivity) {
+						return (NonWorkActivity) activity;
 					}
 				}
 				break;
@@ -45,7 +49,6 @@ public class PlannedWeek {
 		if (plannedActivities.get(activity) == null) {
 			addActivityToWeek(activity);
 		}
-		
 		
 		Double registeredHours = plannedActivities.get(activity);
 		double calculatedTotalHoursBefore = calculateTotalPlannedHours();
@@ -64,9 +67,35 @@ public class PlannedWeek {
 	public double calculateTotalPlannedHours() {
 		double plannedWork = 0.0;
 		for (Activity checkActivity : plannedActivities.keySet()) {
-			plannedWork += plannedActivities.get(checkActivity);
+			boolean activityIntervalValid = true;
+			if (checkActivity instanceof WorkActivity) {
+				activityIntervalValid = isActivityIntervalValid((WorkActivity) checkActivity);
+			}
+			if (activityIntervalValid) {
+				plannedWork += plannedActivities.get(checkActivity);
+			} 
 		}
+
+		clearInvalidActivities();
+		
 		return plannedWork;
+	}
+
+	public void clearInvalidActivities() {
+		for(WorkActivity act : invalidActivities) {
+			plannedActivities.remove(act);
+		}
+		invalidActivities.clear();
+	}
+
+	// Checks that the activity week interval still contains the plannedweek and otherwise removes it
+	public boolean isActivityIntervalValid(WorkActivity checkActivity) { 
+		if (Integer.parseInt(checkActivity.getStart()) > Integer.parseInt(yearWeek)
+			|| Integer.parseInt(checkActivity.getEnd()) < Integer.parseInt(yearWeek)) {
+				invalidActivities.add(checkActivity);
+				return false;
+		}
+		return true;
 	}
 	
 	public Map<Activity,Double> getPlannedActivities() {

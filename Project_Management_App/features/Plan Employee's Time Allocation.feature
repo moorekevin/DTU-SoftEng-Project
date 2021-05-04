@@ -28,5 +28,5 @@ Scenario: The Project Manager plans an Employee's Time Allocation for an Employe
 
 Scenario: The Project Manager plans an Employee's Time Allocation for an Activity that has ended	
 	When the Project Manager allocates 8.0 hours for the Employee for the WorkActivity for Week "9010"
-	Then the error is thrown "Activity has not begun/is ended for planned time"
+	Then the error is thrown "Activity has not begun/ended for planned time"
 	

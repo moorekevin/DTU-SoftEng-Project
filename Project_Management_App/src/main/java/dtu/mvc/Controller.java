@@ -50,6 +50,7 @@ public class Controller {
 			app.assignEmployeeToProject(indexer.findProject(210001), indexer.findEmployee("pm"),
 					indexer.findEmployee("em"));
 			app.createWorkActivity(indexer.findProject(210001), indexer.findEmployee("pm"), "act1", "2201", "2210");
+			app.assignEmployeeToActivity(indexer.findProject(210001), indexer.findProject(210001).getActivities().get(0), indexer.findEmployee("pm"),indexer.findEmployee("em"));
 			app.allocateTimeForEmployee(indexer.findEmployee("pm"), indexer.findEmployee("em"), 12.0,
 					indexer.findProject(210001), indexer.findActivity(indexer.findProject(210001), "act1"), "2202");
 		} catch (Exception e) {
@@ -198,8 +199,7 @@ public class Controller {
 							"What week does the activity begin?\n Enter week on form yyww (e.g. 2101 for first week of 2021)");
 					String startWeek = ui.getUserInput();
 					if (startWeek != null) {
-						ui.print(methodName
-								+ "What week does the activity end?\n Enter week on form yyww (e.g. 2101 for first week of 2021)");
+						ui.print(methodName, "What week does the activity end?\n Enter week on form yyww (e.g. 2101 for first week of 2021)");
 						String endWeek = ui.getUserInput();
 						if (endWeek != null) {
 							try {
@@ -225,16 +225,13 @@ public class Controller {
 			if (project != null) {
 				WorkActivity activity = requestActivity(methodName, project, "What is the activity's name?");
 				if (activity != null) {
-					ui.print(methodName
-							+ "What should the new name of the activity be?\n (Leave blank if name shouldn't be changed)");
+					ui.print(methodName, "What should the new name of the activity be?\n (Leave blank if name shouldn't be changed)");
 					String name = ui.getUserInput();
 					if (name != null) {
-						ui.print(methodName
-								+ "What week does the activity begin?\n Enter week on form yyww (leave blank if start week shouldn't be changed)");
+						ui.print(methodName, "What week does the activity begin?\n Enter week on form yyww (leave blank if start week shouldn't be changed)");
 						String startWeek = ui.getUserInput();
 						if (startWeek != null) {
-							ui.print(methodName
-									+ "What week does the activity end?\n Enter week on form yyww (leave blank if end week shouldn't be changed)");
+							ui.print(methodName, "What week does the activity end?\n Enter week on form yyww (leave blank if end week shouldn't be changed)");
 							String endWeek = ui.getUserInput();
 							if (endWeek != null) {
 								try {
@@ -266,6 +263,8 @@ public class Controller {
 						ui.printSuccess(methodName);
 					} catch (NumberFormatException e) {
 						ui.printError("Please enter number of hours as a decimal");
+					} catch (Exception e) {
+						ui.printError(e.getMessage());
 					}
 				}
 			}
@@ -329,8 +328,7 @@ public class Controller {
 					WorkActivity activity = requestActivity(methodName, project,
 							"What is the activity the employee's time should be planned to?");
 					if (activity != null) {
-						ui.print(methodName
-								+ "What week should be planned to?\n Enter week on form yyww (e.g. 2101 for first week of 2021)");
+						ui.print(methodName, "What week should be planned to?\n Enter week on form yyww (e.g. 2101 for first week of 2021)");
 						String yearWeek = ui.getUserInput();
 						if (yearWeek != null) {
 							while (true) {
@@ -413,8 +411,7 @@ public class Controller {
 
 	public void viewEmployees() {
 		String methodName = "View employees";
-		ui.print(methodName
-				+ "Please choose one of the following to view a list of all employees:\n [1] For whole company\n [2] For a project\n [3] For an activity");
+		ui.print(methodName, "Please choose one of the following to view a list of all employees:\n [1] For whole company\n [2] For a project\n [3] For an activity");
 		String choice = ui.getUserInput();
 
 		if (choice == null)
@@ -461,9 +458,10 @@ public class Controller {
 			String week = ui.getUserInput();
 			if (week != null) {
 				try {
-					ui.printTimeAllocation(app.calculatePlannedHours(em, week),
-					indexer.findPlannedWeek(em, week).getPlannedActivities());
+					ui.printTimeAllocation(app.calculatePlannedHours(em, week), 
+							indexer.findPlannedWeek(em, week).getPlannedActivities());
 				} catch (Exception e) {
+					System.out.println(e.getStackTrace()[0].getMethodName());
 					ui.printError(e.getMessage());
 				}
 			}

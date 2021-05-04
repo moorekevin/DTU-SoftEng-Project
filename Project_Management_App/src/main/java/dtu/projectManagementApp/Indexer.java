@@ -53,6 +53,7 @@ public class Indexer {
     
     // Validations
 	public void validateProjectManager(Employee employeeToCheck) throws Exception {
+		findEmployee(employeeToCheck.getInitials());
 		if (!employeeToCheck.isProjectManger()) {
 			throw new Exception("Employee is not project manager");
 		}
@@ -60,11 +61,14 @@ public class Indexer {
 
 	public void validateProjectManager(Employee employeeToCheck, Project projectToCheck) throws Exception {
 		validateProjectManager(employeeToCheck);
+		findProject(projectToCheck.getId());
 		if (projectToCheck.getProjectManager() != employeeToCheck) {
 			throw new Exception("Project Manager is not assigned to the Project");
 		}
 	}
 	public void validateEmployeeAssigned(Employee employeeToCheck, Project projectToCheck) throws Exception {
+		findEmployee(employeeToCheck.getInitials());
+		findProject(projectToCheck.getId());
 		if (!projectToCheck.getAssignedEmployees().contains(employeeToCheck)) {
 			throw new Exception("Employee is not assigned to the Project");
 		}
@@ -85,7 +89,7 @@ public class Indexer {
 					: Integer.parseInt((yearWeek).substring(2, 4));
 
 			if (year < actualYear || year == actualYear && week < actualWeek || week < 1 || week > 52) {
-				throw new Exception("Activity start/end-YearWeek is invalid");
+				throw new Exception("Week(s) are invalid");
 			}
 		} catch (NumberFormatException e) {
 			throw new Exception("Week should be numeric");
@@ -130,14 +134,15 @@ public class Indexer {
 	
 	
 
-	
-	public PlannedWeek findPlannedWeek(Employee em, String week) throws Exception {
-		validateYearWeek(week);
+	public PlannedWeek findPlannedWeek(Employee em, String week) {
+		
 		for (PlannedWeek plannedWeek : em.getPlannedWeeks()) {
 			if (plannedWeek.getYearWeek().equals(week)) {
 				return plannedWeek;
 			}
 		}
-		return null;
+		PlannedWeek newPlannedWeek = new PlannedWeek(week);
+		em.addPlannedWeek(newPlannedWeek);
+		return newPlannedWeek;
 	}
 }

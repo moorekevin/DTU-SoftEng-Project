@@ -97,7 +97,11 @@ public class ActivitySteps {
 
 	@When("sets the expected hours to {double} for the WorkActivity")
 	public void sets_the_expected_hours_to_for_the_work_activity(Double expectedHours) {
-		projectApp.setExpectedHours(activity, expectedHours);
+		try {
+			projectApp.setExpectedHours(activity, expectedHours);
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
 	}
 	
 	@Then("the WorkActivity is assigned to the Project")
@@ -128,7 +132,7 @@ public class ActivitySteps {
 	}
 	
 	@Given("the WorkActivity's expected hours is set to {double}")
-	public void the_work_activity_s_expected_hours_is_set_to(Double expectedHours) {
+	public void the_work_activity_s_expected_hours_is_set_to(Double expectedHours) throws Exception {
 		projectApp.setExpectedHours(activity, expectedHours);
 	}
 	

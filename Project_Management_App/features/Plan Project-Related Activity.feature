@@ -22,7 +22,7 @@ Scenario: Add Activities to Project with invalid start-YearWeek and end-YearWeek
 	When the Project Manager creates a WorkActivity with name "Activity", start-week "1001" and end-week "1002"
 	And sets the expected hours to 10.0 for the WorkActivity
 	Then the WorkActivity is not assigned to the Project
-	And the error is thrown "Activity start/end-YearWeek is invalid"
+	And the error is thrown "Week(s) are invalid"
 
 Scenario: Edit Activity in a Project succesfully
 	Given a Project Manager with initials "AAAA" is assigned to a Project
