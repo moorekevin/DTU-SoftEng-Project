@@ -47,8 +47,8 @@ public class ActivitySteps {
 	@When("the Project Manager assigns the Employee to the Activity")
 	public void the_project_manager_assigns_the_employee_to_the_activity() {
 		try {
-			projectApp.assignEmployeeToActivity(projectHelper.getProject(), activity,
-					employeeHelper.getAdditionalEmployee(), employeeHelper.getEmployee());
+			projectApp.assignEmployeeToActivity(projectHelper.getProject().getId(), activity.getName(),
+					employeeHelper.getAdditionalEmployee().getInitials(), employeeHelper.getEmployee().getInitials());
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -143,8 +143,8 @@ public class ActivitySteps {
 
 	@Given("the Employee is assigned to the WorkActivity")
 	public void the_employee_is_assigned_to_the_work_activity() throws Exception {
-		projectApp.assignEmployeeToActivity(projectHelper.getProject(), activity,
-				employeeHelper.getAdditionalEmployee(), employeeHelper.getEmployee());
+		projectApp.assignEmployeeToActivity(projectHelper.getProject().getId(), activity.getName(),
+				employeeHelper.getAdditionalEmployee().getInitials(), employeeHelper.getEmployee().getInitials());
 	}
 
 	@When("the Employee is removed from the Activity")

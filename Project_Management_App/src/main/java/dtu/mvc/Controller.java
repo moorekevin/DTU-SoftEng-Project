@@ -49,11 +49,8 @@ public class Controller {
 			app.assignProjectManager(210001, "pm");
 			app.assignEmployeeToProject(210001, "pm", "em");
 			app.createWorkActivity(210001, "pm", "act1", "2201", "2210");
-			app.assignEmployeeToActivity(indexer.findProject(210001),
-					indexer.findProject(210001).getActivities().get(0), indexer.findEmployee("pm"),
-					indexer.findEmployee("em"));
-			app.allocateTimeForEmployee(indexer.findEmployee("pm"), indexer.findEmployee("em"), 12.0,
-					indexer.findProject(210001), indexer.findActivity(indexer.findProject(210001), "act1"), "2202");
+			app.assignEmployeeToActivity(210001, "act1", "pm", "em");
+			app.allocateTimeForEmployee("pm", "em", 12.0, 210001, "act1", "2202");
 		} catch (Exception e) {
 			ui.printError(e.getMessage());
 		}
@@ -78,30 +75,34 @@ public class Controller {
 	public void printCommandList() {
 		ui.printCommandList();
 	}
-	
+
 	// Request methods //
 	public String requestProjectManager(String methodName) {
 		ui.print(methodName, "What are the initials of the project manager?");
 		return ui.getUserInput();
 	}
+
 	public String requestEmployee(String methodName) {
 		ui.print(methodName, "What are the initials of the employee?");
 		return ui.getUserInput();
 	}
+
 	public String requestProject(String methodName) {
 		ui.print(methodName, "What is the ID of the project?");
 		return ui.getUserInput();
 	}
+
 	public String requestActivity(String methodName) {
 		ui.print(methodName, "What is the name of the activity?");
 		return ui.getUserInput();
 	}
+
 	public String requestWeek() {
 		ui.print("\n Enter week on form yyww (e.g. 2101 for first week of 2021)");
 		return ui.getUserInput();
 	}
 	//////////////////////
-	
+
 	public void createProject() {
 		String methodName = "Create project";
 		ui.print(methodName, "What should the name of the project be?");
@@ -236,7 +237,8 @@ public class Controller {
 						String endWeek = requestWeek();
 						if (endWeek != null) {
 							try {
-								app.createWorkActivity(convertToInt(projectID), pmInitials, activityName, startWeek, endWeek);
+								app.createWorkActivity(convertToInt(projectID), pmInitials, activityName, startWeek,
+										endWeek);
 								ui.print("\nActivity \"" + activityName + "\" created!");
 								ui.printSuccess(methodName);
 							} catch (Exception e) {
@@ -265,11 +267,13 @@ public class Controller {
 								"What week does the activity begin? (Leave blank if start week should not be changed)");
 						String startWeek = requestWeek();
 						if (startWeek != null) {
-							ui.print(methodName, "What week does the activity end? (Leave blank if end week should not be changed)");
+							ui.print(methodName,
+									"What week does the activity end? (Leave blank if end week should not be changed)");
 							String endWeek = requestWeek();
 							if (endWeek != null) {
 								try {
-									app.editActivity(activity, convertToInt(project), pmInitials, activityName, startWeek, endWeek);
+									app.editActivity(activity, convertToInt(project), pmInitials, activityName,
+											startWeek, endWeek);
 									ui.printSuccess(methodName);
 								} catch (Exception e) {
 									ui.printError(e.getMessage());
@@ -304,18 +308,16 @@ public class Controller {
 
 	public void assignEmployeeToActivity() {
 		String methodName = "Assign To Activity";
-		Employee pm = requestEmployee(methodName, "What are the initials of the project manager who is assigning?");
-		if (pm != null) {
-			Employee em = requestEmployee(methodName, "What are the initials of the employee who should be assigned?");
-			if (em != null) {
-				Project project = requestProject(methodName,
-						"What is the ID of the project the activity is assigned to?");
-				if (project != null) {
-					WorkActivity activity = requestActivity(methodName, project,
-							"What is the activity the employee should be assigned to?");
-					if (activity != null) {
+		String pmInitials = requestProjectManager(methodName);
+		if (pmInitials != null) {
+			String emInitials = requestEmployee(methodName);
+			if (emInitials != null) {
+				String projectID = requestProject(methodName);
+				if (projectID != null) {
+					String activityName = requestActivity(methodName);
+					if (activityName != null) {
 						try {
-							app.assignEmployeeToActivity(project, activity, pm, em);
+							app.assignEmployeeToActivity(convertToInt(projectID), activityName, pmInitials, emInitials);
 							ui.printSuccess(methodName);
 						} catch (Exception e) {
 							ui.printError(e.getMessage());
@@ -347,41 +349,28 @@ public class Controller {
 
 	public void planTimeAllocation() {
 		String methodName = "Time Allocation";
-		Employee pm = requestEmployee(methodName, "What are the initials of the project manager who is planning?");
-		if (pm != null) {
-			Employee em = requestEmployee(methodName,
-					"What are the initials of the employee who's time should be planned?");
-			if (em != null) {
-				Project project = requestProject(methodName,
-						"What is the ID of the project the activity is assigned to?");
-				if (project != null) {
-					WorkActivity activity = requestActivity(methodName, project,
-							"What is the activity the employee's time should be planned to?");
-					if (activity != null) {
-						ui.print(methodName,
-								"What week should be planned to?\n Enter week on form yyww (e.g. 2101 for first week of 2021)");
-						String yearWeek = ui.getUserInput();
+		String pmInitials = requestEmployee(methodName);
+		if (pmInitials != null) {
+			String emInitials = requestEmployee(methodName);
+			if (emInitials != null) {
+				String projectID = requestProject(methodName);
+				if (projectID != null) {
+					String activityName = requestActivity(methodName);
+					if (activityName != null) {
+						ui.print(methodName, "What week should be planned to?");
+						String yearWeek = requestWeek();
 						if (yearWeek != null) {
-							while (true) {
-								ui.print(methodName, "How many hours should be assigned to the employee for the week?");
-								String input = ui.getUserInput();
-								if (input == null) {
-									break;
-								} else {
-									try {
-										double hours = Double.parseDouble(input);
-										app.allocateTimeForEmployee(pm, em, hours, project, activity, yearWeek);
-										ui.printSuccess(methodName);
-										break;
-									} catch (NumberFormatException e) {
-										ui.printError("Please enter number of hours as a decimal");
-									} catch (WarningException e) {
-										ui.printWarning(e.getMessage());
-										ui.printSuccess(methodName);
-									} catch (Exception e) {
-										ui.printError(e.getMessage());
-										break;
-									}
+							ui.print(methodName, "How many hours should be assigned to the employee for the week?");
+							String hours = ui.getUserInput();
+							if (hours != null) {
+								try {
+									app.allocateTimeForEmployee(pmInitials, emInitials, convertToDouble(hours), convertToInt(projectID), activityName, yearWeek);
+									ui.printSuccess(methodName);
+								} catch (WarningException e) {
+									ui.printWarning(e.getMessage());
+									ui.printSuccess(methodName);
+								} catch (Exception e) {
+									ui.printError(e.getMessage());
 								}
 							}
 						}
@@ -389,12 +378,13 @@ public class Controller {
 				}
 			}
 		}
+
 	}
 
 	public void planNonWorkActivity() {
 		String methodName = "Plan non-work activity";
-		Employee em = requestEmployee(methodName, "What are the initials of the employee who is planning?");
-		if (em != null) {
+		String emInitials = requestEmployee(methodName);
+		if (emInitials != null) {
 			ui.print(methodName, "What kind of activity should be planned? Choose between:");
 			for (int i = 0; i < PlannedWeek.NON_WORK_ACTIVITIES.length; i++) {
 				ui.print(" [" + (i + 1) + "] " + PlannedWeek.NON_WORK_ACTIVITIES[i]);
@@ -403,26 +393,21 @@ public class Controller {
 			if (activityChoice != null) {
 				String activityName = null;
 				try {
-					int number = Integer.parseInt(activityChoice);
-					activityName = PlannedWeek.NON_WORK_ACTIVITIES[number - 1];
+					activityName = PlannedWeek.NON_WORK_ACTIVITIES[convertToInt(activityChoice) - 1];
 				} catch (Exception e) {
-					ui.printError("Please enter a valid choice");
+					ui.printError(e.getMessage());
 				}
 
 				if (activityName != null) {
-					ui.print(methodName,
-							"What week should be planned to?\n Enter week on form yyww (e.g. 2101 for first week of 2021)");
-					String week = ui.getUserInput();
+					ui.print(methodName, "What week should be planned to?");
+					String week = requestWeek();
 					if (week != null) {
 						ui.print(methodName, "How many days is the activity?");
-						String input = ui.getUserInput();
-						if (input != null) {
+						String days = ui.getUserInput();
+						if (days != null) {
 							try {
-								int days = Integer.parseInt(input);
-								app.assignToNonWorkActivity(em, activityName, days, week);
+								app.assignToNonWorkActivity(emInitials, activityName, convertToInt(days), week);
 								ui.printSuccess(methodName);
-							} catch (NumberFormatException e) {
-								ui.printError("Please enter number of days as an integer");
 							} catch (WarningException e) {
 								ui.printWarning(e.getMessage());
 								ui.printSuccess(methodName);
@@ -480,17 +465,18 @@ public class Controller {
 		}
 	}
 
+	
 	public void viewTimeAllocation() {
 		String methodName = "View time allocation";
-		Employee em = requestEmployee(methodName,
-				"What are the initials of the employee who's time allocation should be viewed?");
-		if (em != null) {
+		String emInitials = requestEmployee(methodName);
+		if (emInitials != null) {
 			ui.print(methodName, "What week do you want to view time allocation for?");
-			String week = ui.getUserInput();
+			String week = requestWeek();
 			if (week != null) {
 				try {
-					ui.printTimeAllocation(app.calculatePlannedHours(em, week),
-							indexer.findPlannedWeek(em, week).getPlannedActivities());
+					// TODO Find a more permanent solution
+					ui.printTimeAllocation(app.calculatePlannedHours(emInitials, week),
+							indexer.findPlannedWeek(indexer.findEmployee(emInitials), week).getPlannedActivities());
 				} catch (Exception e) {
 					System.out.println(e.getStackTrace()[0].getMethodName());
 					ui.printError(e.getMessage());
@@ -499,7 +485,7 @@ public class Controller {
 		}
 	}
 
-	// TODO Reduce redundancy
+	// TODO Remove
 	public Employee requestEmployee(String methodName, String msg) {
 		while (true) {
 			ui.print(methodName, msg);

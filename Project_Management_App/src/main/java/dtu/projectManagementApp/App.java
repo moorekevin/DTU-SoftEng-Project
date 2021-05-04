@@ -117,20 +117,26 @@ public class App {
 		activity.setExpectedHours(expectedHours);
 	}
 
-	public void assignEmployeeToActivity(Project project, WorkActivity workActivity, Employee pm, Employee em)
+	public void assignEmployeeToActivity(int projectID, String activityName, String pmInitials, String emInitials)
 			throws Exception {
-		indexer.findEmployee(pm.getInitials());
-		indexer.findEmployee(em.getInitials());
-		indexer.findProject(project.getId());
-		indexer.findActivity(project, workActivity.getName());
+		Employee pm = indexer.findEmployee(pmInitials);
+		Employee em = indexer.findEmployee(emInitials);
+		Project project = indexer.findProject(projectID);
+		WorkActivity activity = indexer.findActivity(project, activityName);
+		
 		indexer.validateProjectManager(pm, project);
 		indexer.validateEmployeeAssigned(em, project);
 
-		workActivity.addEmployee(em);
+		activity.addEmployee(em);
 	}
 
-	public void allocateTimeForEmployee(Employee pm, Employee em, Double hours, Project project, WorkActivity activity,
+	public void allocateTimeForEmployee(String pmInitials, String emInitials, double hours, int projectID, String activityName,
 			String yearWeek) throws Exception {
+		Employee pm = indexer.findEmployee(pmInitials);
+		Employee em = indexer.findEmployee(emInitials);
+		Project project = indexer.findProject(projectID);
+		WorkActivity activity = indexer.findActivity(project, activityName);
+		
 		indexer.validateEmployeeAssigned(em, project);
 		indexer.validateProjectManager(pm);
 		indexer.validateYearWeek(yearWeek);
@@ -146,16 +152,18 @@ public class App {
 		plannedWeek.addHoursForActivity(activity, hours);
 	}
 
-	public double calculatePlannedHours(Employee em, String week) throws Exception {
-		indexer.findEmployee(em.getInitials());
+	public double calculatePlannedHours(String emInitials, String week) throws Exception {
+		Employee em = indexer.findEmployee(emInitials);
 
 		PlannedWeek foundPlannedWeek = indexer.findPlannedWeek(em, week);
 
 		return foundPlannedWeek.calculateTotalPlannedHours();
 	}
 
-	public void assignToNonWorkActivity(Employee em, String activityName, Integer days, String yearWeek)
+	public void assignToNonWorkActivity(String emInitials, String activityName, int days, String yearWeek)
 			throws Exception {
+		Employee em = indexer.findEmployee(emInitials);
+		
 		if (days > 7) {
 			throw new OperationNotAllowedException("There cannot be more than 7 days in a week");
 		}

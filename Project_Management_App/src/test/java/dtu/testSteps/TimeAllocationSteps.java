@@ -35,7 +35,7 @@ public class TimeAllocationSteps {
 
 		
 		projectApp.assignEmployeeToProject(projectHelper.getProject().getId(), pm.getInitials(), employeeHelper.getEmployee().getInitials());
-		projectApp.assignEmployeeToActivity(projectHelper.getProject(), activityHelper.getWorkActivity(), employeeHelper.getAdditionalEmployee(), employeeHelper.getEmployee());
+		projectApp.assignEmployeeToActivity(projectHelper.getProject().getId(), activityHelper.getWorkActivity().getName(), employeeHelper.getAdditionalEmployee().getInitials(), employeeHelper.getEmployee().getInitials());
 
 	}
 
@@ -54,8 +54,8 @@ public class TimeAllocationSteps {
 			String yearWeek) {
 
 		try {
-			projectApp.allocateTimeForEmployee(employeeHelper.getAdditionalEmployee(), employeeHelper.getEmployee(), hours, projectHelper.getProject(),
-					activity, yearWeek);
+			projectApp.allocateTimeForEmployee(employeeHelper.getAdditionalEmployee().getInitials(), employeeHelper.getEmployee().getInitials(), hours, projectHelper.getProject().getId(),
+					activity.getName(), yearWeek);
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -64,7 +64,7 @@ public class TimeAllocationSteps {
 	@Then("the Employee has a total of {double} hours Planned Work for Week {string}")
 	public void the_employee_has_a_total_of_hours_planned_work_for_week(Double hours, String yearWeek)
 			throws Exception {
-		assertTrue(hours.equals(projectApp.calculatePlannedHours(employeeHelper.getEmployee(), yearWeek)));
+		assertTrue(hours.equals(projectApp.calculatePlannedHours(employeeHelper.getEmployee().getInitials(), yearWeek)));
 	}
 
 	// Plan Non-Work related Activity Feature
@@ -73,7 +73,7 @@ public class TimeAllocationSteps {
 	public void the_employee_assigns_days_for_the_non_work_activity_for_week(Integer days, String name,
 			String yearWeek) {
 		try {
-			projectApp.assignToNonWorkActivity(employeeHelper.getEmployee(), name, days, yearWeek);
+			projectApp.assignToNonWorkActivity(employeeHelper.getEmployee().getInitials(), name, days, yearWeek);
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
