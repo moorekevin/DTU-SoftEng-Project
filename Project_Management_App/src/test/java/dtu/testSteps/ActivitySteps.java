@@ -30,19 +30,10 @@ public class ActivitySteps {
 
 	@Given("a WorkActivity with name {string} is assigned to the Project")
 	public void a_work_activity_with_name_is_assigned_to_the_project(String name) throws Exception {
-<<<<<<< HEAD
-		
 			Employee pm = employeeHelper.getAdditionalEmployee();
 			String start = activityHelper.getCurrentYearWeek();
 			String end = activityHelper.addToYearWeek(1, 0);	
 			activity = projectApp.createWorkActivity(projectHelper.getProject().getId(), pm.getInitials(), name, start, end);
-=======
-
-		pm = employeeHelper.getAdditionalEmployee();
-		String start = activityHelper.getCurrentYearWeek();
-		String end = activityHelper.addToYearWeek(1, 0);
-		activity = projectApp.createWorkActivity(projectHelper.getProject(), pm, name, start, end);
->>>>>>> f7bdad07bb4fd957f5fdbe87c2b8cd2935f31136
 	}
 
 	@Given("there is an Employee with initials {string} assigned to the project")
@@ -114,21 +105,11 @@ public class ActivitySteps {
 	@Given("a WorkActivity with name {string}, start-week {string} and end-week {string} is assigned to the Project")
 	public void a_work_activity_with_name_start_week_and_end_week_is_assigned_to_the_project(String name, String start,
 			String end) throws Exception {
-<<<<<<< HEAD
 		Project project = projectHelper.getProject();
 		Employee pm = employeeHelper.getAdditionalEmployee();
 		
 		activity = projectApp.createWorkActivity(project.getId(), pm.getInitials(), name, start, end);
 		activityHelper.setWorkActivity(activity);
-		
-=======
-		project = projectHelper.getProject();
-		pm = employeeHelper.getAdditionalEmployee();
-
-		activity = projectApp.createWorkActivity(project, pm, name, start, end);
-		activityHelper.setWorkActivity(activity);
-
->>>>>>> f7bdad07bb4fd957f5fdbe87c2b8cd2935f31136
 	}
 
 	@Given("the WorkActivity's expected hours is set to {double}")
@@ -163,19 +144,19 @@ public class ActivitySteps {
 	@Given("the Employee is assigned to the WorkActivity")
 	public void the_employee_is_assigned_to_the_work_activity() throws Exception {
 		projectApp.assignEmployeeToActivity(projectHelper.getProject(), activity,
-				employeeHelper.getAdditionalEmployee(), em);
+				employeeHelper.getAdditionalEmployee(), employeeHelper.getEmployee());
 	}
 
 	@When("the Employee is removed from the Activity")
 	public void the_employee_is_removed_from_the_activity() throws Exception {
 
-		projectApp.removeEmployeeFromActivity(em, activity);
+		projectApp.removeEmployeeFromActivity(projectHelper.getProject().getId(), employeeHelper.getEmployee().getInitials(), activity.getName());
 
 	}
 
 	@Then("the Employee is unassigned from the Activity")
 	public void the_employee_is_unassigned_from_the_activity() throws Exception {
-		assertFalse(activity.getAssignedEmployees().contains(em));
+		assertFalse(activity.getAssignedEmployees().contains(employeeHelper.getEmployee()));
 	}
 
 }

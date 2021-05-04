@@ -99,7 +99,7 @@ public class EmployeeSteps {
 
 	@When("the Employee is removed from the Project")
 	public void the_employee_is_removed_from_the_project() throws Exception {
-		projectApp.removeEmployeeFromProject(ph.getProject(), eh.getEmployee());
+		projectApp.removeEmployeeFromProject(ph.getProject().getId(), eh.getEmployee().getInitials());
 	}
 
 	@Given("the Employee is not a Project Manager")
