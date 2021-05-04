@@ -19,8 +19,13 @@ Scenario: Add Activities to Project when not assigned to the Project
 	
 Scenario: Add Activities to Project with invalid start-YearWeek and end-YearWeek
 	Given a Project Manager with initials "AAAA" is assigned to a Project
-	When the Project Manager creates a WorkActivity with name "Activity", start-week "1001" and end-week "1002"
-	And the Project Manager sets the expected hours to 10.0 for the WorkActivity
+	When the Project Manager creates a WorkActivity with name "Activity", start-week "0000" and end-week "0005"
+	Then the WorkActivity is not assigned to the Project
+	And the error is thrown "Week(s) are invalid"
+	
+	Scenario: Add Activities to Project with wrong format start-YearWeek and end-Yearweek
+	Given a Project Manager with initials "AAAA" is assigned to a Project
+	When the Project Manager creates a WorkActivity with name "Activity", start-week "today" and end-week "tomorrow"
 	Then the WorkActivity is not assigned to the Project
 	And the error is thrown "Week(s) are invalid"
 	

@@ -31,3 +31,10 @@ Scenario: Assign an Employee to an Activity when Project Manager is not assigned
 	Then the error is thrown "Project Manager is not assigned to the Project"
 	And the Employee with initials "CCCC" is not assigned to the Activity
 	
+
+Scenario: Remove an Employee from an Activity
+    Given there is an Employee with initials "BBBB" assigned to the project
+    And  the Employee is assigned to the WorkActivity
+    When the Employee is removed from the Activity
+    Then the Employee is unassigned from the Activity
+    
