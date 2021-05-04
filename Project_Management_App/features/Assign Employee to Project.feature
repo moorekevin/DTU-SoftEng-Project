@@ -9,6 +9,12 @@ Scenario: Assign an Employee to a Project
 	When the Project Manager assigns the Employee to the Project
 	Then the Employee is assigned to the Project
 
+Scenario: Remove an Employee from a Project succesfully
+	Given a Project Manager with initials "AAAA" is assigned to a Project
+	And there is an Employee with initials "BBBB" assigned to the project
+	When the Employee is removed from the Project
+	Then the Employee is not assigned to the Project
+
 Scenario: Assign a non-existing Employee to a Project
 	Given a Project Manager with initials "AAAA" is assigned to a Project
 	And there is not an Employee with initials "BBBB"

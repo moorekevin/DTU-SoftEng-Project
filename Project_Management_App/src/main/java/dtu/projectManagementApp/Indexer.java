@@ -1,6 +1,8 @@
 package dtu.projectManagementApp;
 
 import java.util.List;
+
+
 import java.util.ArrayList;
 import dtu.exceptions.EmployeeNotFoundException;
 
@@ -76,19 +78,27 @@ public class Indexer {
 	}
 
 	public void validateYearWeek(String yearWeek) throws Exception {
+		boolean correctFormat = true;
+		if (yearWeek.length() > 4)
+			correctFormat = false;
+
 		DateServer date = new DateServer();
 		int actualYear = date.getYear() % 100;
 		int actualWeek = date.getWeek();
+		
+		try {
+			int year = Integer.parseInt((yearWeek).substring(0, 2));
 
-		int year = Integer.parseInt((yearWeek).substring(0, 2));
-
-		int week;
-		if(yearWeek.charAt(0) == '0') 
-			week = Integer.parseInt((yearWeek).substring(3, 4));
-		else
-			week = Integer.parseInt((yearWeek).substring(2, 4));
-
-		if (year < actualYear || year == actualYear && week < actualWeek || week < 1 || week > 52) {
+			int week;
+			if (yearWeek.charAt(0) == '0')
+				week = Integer.parseInt((yearWeek).substring(3, 4));
+			else
+				week = Integer.parseInt((yearWeek).substring(2, 4));
+			if (!correctFormat || year < actualYear || year == actualYear && week < actualWeek || week < 1
+					|| week > 52) {
+				throw new Exception("Week(s) are invalid");
+			}
+		} catch (NumberFormatException e) {
 			throw new Exception("Week(s) are invalid");
 		}
 

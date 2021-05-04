@@ -30,11 +30,19 @@ public class ActivitySteps {
 
 	@Given("a WorkActivity with name {string} is assigned to the Project")
 	public void a_work_activity_with_name_is_assigned_to_the_project(String name) throws Exception {
+<<<<<<< HEAD
 		
 			Employee pm = employeeHelper.getAdditionalEmployee();
 			String start = activityHelper.getCurrentYearWeek();
 			String end = activityHelper.addToYearWeek(1, 0);	
 			activity = projectApp.createWorkActivity(projectHelper.getProject().getId(), pm.getInitials(), name, start, end);
+=======
+
+		pm = employeeHelper.getAdditionalEmployee();
+		String start = activityHelper.getCurrentYearWeek();
+		String end = activityHelper.addToYearWeek(1, 0);
+		activity = projectApp.createWorkActivity(projectHelper.getProject(), pm, name, start, end);
+>>>>>>> f7bdad07bb4fd957f5fdbe87c2b8cd2935f31136
 	}
 
 	@Given("there is an Employee with initials {string} assigned to the project")
@@ -78,7 +86,7 @@ public class ActivitySteps {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
-	
+
 	@When("the Project Manager sets the expected hours to {double} for the WorkActivity")
 	public void the_project_manager_sets_the_expected_hours_to_for_the_work_activity(Double expectedHours) {
 		try {
@@ -106,12 +114,21 @@ public class ActivitySteps {
 	@Given("a WorkActivity with name {string}, start-week {string} and end-week {string} is assigned to the Project")
 	public void a_work_activity_with_name_start_week_and_end_week_is_assigned_to_the_project(String name, String start,
 			String end) throws Exception {
+<<<<<<< HEAD
 		Project project = projectHelper.getProject();
 		Employee pm = employeeHelper.getAdditionalEmployee();
 		
 		activity = projectApp.createWorkActivity(project.getId(), pm.getInitials(), name, start, end);
 		activityHelper.setWorkActivity(activity);
 		
+=======
+		project = projectHelper.getProject();
+		pm = employeeHelper.getAdditionalEmployee();
+
+		activity = projectApp.createWorkActivity(project, pm, name, start, end);
+		activityHelper.setWorkActivity(activity);
+
+>>>>>>> f7bdad07bb4fd957f5fdbe87c2b8cd2935f31136
 	}
 
 	@Given("the WorkActivity's expected hours is set to {double}")
@@ -129,11 +146,11 @@ public class ActivitySteps {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
-	
+
 	@Then("the WorkActivity has start-week {string} and end-week {string}")
 	public void the_work_activity_has_start_week_and_end_week(String start, String end) {
-	    assertTrue(activity.getStart().equals(start));
-	    assertTrue(activity.getEnd().equals(end));
+		assertTrue(activity.getStart().equals(start));
+		assertTrue(activity.getEnd().equals(end));
 	}
 
 	@Then("the Activity has name {string}, start-week {string} and end-week {string}")
@@ -141,6 +158,24 @@ public class ActivitySteps {
 		assertTrue(activity.getName().equals(name));
 		assertTrue(activity.getStart().equals(start));
 		assertTrue(activity.getEnd().equals(end));
+	}
+
+	@Given("the Employee is assigned to the WorkActivity")
+	public void the_employee_is_assigned_to_the_work_activity() throws Exception {
+		projectApp.assignEmployeeToActivity(projectHelper.getProject(), activity,
+				employeeHelper.getAdditionalEmployee(), em);
+	}
+
+	@When("the Employee is removed from the Activity")
+	public void the_employee_is_removed_from_the_activity() throws Exception {
+
+		projectApp.removeEmployeeFromActivity(em, activity);
+
+	}
+
+	@Then("the Employee is unassigned from the Activity")
+	public void the_employee_is_unassigned_from_the_activity() throws Exception {
+		assertFalse(activity.getAssignedEmployees().contains(em));
 	}
 
 }

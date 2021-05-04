@@ -97,6 +97,11 @@ public class EmployeeSteps {
 		}
 	}
 
+	@When("the Employee is removed from the Project")
+	public void the_employee_is_removed_from_the_project() throws Exception {
+		projectApp.removeEmployeeFromProject(ph.getProject(), eh.getEmployee());
+	}
+
 	@Given("the Employee is not a Project Manager")
 	public void the_employee_is_not_a_project_manager() throws Exception {
 		assertFalse(eh.getEmployee().isProjectManger());
@@ -105,15 +110,16 @@ public class EmployeeSteps {
 	@When("the Employee assigns the Employee to the Project")
 	public void the_employee_assigns_the_employee_to_the_project() {
 		try {
-			projectApp.assignEmployeeToProject(ph.getProject().getId(), eh.getEmployee().getInitials(), eh.getEmployee().getInitials());
+			projectApp.assignEmployeeToProject(ph.getProject().getId(), eh.getEmployee().getInitials(),
+					eh.getEmployee().getInitials());
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
-	
+
 	@Then("the Employee is the Project Manager for the Project")
 	public void the_employee_is_the_project_manager_for_the_project() throws Exception {
-	    assertTrue(ph.getProject().getProjectManager().equals(eh.getEmployee()));
+		assertTrue(ph.getProject().getProjectManager().equals(eh.getEmployee()));
 	}
 
 }

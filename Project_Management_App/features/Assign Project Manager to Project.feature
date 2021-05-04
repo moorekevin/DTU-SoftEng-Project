@@ -8,7 +8,6 @@ Scenario: Employee assigns themselves as Project Manager to a Project that does 
 	And there is an Employee with initials "AAAA"
 	When the Employee assigns the Employee as the Project Manager to the Project
 	Then the Employee is the Project Manager for the Project
-	#Then the Project has the Project Manager with initials "AAAA"
 
 Scenario: Unassign Project Manager from a Project succesfully
 	Given a Project Manager with initials "AAAA" is assigned to a Project
