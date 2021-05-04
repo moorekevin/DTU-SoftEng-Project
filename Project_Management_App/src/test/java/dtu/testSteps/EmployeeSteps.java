@@ -35,14 +35,10 @@ public class EmployeeSteps {
 		pm = eh.createAdditionalEmployee(name);
 		ph.createProject("Project");
 
-		try {
-			projectApp.assignProjectManager(ph.getProject(), pm);
-		} catch (Exception e) {
-			errorMessage.setErrorMessage(e.getMessage());
-		}
+		projectApp.assignProjectManager(ph.getProject(), pm);
 
 		assertTrue(pm.isProjectManger());
-		assertTrue(ph.getProject().getProjectManager() == pm);
+		assertTrue(ph.getProject().getProjectManager().equals(pm));
 	}
 
 	@When("the Project Manager assigns the Employee to the Project")
@@ -62,14 +58,7 @@ public class EmployeeSteps {
 	@Given("there is not an Employee with initials {string}")
 	public void there_is_not_an_employee_with_initials(String initials) {
 		em = eh.createNonExistingEmployee(initials);
-		boolean errorThrown = false;
-		try { // Checks that employee indeed does not exist
-			projectApp.getIndexer().findEmployee(em.getInitials());
-		} catch (Exception e) {
-			errorThrown = true;
-		}
-		assertTrue(errorThrown);
-		
+		assertFalse(projectApp.getIndexer().getEmployees().contains(em));
 	}
 
 	@Given("a Project Manager with initials {string} is not assigned to the Project")
@@ -99,15 +88,10 @@ public class EmployeeSteps {
 		}
 	}
 
-	@Then("the Project has the Project Manager with initials {string}")
-	public void the_project_has_the_project_manager_with_initials(String initials) {
-		assertTrue(ph.getProject().getProjectManager().getInitials().equals(initials));
-	}
-
-	@When("the Project Manager is removed from the Project")
-	public void the_project_manager_is_removed_from_the_project() {
+	@When("the Project Manager is unassigned from the Project")
+	public void the_project_manager_is_unassigned_from_the_project() {
 		try {
-			projectApp.removeProjectManager(ph.getProject(), pm);
+			projectApp.unassignProjectManager(ph.getProject(), pm);
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -125,5 +109,10 @@ public class EmployeeSteps {
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
+	}
+	
+	@Then("the Employee is the Project Manager for the Project")
+	public void the_employee_is_the_project_manager_for_the_project() throws Exception {
+	    assertTrue(ph.getProject().getProjectManager().equals(eh.getEmployee()));
 	}
 }

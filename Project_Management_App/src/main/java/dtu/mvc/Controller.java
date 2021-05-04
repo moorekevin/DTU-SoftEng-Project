@@ -169,14 +169,14 @@ public class Controller {
 		}
 	}
 
-	public void removeProjectManager() {
+	public void unassignProjectManager() {
 		String methodName = "Remove project manager";
 		Employee pm = requestEmployee(methodName, "What are the initials of the project manager?");
 		if (pm != null) {
 			Project project = requestProject(methodName, "What project should the project manager be unassigned from?");
 			if (project != null) {
 				try {
-					app.removeProjectManager(project, pm);
+					app.unassignProjectManager(project, pm);
 					ui.printSuccess(methodName);
 				} catch (Exception e) {
 					ui.printError(e.getMessage());

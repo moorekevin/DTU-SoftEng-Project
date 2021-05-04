@@ -24,12 +24,6 @@ Scenario: Add Activities to Project with invalid start-YearWeek and end-YearWeek
 	Then the WorkActivity is not assigned to the Project
 	And the error is thrown "Week(s) are invalid"
 	
-	Scenario: Add Activities to Project with invalid start-YearWeek interval
-	Given a Project Manager with initials "AAAA" is assigned to a Project
-	When the Project Manager creates a WorkActivity with name "Activity", start-week "1001" and end-week "1002"
-	And the Project Manager sets the expected hours to 10.0 for the WorkActivity
-	Then the WorkActivity is not assigned to the Project
-	And the error is thrown "Week(s) are invalid"
 
 Scenario: Edit Activity in a Project succesfully
 	Given a Project Manager with initials "AAAA" is assigned to a Project
@@ -39,6 +33,13 @@ Scenario: Edit Activity in a Project succesfully
 	And the Project Manager sets the expected hours to 20.0 for the WorkActivity
 	Then the Activity has name "Coding", start-week "9010" and end-week "9011"
 	And the expected hours is 20.0 for the WorkActivity
+
+Scenario: Edit WorkActivity with invalid start-YearWeek interval
+	Given a Project Manager with initials "AAAA" is assigned to a Project
+	And a WorkActivity with name "Activity", start-week "9001" and end-week "9002" is assigned to the Project
+	When the Project Manager edits the Activity to name "Coding", start-week "9010" and end-week "9001"
+	Then the WorkActivity has start-week "9001" and end-week "9002"
+	And the error is thrown "Start week cannot be larger than end week"
 	
 Scenario: Duplicating an active Activity in a Project
 	Given a Project Manager with initials "AAAA" is assigned to a Project

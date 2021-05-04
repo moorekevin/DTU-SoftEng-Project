@@ -98,7 +98,7 @@ public class CommandController {
 		commandList.put("/removeprojectmanager",
 				new CommandInfo("Remove a project manager from a project", new Command() {
 					public void runCommand() {
-						controller.removeProjectManager();
+						controller.unassignProjectManager();
 					};
 				}));
 

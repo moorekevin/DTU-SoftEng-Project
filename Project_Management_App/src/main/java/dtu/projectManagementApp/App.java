@@ -32,7 +32,7 @@ public class App {
 		project.assignProjectManager(em);
 	}
 
-	public void removeProjectManager(Project project, Employee pm) throws Exception {
+	public void unassignProjectManager(Project project, Employee pm) throws Exception {
 		indexer.findProject(project.getId()); indexer.findEmployee(pm.getInitials());
 		indexer.validateProjectManager(pm, project);
 

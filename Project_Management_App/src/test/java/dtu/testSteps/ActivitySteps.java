@@ -132,6 +132,12 @@ public class ActivitySteps {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
+	
+	@Then("the WorkActivity has start-week {string} and end-week {string}")
+	public void the_work_activity_has_start_week_and_end_week(String start, String end) {
+	    assertTrue(activity.getStart().equals(start));
+	    assertTrue(activity.getEnd().equals(end));
+	}
 
 	@Then("the Activity has name {string}, start-week {string} and end-week {string}")
 	public void the_activity_has_name_start_week_and_end_week(String name, String start, String end) {
