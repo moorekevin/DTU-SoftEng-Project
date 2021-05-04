@@ -4,7 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import dtu.projectManagementApp.App;
 import dtu.projectManagementApp.Employee;
-import dtu.projectManagementApp.Project;
 import dtu.projectManagementApp.WorkActivity;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -12,12 +11,9 @@ import io.cucumber.java.en.When;
 
 public class TimeAllocationSteps {
 	private App projectApp;
-	private Project project;
 	private WorkActivity activity;
 	private ProjectHelper projectHelper;
 	private ActivityHelper activityHelper;
-	private Employee pm;
-	private Employee em;
 	private EmployeeHelper employeeHelper;
 	private ErrorMessage errorMessage;
 
@@ -35,7 +31,7 @@ public class TimeAllocationSteps {
 		activity = activityHelper.getWorkActivity();
 		employeeHelper.createEmployee(name);
 
-		pm = employeeHelper.getAdditionalEmployee();
+		Employee pm = employeeHelper.getAdditionalEmployee();
 
 		
 		projectApp.assignEmployeeToProject(projectHelper.getProject().getId(), pm.getInitials(), employeeHelper.getEmployee().getInitials());

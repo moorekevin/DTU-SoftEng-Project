@@ -1,13 +1,11 @@
 package dtu.testSteps;
 
-import dtu.projectManagementApp.Activity;
 import dtu.projectManagementApp.App;
 import dtu.projectManagementApp.Employee;
+import dtu.projectManagementApp.Indexer;
 import dtu.projectManagementApp.NonWorkActivity;
 import dtu.projectManagementApp.PlannedWeek;
 import dtu.projectManagementApp.Project;
-import dtu.projectManagementApp.WorkActivity;
-import dtu.projectManagementApp.Indexer;
 
 public class EmployeeHelper {
 	private App app;
@@ -20,11 +18,11 @@ public class EmployeeHelper {
 		this.indexer = app.getIndexer();
 	}
 
-	public Employee getEmployee() throws Exception {
+	public Employee getEmployee() {
 		return employee;
 	}
 
-	public Employee getAdditionalEmployee() throws Exception {
+	public Employee getAdditionalEmployee() {
 		return additionalEmployee;
 	}
 
@@ -49,7 +47,7 @@ public class EmployeeHelper {
 	}
 
 	public void makeEmployeeProjectManager(Employee em) {
-		em.setProjectManager(new Project("AAAA", 9));
+		em.setProjectManager(new Project("v", 9));
 	}
 
 	public void setTimeAllocation(Employee em, String yearWeek, Double hours) throws Exception {

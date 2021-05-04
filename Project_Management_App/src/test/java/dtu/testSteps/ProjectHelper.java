@@ -12,6 +12,9 @@ public class ProjectHelper {
 	}
 
 	public Project getProject() {
+		if (project == null) {
+			createProject("Example Project");
+		}
 		return project;
 	}
 

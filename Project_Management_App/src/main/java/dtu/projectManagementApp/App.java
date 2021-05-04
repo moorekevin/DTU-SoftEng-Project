@@ -15,7 +15,7 @@ public class App {
 
 	// Commands
 	public void assignEmployeeToProject(int projectID, String pmInitials, String emInitials) throws Exception {
-		Employee pm = indexer.findEmployee(pmInitials); 
+		Employee pm = indexer.findEmployee(pmInitials);
 		Employee em = indexer.findEmployee(emInitials);
 		Project project = indexer.findProject(projectID);
 
@@ -27,108 +27,128 @@ public class App {
 		project.assignEmployeeToProject(em);
 	}
 
-	public void assignProjectManager(Project project, Employee em) throws Exception {
+	public void assignProjectManager(int projectID, String emInitials) throws Exception {
+		Project project = indexer.findProject(projectID);
+		Employee em = indexer.findEmployee(emInitials);
+
 		if (project.getProjectManager() != null)
 			throw new Exception("Project already has a Project Manager");
 		em.setProjectManager(project);
 		project.assignProjectManager(em);
 	}
 
-	public void unassignProjectManager(Project project, Employee pm) throws Exception {
-		indexer.findProject(project.getId()); indexer.findEmployee(pm.getInitials());
+	public void unassignProjectManager(int projectID, String pmInitials) throws Exception {
+		Project project = indexer.findProject(projectID);
+		Employee pm = indexer.findEmployee(pmInitials);
 		indexer.validateProjectManager(pm, project);
 
 		pm.removeProjectManager(project);
 		project.removeProjectManager();
 	}
 
-	public void removeEmployeeFromProject(Project project, Employee em) throws Exception {
+	public void removeEmployeeFromProject(int projectID, String emInitials) throws Exception {
+		Project project = indexer.findProject(projectID);
+		Employee em = indexer.findEmployee(emInitials);
 
 		indexer.validateEmployeeAssigned(em, project);
 		project.removeEmployeeFromProject(em);
 
 	}
 
-	public void removeEmployeeFromActivity(Employee em, WorkActivity activity) throws Exception{
+	public void removeEmployeeFromActivity(int projectID, String emInitials, String activityName) throws Exception {
+		Employee em = indexer.findEmployee(emInitials);
+		Project project = indexer.findProject(projectID);
+		WorkActivity activity = indexer.findActivity(project, activityName);
+
 		if (!activity.getAssignedEmployees().contains(em)) {
-		    throw new Exception("Employee is not assigned to the activity");
+			throw new Exception("Employee is not assigned to the activity");
 		}
 		activity.removeEmployee(em);
 	}
 
-	public WorkActivity createWorkActivity(Project project, Employee pm, String name, String start, String end)
+	public WorkActivity createWorkActivity(int projectID, String pmInitials, String name, String start, String end)
 			throws Exception {
-		indexer.validateWeekInterval(start, end); 
+		Project project = indexer.findProject(projectID);
+		Employee pm = indexer.findEmployee(pmInitials);
+
+		indexer.validateWeekInterval(start, end);
 		indexer.validateProjectManager(pm, project);
-		
+
 		for (WorkActivity activity : project.getActivities()) {
 			if (activity.getName().equals(name))
 				throw new Exception("This Activity is already assigned to the Project");
 		}
 
 		WorkActivity activity = new WorkActivity(name, start, end);
-
 		project.addActivity(activity);
 
 		return activity;
 	}
-	
-	
-	public void editActivity(WorkActivity activity, Project project, Employee pm, String name, String start, String end)
-			throws Exception {
+
+	public void editActivity(String activityName, int projectID, String pmInitials, String newName, String startWeek,
+			String endWeek) throws Exception {
+		Project project = indexer.findProject(projectID);
+		Employee pm = indexer.findEmployee(pmInitials);
+		indexer.validateProjectManager(pm, project);
+		WorkActivity activity = indexer.findActivity(project, activityName);
 
 		// Use old weeks if no information was typed
-		if (start.equals("")) {
-			start = activity.getStart();
+		if (startWeek.equals("")) {
+			startWeek = activity.getStart();
 		}
-		if (end.equals("")) {
-			end = activity.getEnd();
+		if (endWeek.equals("")) {
+			endWeek = activity.getEnd();
 		}
 
-		indexer.validateWeekInterval(start, end);
+		indexer.validateWeekInterval(startWeek, endWeek);
 		indexer.validateProjectManager(pm, project);
 
 		// Should only be updated if user typed information
-		if (!name.equals("")) {
-			activity.setName(name);
+		if (!newName.equals("")) {
+			activity.setName(newName);
 		}
-		activity.setStart(start);
-		activity.setEnd(end);
+		activity.setStart(startWeek);
+		activity.setEnd(endWeek);
 	}
 
-	public void setExpectedHours(WorkActivity activity, double expectedHours) throws Exception {
-		if (activity != null) {
-			activity.setExpectedHours(expectedHours);
-		}
+	public void setExpectedHours(int projectID, String activityName, double expectedHours) throws Exception {
+		Project project = indexer.findProject(projectID);
+		WorkActivity activity = indexer.findActivity(project, activityName);
+		activity.setExpectedHours(expectedHours);
 	}
 
 	public void assignEmployeeToActivity(Project project, WorkActivity workActivity, Employee pm, Employee em)
 			throws Exception {
-		indexer.findEmployee(pm.getInitials()); indexer.findEmployee(em.getInitials()); indexer.findProject(project.getId());
+		indexer.findEmployee(pm.getInitials());
+		indexer.findEmployee(em.getInitials());
+		indexer.findProject(project.getId());
 		indexer.findActivity(project, workActivity.getName());
-		indexer.validateProjectManager(pm, project); indexer.validateEmployeeAssigned(em, project);
-		
+		indexer.validateProjectManager(pm, project);
+		indexer.validateEmployeeAssigned(em, project);
+
 		workActivity.addEmployee(em);
 	}
 
 	public void allocateTimeForEmployee(Employee pm, Employee em, Double hours, Project project, WorkActivity activity,
 			String yearWeek) throws Exception {
-		indexer.validateEmployeeAssigned(em, project); indexer.validateProjectManager(pm); indexer.validateYearWeek(yearWeek);
-		
-		if (Integer.parseInt(yearWeek) > Integer.parseInt(activity.getEnd()) 
-			||Integer.parseInt(yearWeek) < Integer.parseInt(activity.getStart())) {
+		indexer.validateEmployeeAssigned(em, project);
+		indexer.validateProjectManager(pm);
+		indexer.validateYearWeek(yearWeek);
+
+		if (Integer.parseInt(yearWeek) > Integer.parseInt(activity.getEnd())
+				|| Integer.parseInt(yearWeek) < Integer.parseInt(activity.getStart())) {
 			throw new Exception("Activity has not begun/ended for planned time");
 		}
-		
+
 		PlannedWeek plannedWeek = indexer.findPlannedWeek(em, yearWeek);
-		
+
 		plannedWeek.addActivityToWeek(activity);
 		plannedWeek.addHoursForActivity(activity, hours);
 	}
 
-	public double calculatePlannedHours(Employee em, String week) throws Exception  {
+	public double calculatePlannedHours(Employee em, String week) throws Exception {
 		indexer.findEmployee(em.getInitials());
-		
+
 		PlannedWeek foundPlannedWeek = indexer.findPlannedWeek(em, week);
 
 		return foundPlannedWeek.calculateTotalPlannedHours();
@@ -144,7 +164,7 @@ public class App {
 		}
 		double weekHours = days * PlannedWeek.WORKHOURS_PER_DAY;
 		PlannedWeek plannedWeek = indexer.findPlannedWeek(em, yearWeek);
-		
+
 		NonWorkActivity activityFound = plannedWeek.findNonWorkActivity(activityName);
 		plannedWeek.addHoursForActivity(activityFound, weekHours);
 	}

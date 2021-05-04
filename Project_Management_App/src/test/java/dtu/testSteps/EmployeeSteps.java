@@ -35,7 +35,7 @@ public class EmployeeSteps {
 		pm = eh.createAdditionalEmployee(name);
 		ph.createProject("Project");
 
-		projectApp.assignProjectManager(ph.getProject(), pm);
+		projectApp.assignProjectManager(ph.getProject().getId(), pm.getInitials());
 
 		assertTrue(pm.isProjectManger());
 		assertTrue(ph.getProject().getProjectManager().equals(pm));
@@ -82,7 +82,7 @@ public class EmployeeSteps {
 	@When("the Employee assigns the Employee as the Project Manager to the Project")
 	public void the_employee_assigns_the_employee_as_the_project_manager_to_the_project() {
 		try {
-			projectApp.assignProjectManager(ph.getProject(), eh.getEmployee());
+			projectApp.assignProjectManager(ph.getProject().getId(), eh.getEmployee().getInitials());
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -91,7 +91,7 @@ public class EmployeeSteps {
 	@When("the Project Manager is unassigned from the Project")
 	public void the_project_manager_is_unassigned_from_the_project() {
 		try {
-			projectApp.unassignProjectManager(ph.getProject(), pm);
+			projectApp.unassignProjectManager(ph.getProject().getId(), pm.getInitials());
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -115,4 +115,5 @@ public class EmployeeSteps {
 	public void the_employee_is_the_project_manager_for_the_project() throws Exception {
 	    assertTrue(ph.getProject().getProjectManager().equals(eh.getEmployee()));
 	}
+
 }

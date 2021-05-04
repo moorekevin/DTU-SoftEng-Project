@@ -2,9 +2,6 @@ package dtu.testSteps;
 
 import dtu.projectManagementApp.App;
 import dtu.projectManagementApp.DateServer;
-import dtu.projectManagementApp.Employee;
-import dtu.projectManagementApp.NonWorkActivity;
-import dtu.projectManagementApp.Project;
 import dtu.projectManagementApp.WorkActivity;
 
 public class ActivityHelper {

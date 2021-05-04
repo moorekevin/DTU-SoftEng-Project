@@ -120,9 +120,9 @@ public class Indexer {
 		throw new EmployeeNotFoundException("Employee does not exist");
 	}
 
-	public WorkActivity findActivity(Project project, String name) throws Exception {
+	public WorkActivity findActivity(Project project, String activityName) throws Exception {
 		for (WorkActivity activity : project.getActivities()) {
-			if (activity.getName().equals(name)) {
+			if (activity.getName().equals(activityName)) {
 				return activity;
 			}
 		}
