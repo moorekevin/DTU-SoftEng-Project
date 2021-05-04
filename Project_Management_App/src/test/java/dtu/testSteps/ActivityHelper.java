@@ -10,7 +10,6 @@ import dtu.projectManagementApp.WorkActivity;
 public class ActivityHelper {
 	private App app;
 	private WorkActivity workActivity;
-	private NonWorkActivity nonWorkActivity;
 
 	public ActivityHelper(App app) {
 		this.app = app;
@@ -19,11 +18,6 @@ public class ActivityHelper {
 	public WorkActivity getWorkActivity() {
 		return workActivity;
 	}
-	
-	public NonWorkActivity getNonWorkActivity() {
-		return nonWorkActivity;
-	}
-
 
 	public void setWorkActivity(WorkActivity activity) {
 		workActivity = activity;
@@ -42,21 +36,5 @@ public class ActivityHelper {
 		
 		return (year+yearPlus) % 100 + "" + (week+weekPlus) / 10 + "" + (week+weekPlus) % 10;
 	}
-	
-
-	public WorkActivity createWorkActivity(Project project, Employee pm, String name) throws Exception {
-		String startWeek = getCurrentYearWeek();
-		String endWeek = addToYearWeek(1, 0);
-		workActivity = app.createWorkActivity(project, pm, name, startWeek, endWeek);
-		return workActivity;
-	}
-	
-	public WorkActivity createWorkActivity(Project project, Employee pm, String name, String start, String end) throws Exception {
-		workActivity = app.createWorkActivity(project, pm, name, start, end);
-		return workActivity;
-	}
-	
-	
-	
-	 
+		 
 }

@@ -5,7 +5,6 @@ import java.util.List;
 
 public class Employee {
 	private String initials;
-	private double registeredHoursToday;
 	private List<Project> managingProjects;
 	private List<PlannedWeek> plannedWeekRepository;
 	private List<NonWorkActivity> nonWorkActivities;
