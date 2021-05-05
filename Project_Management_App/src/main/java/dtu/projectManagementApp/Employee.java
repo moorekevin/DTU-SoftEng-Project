@@ -40,13 +40,4 @@ public class Employee {
 		plannedWeekRepository.add(plannedWeek);
 	}
 	
-	public List<NonWorkActivity> getNonWorkActivities(){
-		return nonWorkActivities;
-	}
-	
-	public void addNonWorkActivity(NonWorkActivity nonWorkActivity) {
-		nonWorkActivities.add(nonWorkActivity);
-	}
-
-
 }

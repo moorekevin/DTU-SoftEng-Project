@@ -349,7 +349,7 @@ public class Controller {
 
 	public void planTimeAllocation() {
 		String methodName = "Time Allocation";
-		String pmInitials = requestEmployee(methodName);
+		String pmInitials = requestProjectManager(methodName);
 		if (pmInitials != null) {
 			String emInitials = requestEmployee(methodName);
 			if (emInitials != null) {

@@ -135,6 +135,7 @@ public class Indexer {
 		throw new Exception("Activity is not assigned to the project");
 	}
 
+
 	public PlannedWeek findPlannedWeek(Employee em, String week) {
 
 		for (PlannedWeek plannedWeek : em.getPlannedWeeks()) {

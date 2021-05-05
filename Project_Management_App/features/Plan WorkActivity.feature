@@ -28,7 +28,6 @@ Scenario: Add Activities to Project with invalid start-YearWeek and end-YearWeek
 	Then the WorkActivity is not assigned to the Project
 	And the error is thrown "Week(s) are invalid"
 	
-
 Scenario: Edit Activity in a Project succesfully
 	Given a Project Manager with initials "AAAA" is assigned to a Project
 	And a WorkActivity with name "Activity", start-week "9001" and end-week "9002" is assigned to the Project
