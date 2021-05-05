@@ -2,6 +2,9 @@ package dtu.testSteps;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+
+import dtu.exceptions.EmployeeNotFoundException;
 
 import dtu.projectManagementApp.App;
 import dtu.projectManagementApp.Employee;
@@ -23,6 +26,36 @@ public class EmployeeSteps {
 		this.eh = eh;
 		this.errorMessage = errorMessage;
 
+	}
+	
+	@When("there is added an Employee with initials {string}")
+	public void there_is_added_an_employee_with_initials(String initials) {
+	    try {
+			projectApp.getIndexer().addEmployee(initials);
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
+	}
+	
+	@Then("there is {int} Employee\\(s) with initials {string} in the Employee repository")
+	public void there_is_employee_s_with_initials_in_the_employee_repository(Integer amount, String initials) {
+		Integer counted = 0;
+		for (Employee employeeToCheck :projectApp.getIndexer().getEmployees()) {
+			if (employeeToCheck.getInitials().equals(initials)){
+				counted ++;
+			}				
+		}
+	    assertEquals(counted, amount);
+	}
+	
+
+	@When("an Employee with initials {string} is removed from the app")
+	public void an_employee_with_initials_is_removed_from_the_app(String initials) {
+	   try {
+		   projectApp.getIndexer().removeEmployee(initials);
+	   } catch (Exception e) {
+		   errorMessage.setErrorMessage(e.getMessage());
+	   }
 	}
 
 	@Given("there is an Employee with initials {string}")
@@ -76,7 +109,7 @@ public class EmployeeSteps {
 
 	@Given("the Project does not have a Project Manager")
 	public void the_project_does_not_have_a_project_manager() {
-		assertTrue(ph.getProject().getProjectManager() == null);
+		assertEquals(ph.getProject().getProjectManager(), null);
 	}
 
 	@When("the Employee assigns the Employee as the Project Manager to the Project")

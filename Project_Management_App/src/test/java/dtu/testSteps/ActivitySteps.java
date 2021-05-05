@@ -13,57 +13,66 @@ import io.cucumber.java.en.When;
 
 public class ActivitySteps {
 	private App projectApp;
-	private WorkActivity activity;
-	private ProjectHelper projectHelper;
-	private ActivityHelper activityHelper;
-	private EmployeeHelper employeeHelper;
+	private ProjectHelper ph;
+	private ActivityHelper ah;
+	private EmployeeHelper eh;
 	private ErrorMessage errorMessage;
 
 	public ActivitySteps(App projectApp, ProjectHelper projectHelper, EmployeeHelper employeeHelper,
 			ActivityHelper activityHelper, ErrorMessage errorMessage) {
 		this.projectApp = projectApp;
-		this.projectHelper = projectHelper;
-		this.activityHelper = activityHelper;
-		this.employeeHelper = employeeHelper;
+		this.ph = projectHelper;
+		this.ah = activityHelper;
+		this.eh = employeeHelper;
 		this.errorMessage = errorMessage;
 	}
 
 	@Given("a WorkActivity with name {string} is assigned to the Project")
 	public void a_work_activity_with_name_is_assigned_to_the_project(String name) throws Exception {
-			Employee pm = employeeHelper.getAdditionalEmployee();
-			String start = activityHelper.getCurrentYearWeek();
-			String end = activityHelper.addToYearWeek(1, 0);	
-			activity = projectApp.createWorkActivity(projectHelper.getProject().getId(), pm.getInitials(), name, start, end);
+			Employee pm = eh.getAdditionalEmployee();
+			String start = ah.getCurrentYearWeek();
+			String end = ah.addToYearWeek(1, 0);	
+			Project project = ph.getProject();
+
+			ah.setWorkActivity(projectApp.createWorkActivity(project.getId(), pm.getInitials(), name, start, end));
+			assertTrue(ph.getProject().getActivities().contains(ah.getWorkActivity()));
+	}
+	
+	@Given("there is a WorkActivity with name {string} that is not assigned to the Project")
+	public void there_is_a_work_activity_with_name_that_is_not_assigned_to_the_project(String activityName) {
+		WorkActivity nonAssignedWA = new WorkActivity(activityName, ah.getCurrentYearWeek(), ah.addToYearWeek(1, 0));
+	    ah.setWorkActivity(nonAssignedWA);
+		assertFalse(ph.getProject().getActivities().contains(nonAssignedWA));
 	}
 
-	@Given("there is an Employee with initials {string} assigned to the project")
-	public void there_is_an_employee_with_initials_assigned_to_the_project(String name) throws Exception {
-		Employee pm = employeeHelper.getAdditionalEmployee();
-		Employee em = employeeHelper.createEmployee(name);
+	@Given("there is an Employee with initials {string} assigned to the Project")
+	public void there_is_an_employee_with_initials_assigned_to_the_project(String initials) throws Exception {
+		Employee pm = eh.getAdditionalEmployee();
+		Employee em = eh.createEmployee(initials);
 
-		projectApp.assignEmployeeToProject(projectHelper.getProject().getId(), pm.getInitials(), em.getInitials());
+		projectApp.assignEmployeeToProject(ph.getProject().getId(), pm.getInitials(), em.getInitials());
 	}
 
-	@When("the Project Manager assigns the Employee to the Activity")
-	public void the_project_manager_assigns_the_employee_to_the_activity() {
+	@When("the Project Manager assigns the Employee to the WorkActivity")
+	public void the_project_manager_assigns_the_employee_to_the_work_activity() {
 		try {
-			projectApp.assignEmployeeToActivity(projectHelper.getProject().getId(), activity.getName(),
-					employeeHelper.getAdditionalEmployee().getInitials(), employeeHelper.getEmployee().getInitials());
+			projectApp.assignEmployeeToActivity(ph.getProject().getId(), ah.getWorkActivity().getName(),
+					eh.getAdditionalEmployee().getInitials(), eh.getEmployee().getInitials());
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
 	}
 
-	@Then("the Employee is assigned to the Activity")
-	public void the_employee_is_assigned_to_the_activity() {
-		Employee em = employeeHelper.getEmployee();
-		assertTrue(activity.getAssignedEmployees().contains(em));
+	@Then("the Employee is now assigned to the WorkActivity")
+	public void the_employee_is_now_assigned_to_the_work_activity() {
+		Employee em = eh.getEmployee();
+		assertTrue(ah.getWorkActivity().getAssignedEmployees().contains(em));
 	}
 
-	@Then("the Employee with initials {string} is not assigned to the Activity")
-	public void the_employee_with_initials_is_not_assigned_to_the_activity(String initials) throws Exception {
-		assertTrue(employeeHelper.getEmployee().getInitials().equals(initials));
-		assertFalse(activity.getAssignedEmployees().contains(employeeHelper.getEmployee()));
+	@Then("the Employee with initials {string} is not assigned to the WorkActivity")
+	public void the_employee_with_initials_is_not_assigned_to_the_work_activity(String initials) throws Exception {
+		assertTrue(eh.getEmployee().getInitials().equals(initials));
+		assertFalse(ah.getWorkActivity().getAssignedEmployees().contains(eh.getEmployee()));
 	}
 
 	// Feature Plan Project-Related Activities
@@ -71,8 +80,8 @@ public class ActivitySteps {
 	public void the_project_manager_creates_a_work_activity_with_name_start_week_and_end_week(String name,
 			String startWeek, String endWeek) throws Exception {
 		try {
-			Employee pm = employeeHelper.getAdditionalEmployee();
-			activity = projectApp.createWorkActivity(projectHelper.getProject().getId(), pm.getInitials(), name, startWeek, endWeek);
+			Employee pm = eh.getAdditionalEmployee();
+			ah.setWorkActivity(projectApp.createWorkActivity(ph.getProject().getId(), pm.getInitials(), name, startWeek, endWeek));
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -81,7 +90,7 @@ public class ActivitySteps {
 	@When("the Project Manager sets the expected hours to {double} for the WorkActivity")
 	public void the_project_manager_sets_the_expected_hours_to_for_the_work_activity(Double expectedHours) {
 		try {
-			projectApp.setExpectedHours(projectHelper.getProject().getId(), activity.getName(), expectedHours);
+			projectApp.setExpectedHours(ph.getProject().getId(), ah.getWorkActivity().getName(), expectedHours);
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -89,40 +98,40 @@ public class ActivitySteps {
 
 	@Then("the WorkActivity is assigned to the Project")
 	public void the_work_activity_is_assigned_to_the_project() throws Exception {
-		assertTrue(projectHelper.getProject().getActivities().contains(activity));
+		assertTrue(ph.getProject().getActivities().contains(ah.getWorkActivity()));
 	}
 
 	@Then("the expected hours is {double} for the WorkActivity")
 	public void the_expected_hours_is_for_the_work_activity(Double expectedHours) throws Exception {
-		assertTrue(activity.getExpectedHours().equals(expectedHours));
+		assertTrue(ah.getWorkActivity().getExpectedHours().equals(expectedHours));
 	}
 
 	@Then("the WorkActivity is not assigned to the Project")
 	public void the_work_activity_is_not_assigned_to_the_project() throws Exception {
-		assertFalse(projectHelper.getProject().getActivities().contains(activity));
+		assertFalse(ph.getProject().getActivities().contains(ah.getWorkActivity()));
 	}
 
 	@Given("a WorkActivity with name {string}, start-week {string} and end-week {string} is assigned to the Project")
 	public void a_work_activity_with_name_start_week_and_end_week_is_assigned_to_the_project(String name, String start,
 			String end) throws Exception {
-		Project project = projectHelper.getProject();
-		Employee pm = employeeHelper.getAdditionalEmployee();
+		Project project = ph.getProject();
+		Employee pm = eh.getAdditionalEmployee();
 		
-		activity = projectApp.createWorkActivity(project.getId(), pm.getInitials(), name, start, end);
-		activityHelper.setWorkActivity(activity);
+		ah.setWorkActivity(projectApp.createWorkActivity(project.getId(), pm.getInitials(), name, start, end));
+		ah.setWorkActivity(ah.getWorkActivity());
 	}
 
 	@Given("the WorkActivity's expected hours is set to {double}")
 	public void the_work_activity_s_expected_hours_is_set_to(Double expectedHours) throws Exception {
-		projectApp.setExpectedHours(projectHelper.getProject().getId(), activity.getName(), expectedHours);
+		projectApp.setExpectedHours(ph.getProject().getId(), ah.getWorkActivity().getName(), expectedHours);
 	}
 
-	@When("the Project Manager edits the Activity to name {string}, start-week {string} and end-week {string}")
-	public void the_project_manager_edits_the_activity_to_name_start_week_and_end_week(String name, String start,
+	@When("the Project Manager edits the WorkActivity to name {string}, start-week {string} and end-week {string}")
+	public void the_project_manager_edits_the_work_activity_to_name_start_week_and_end_week(String name, String start,
 			String end) {
 		try {
-			Employee pm = employeeHelper.getAdditionalEmployee();
-			projectApp.editActivity(activity.getName(), projectHelper.getProject().getId(), pm.getInitials(), name, start, end);
+			Employee pm = eh.getAdditionalEmployee();
+			projectApp.editActivity(ah.getWorkActivity().getName(), ph.getProject().getId(), pm.getInitials(), name, start, end);
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -130,33 +139,35 @@ public class ActivitySteps {
 
 	@Then("the WorkActivity has start-week {string} and end-week {string}")
 	public void the_work_activity_has_start_week_and_end_week(String start, String end) {
-		assertTrue(activity.getStart().equals(start));
-		assertTrue(activity.getEnd().equals(end));
+		assertTrue(ah.getWorkActivity().getStart().equals(start));
+		assertTrue(ah.getWorkActivity().getEnd().equals(end));
 	}
 
-	@Then("the Activity has name {string}, start-week {string} and end-week {string}")
-	public void the_activity_has_name_start_week_and_end_week(String name, String start, String end) {
-		assertTrue(activity.getName().equals(name));
-		assertTrue(activity.getStart().equals(start));
-		assertTrue(activity.getEnd().equals(end));
+	@Then("the WorkActivity has name {string}, start-week {string} and end-week {string}")
+	public void the_work_activity_has_name_start_week_and_end_week(String name, String start, String end) {
+		assertTrue(ah.getWorkActivity().getName().equals(name));
+		assertTrue(ah.getWorkActivity().getStart().equals(start));
+		assertTrue(ah.getWorkActivity().getEnd().equals(end));
 	}
 
 	@Given("the Employee is assigned to the WorkActivity")
 	public void the_employee_is_assigned_to_the_work_activity() throws Exception {
-		projectApp.assignEmployeeToActivity(projectHelper.getProject().getId(), activity.getName(),
-				employeeHelper.getAdditionalEmployee().getInitials(), employeeHelper.getEmployee().getInitials());
+		projectApp.assignEmployeeToActivity(ph.getProject().getId(), ah.getWorkActivity().getName(),
+				eh.getAdditionalEmployee().getInitials(), eh.getEmployee().getInitials());
 	}
 
-	@When("the Employee is removed from the Activity")
-	public void the_employee_is_removed_from_the_activity() throws Exception {
-
-		projectApp.removeEmployeeFromActivity(projectHelper.getProject().getId(), employeeHelper.getEmployee().getInitials(), activity.getName());
-
+	@When("the Employee is removed from the WorkActivity")
+	public void the_employee_is_removed_from_the_work_activity() {
+		try {
+			projectApp.removeEmployeeFromActivity(ph.getProject().getId(), eh.getEmployee().getInitials(), ah.getWorkActivity().getName());
+		} catch (Exception e) {
+			errorMessage.setErrorMessage(e.getMessage());
+		}
 	}
 
-	@Then("the Employee is unassigned from the Activity")
-	public void the_employee_is_unassigned_from_the_activity() throws Exception {
-		assertFalse(activity.getAssignedEmployees().contains(employeeHelper.getEmployee()));
+	@Then("the Employee is unassigned from the WorkActivity")
+	public void the_employee_is_unassigned_from_the_work_activity() throws Exception {
+		assertFalse(ah.getWorkActivity().getAssignedEmployees().contains(eh.getEmployee()));
 	}
 
 }

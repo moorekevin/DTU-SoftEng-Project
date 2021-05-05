@@ -25,10 +25,6 @@ public class Indexer {
 		return employeeRepository;
 	}
 
-	public List<String> getWeeks() {
-		return weekRepository;
-	}
-
 	// Index methods
 	public void addEmployee(String initials) throws Exception {
 		try {
@@ -121,7 +117,7 @@ public class Indexer {
 		throw new Exception("Project does not exist");
 	}
 
-	public Employee findEmployee(String initials) throws Exception {
+	public Employee findEmployee(String initials) throws EmployeeNotFoundException {
 		for (Employee employee : employeeRepository) {
 			if (employee.getInitials().equals(initials.toUpperCase())) {
 				return employee;
@@ -137,11 +133,6 @@ public class Indexer {
 			}
 		}
 		throw new Exception("Activity is not assigned to the project");
-	}
-	
-	public WorkActivity findActivity(int projectID, String activityName) throws Exception {
-		Project project = findProject(projectID);
-		return findActivity(project, activityName);
 	}
 
 	public PlannedWeek findPlannedWeek(Employee em, String week) {

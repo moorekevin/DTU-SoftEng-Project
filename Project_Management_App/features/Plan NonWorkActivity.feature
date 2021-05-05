@@ -1,5 +1,5 @@
-Feature: Plan Non-Project Related Activity
-Description: The Employee plans Non-Project related Activities
+Feature: Plan NonWorkActivity
+Description: The Employee plans NonWorkActivities
 Actors: Employee
 
 Scenario: Employee takes time off succesfully

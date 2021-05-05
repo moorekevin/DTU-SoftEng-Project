@@ -451,7 +451,8 @@ public class Controller {
 				String activityName = requestActivity(methodName);
 				if (activityName != null) {
 					try {
-						ui.printEmployees(indexer.findActivity(convertToInt(projectID), activityName).getAssignedEmployees());
+						Project projectFound = indexer.findProject(convertToInt(projectID));
+						ui.printEmployees(indexer.findActivity(projectFound, activityName).getAssignedEmployees());
 					} catch (Exception e) {
 						ui.printError(e.getMessage());
 					}

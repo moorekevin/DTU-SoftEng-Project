@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import dtu.Main;
 import dtu.projectManagementApp.App;
 import dtu.projectManagementApp.Project;
 import io.cucumber.java.en.Given;
@@ -20,6 +21,7 @@ public class ProjectSteps {
 		this.ph = ph;
 		this.errorMessage = errorMessage;
 	}
+	
 
 	@When("the Employee creates a Project with name {string}")
 	public void the_employee_creates_a_project_with_name(String name) {
@@ -30,8 +32,8 @@ public class ProjectSteps {
 	public void the_project_is_assigned_to_the_list_of_projects() {
 		boolean projectAssigned = false;
 		Project checkProject = ph.getProject();
-		for (Project proj: projectApp.getIndexer().getProjects()) {
-			if (proj.getId() == checkProject.getId() && proj.getName() == checkProject.getName()) {
+		for (Project proj : projectApp.getIndexer().getProjects()) {
+			if (proj.getId() == checkProject.getId() && proj.getName().equals(checkProject.getName())) {
 				projectAssigned = true;
 			}
 		}
@@ -73,7 +75,7 @@ public class ProjectSteps {
 	public void there_is_not_a_project_with_id_in_the_list_of_projects(Integer id) {
 		ph.setProject(new Project("AAAA", id));
 		assertFalse(projectApp.getIndexer().getProjects().contains(ph.getProject()));
-		
+
 	}
 
 	@Then("the error is thrown {string}")
