@@ -58,7 +58,7 @@ public class ProjectSteps {
 	@When("the Employee deletes the Project")
 	public void the_employee_deletes_the_project() {
 		try {
-			projectApp.getIndexer().deleteProject(ph.getProject());
+			projectApp.getIndexer().deleteProject(ph.getProject().getId());
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}

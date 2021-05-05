@@ -39,8 +39,8 @@ public class Indexer {
 		}
 	}
 
-	public void removeEmployee(Employee em) throws Exception {
-		employeeRepository.remove(findEmployee(em.getInitials()));
+	public void removeEmployee(String em) throws Exception {
+		employeeRepository.remove(findEmployee(em));
 	}
 
 	public Project createProject(String name) {
@@ -49,8 +49,8 @@ public class Indexer {
 		return projectCreated;
 	}
 
-	public void deleteProject(Project project) throws Exception {
-		projectRepository.remove(findProject(project.getId()));
+	public void deleteProject(int project) throws Exception {
+		projectRepository.remove(findProject(project));
 	}
 
 	// Validations
@@ -137,6 +137,11 @@ public class Indexer {
 			}
 		}
 		throw new Exception("Activity is not assigned to the project");
+	}
+	
+	public WorkActivity findActivity(int projectID, String activityName) throws Exception {
+		Project project = findProject(projectID);
+		return findActivity(project, activityName);
 	}
 
 	public PlannedWeek findPlannedWeek(Employee em, String week) {

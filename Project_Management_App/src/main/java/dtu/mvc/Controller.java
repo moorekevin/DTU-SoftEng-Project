@@ -116,10 +116,10 @@ public class Controller {
 
 	public void deleteProject() {
 		String methodName = "Delete project";
-		Project project = requestProject(methodName, "What is the project's ID?");
+		String project = requestProject(methodName);
 		if (project != null) {
 			try {
-				indexer.deleteProject(project);
+				indexer.deleteProject(convertToInt(project));
 				ui.printSuccess(methodName);
 			} catch (Exception e) {
 				ui.printError(e.getMessage());
@@ -144,10 +144,10 @@ public class Controller {
 
 	public void removeEmployee() {
 		String methodName = "Remove employee";
-		Employee em = requestEmployee(methodName, "What are the initials of the employee?");
-		if (em != null) {
+		String emInitials = requestEmployee(methodName);
+		if (emInitials != null) {
 			try {
-				indexer.removeEmployee(em);
+				indexer.removeEmployee(emInitials);
 				ui.printSuccess(methodName);
 			} catch (Exception e) {
 				ui.printError(methodName);
@@ -437,18 +437,24 @@ public class Controller {
 		if (choice.equals("1")) { // For whole company
 			ui.printEmployees(indexer.getEmployees());
 		} else if (choice.equals("2")) { // For a project
-			Project project = requestProject(methodName,
-					"Please input the ID of the project you wish to see assigned employees for");
-			if (project != null) {
-				ui.printEmployees(project.getAssignedEmployees());
+			String projectID = requestProject(methodName);
+			if (projectID != null) {
+				try {
+					ui.printEmployees(indexer.findProject(convertToInt(projectID)).getAssignedEmployees());
+				} catch (Exception e) {
+					ui.printError(e.getMessage());
+				}
 			}
 		} else if (choice.equals("3")) { // For an activity
-			Project project = requestProject(methodName,
-					"Please input the ID of the project the activity is assigned to");
-			if (project != null) {
-				WorkActivity act = requestActivity(methodName, project, "Please input the name of the activity");
-				if (act != null) {
-					ui.printEmployees(act.getAssignedEmployees());
+			String projectID = requestProject(methodName);
+			if (projectID != null) {
+				String activityName = requestActivity(methodName);
+				if (activityName != null) {
+					try {
+						ui.printEmployees(indexer.findActivity(convertToInt(projectID), activityName).getAssignedEmployees());
+					} catch (Exception e) {
+						ui.printError(e.getMessage());
+					}
 				}
 			}
 		} else {
@@ -458,10 +464,13 @@ public class Controller {
 
 	public void viewActivities() {
 		String methodName = "View activities";
-		Project project = requestProject(methodName,
-				"What is the ID of the project you wish to see the activities for?");
-		if (project != null) {
-			ui.printActivities(project.getActivities());
+		String projectID = requestProject(methodName);
+		if (projectID != null) {
+			try {
+				ui.printActivities(indexer.findProject(convertToInt(projectID)).getActivities());
+			} catch (Exception e) {
+				ui.printError(e.getMessage());
+			}
 		}
 	}
 
@@ -474,7 +483,7 @@ public class Controller {
 			String week = requestWeek();
 			if (week != null) {
 				try {
-					// TODO Find a more permanent solution
+					// TODO Maybe find a more permanent solution
 					ui.printTimeAllocation(app.calculatePlannedHours(emInitials, week),
 							indexer.findPlannedWeek(indexer.findEmployee(emInitials), week).getPlannedActivities());
 				} catch (Exception e) {
@@ -485,61 +494,4 @@ public class Controller {
 		}
 	}
 
-	// TODO Remove
-	public Employee requestEmployee(String methodName, String msg) {
-		while (true) {
-			ui.print(methodName, msg);
-
-			String initials = ui.getUserInput();
-			if (initials == null) { // If user types "/exit" then stop the method
-				break;
-			} else {
-				try {
-					return indexer.findEmployee(initials);
-				} catch (Exception e) {
-					ui.printError(e.getMessage());
-				}
-			}
-		}
-		return null;
-	}
-
-	public Project requestProject(String methodName, String msg) {
-		while (true) {
-			ui.print(methodName, msg);
-
-			String userInput = ui.getUserInput();
-			if (userInput == null) {
-				break;
-			} else {
-				try {
-					int projectID = Integer.parseInt(userInput);
-					return indexer.findProject(projectID);
-				} catch (NumberFormatException e) {
-					ui.printError("Please enter numbers as Project ID");
-				} catch (Exception e) {
-					ui.printError(e.getMessage());
-				}
-			}
-		}
-		return null;
-	}
-
-	public WorkActivity requestActivity(String methodName, Project project, String msg) {
-		while (true) {
-			ui.print(methodName, msg);
-
-			String name = ui.getUserInput();
-			if (name == null) {
-				break;
-			} else {
-				try {
-					return indexer.findActivity(project, name);
-				} catch (Exception e) {
-					ui.printError(e.getMessage());
-				}
-			}
-		}
-		return null;
-	}
 }
