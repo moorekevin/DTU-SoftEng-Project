@@ -37,6 +37,12 @@ Scenario: Edit Activity in a Project succesfully
 	Then the WorkActivity has name "Coding", start-week "9010" and end-week "9011"
 	And the expected hours is 20.0 for the WorkActivity
 
+Scenario: Edit a WorkActivity name only
+	Given a Project Manager with initials "AAAA" is assigned to a Project
+	And a WorkActivity with name "Activity", start-week "9001" and end-week "9002" is assigned to the Project
+	When the Project Manager edits the WorkActivity to name "Coding", start-week "" and end-week ""
+	Then the WorkActivity has name "Coding", start-week "9001" and end-week "9002"
+
 Scenario: Edit WorkActivity with invalid start-YearWeek interval
 	Given a Project Manager with initials "AAAA" is assigned to a Project
 	And a WorkActivity with name "Activity", start-week "9001" and end-week "9002" is assigned to the Project

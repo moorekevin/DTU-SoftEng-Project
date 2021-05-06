@@ -30,9 +30,6 @@ public class App {
 	public void assignProjectManager(int projectID, String emInitials) throws Exception {
 		Project project = indexer.findProject(projectID);
 		Employee em = indexer.findEmployee(emInitials);
-
-		if (project.getProjectManager() != null)
-			throw new Exception("Project already has a Project Manager");
 		em.setProjectManager(project);
 		project.assignProjectManager(em);
 	}
@@ -71,7 +68,7 @@ public class App {
 		Project project = indexer.findProject(projectID);
 		Employee pm = indexer.findEmployee(pmInitials);
 
-		indexer.validateWeekInterval(start, end);
+		DateServer.validateWeekInterval(start, end);
 		indexer.validateProjectManager(pm, project);
 
 		for (WorkActivity activity : project.getActivities()) {
@@ -100,7 +97,7 @@ public class App {
 			endWeek = activity.getEnd();
 		}
 
-		indexer.validateWeekInterval(startWeek, endWeek);
+		DateServer.validateWeekInterval(startWeek, endWeek);
 		indexer.validateProjectManager(pm, project);
 
 		// Should only be updated if user typed information
@@ -139,7 +136,7 @@ public class App {
 		
 		indexer.validateEmployeeAssigned(em, project);
 		indexer.validateProjectManager(pm);
-		indexer.validateYearWeek(yearWeek);
+		DateServer.validateYearWeek(yearWeek);
 
 		if (Integer.parseInt(yearWeek) > Integer.parseInt(activity.getEnd())
 				|| Integer.parseInt(yearWeek) < Integer.parseInt(activity.getStart())) {
@@ -147,8 +144,7 @@ public class App {
 		}
 
 		PlannedWeek plannedWeek = indexer.findPlannedWeek(em, yearWeek);
-
-		plannedWeek.addActivityToWeek(activity);
+		plannedWeek = checkPlannedWeek(yearWeek, em, plannedWeek);
 		plannedWeek.addHoursForActivity(activity, hours);
 	}
 
@@ -156,6 +152,9 @@ public class App {
 		Employee em = indexer.findEmployee(emInitials);
 
 		PlannedWeek foundPlannedWeek = indexer.findPlannedWeek(em, week);
+		if(foundPlannedWeek == null) {
+			return 0.0;
+		}
 
 		return foundPlannedWeek.calculateTotalPlannedHours();
 	}
@@ -164,16 +163,23 @@ public class App {
 			throws Exception {
 		Employee em = indexer.findEmployee(emInitials);
 		
-		if (days > 7) {
-			throw new OperationNotAllowedException("There cannot be more than 7 days in a week");
+		if (days > 7 || days < 0) {
+			throw new OperationNotAllowedException("Invalid amount of days");
 		}
-		if (days < 0) {
-			throw new OperationNotAllowedException("Amount of days cannot be less than 0");
-		}
+		
 		double weekHours = days * PlannedWeek.WORKHOURS_PER_DAY;
 		PlannedWeek plannedWeek = indexer.findPlannedWeek(em, yearWeek);
+		
+		plannedWeek = checkPlannedWeek(yearWeek, em, plannedWeek);
 
 		NonWorkActivity activityFound = plannedWeek.findNonWorkActivity(activityName);
 		plannedWeek.addHoursForActivity(activityFound, weekHours);
+	}
+
+	private PlannedWeek checkPlannedWeek(String yearWeek, Employee em, PlannedWeek plannedWeek) throws Exception {
+		if(plannedWeek == null) {
+			plannedWeek = em.createPlannedWeek(yearWeek);
+		}
+		return plannedWeek;
 	}
 }

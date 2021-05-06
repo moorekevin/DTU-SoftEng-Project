@@ -28,6 +28,14 @@ public class EmployeeSteps {
 
 	}
 	
+	@Given("there is an Employee with initials {string} assigned to the Project")
+	public void there_is_an_employee_with_initials_assigned_to_the_project(String initials) throws Exception {
+		pm = eh.getAdditionalEmployee();
+		em = eh.createEmployee(initials);
+
+		projectApp.assignEmployeeToProject(ph.getProject().getId(), pm.getInitials(), em.getInitials());
+	}
+	
 	@When("there is added an Employee with initials {string}")
 	public void there_is_added_an_employee_with_initials(String initials) {
 	    try {

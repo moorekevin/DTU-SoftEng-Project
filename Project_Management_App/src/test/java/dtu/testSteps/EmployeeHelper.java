@@ -51,8 +51,7 @@ public class EmployeeHelper {
 	}
 
 	public void setTimeAllocation(Employee em, String yearWeek, Double hours) throws Exception {
-		PlannedWeek plannedWeek = new PlannedWeek(yearWeek);
-		em.addPlannedWeek(plannedWeek);
+		PlannedWeek plannedWeek = em.createPlannedWeek(yearWeek);
 
 		NonWorkActivity testActivity = plannedWeek.findNonWorkActivity(PlannedWeek.NON_WORK_ACTIVITIES[0]);
 		plannedWeek.addHoursForActivity(testActivity, hours);

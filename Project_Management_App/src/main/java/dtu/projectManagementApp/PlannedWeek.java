@@ -35,7 +35,6 @@ public class PlannedWeek {
 						return (NonWorkActivity) activity;
 					}
 				}
-				break;
 			}
 		}
 		throw new OperationNotAllowedException("Non-work Activity is not found in Planned Week");
@@ -66,6 +65,7 @@ public class PlannedWeek {
 
 	public double calculateTotalPlannedHours() {
 		double plannedWork = 0.0;
+		
 		for (Activity checkActivity : plannedActivities.keySet()) {
 			boolean activityIntervalValid = true;
 			if (checkActivity instanceof WorkActivity) {
@@ -75,7 +75,8 @@ public class PlannedWeek {
 				plannedWork += plannedActivities.get(checkActivity);
 			} 
 		}
-
+		
+		
 		clearInvalidActivities();
 		
 		return plannedWork;
@@ -105,6 +106,7 @@ public class PlannedWeek {
 	public String getYearWeek() {
 		return yearWeek;
 	}
+	
 	
 //	@Override
 //    public boolean equals(Object obj) {

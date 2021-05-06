@@ -15,6 +15,12 @@ Scenario: Remove an Employee from a Project succesfully
 	When the Employee is removed from the Project
 	Then the Employee is not assigned to the Project
 
+Scenario: Assign the Employee to a Project already assigned to
+	Given a Project Manager with initials "AAAA" is assigned to a Project
+	And there is an Employee with initials "BBBB" assigned to the Project
+	When the Project Manager assigns the Employee to the Project
+	Then the error is thrown "Employee is already assigned to the project"
+
 Scenario: Assign a non-existing Employee to a Project
 	Given a Project Manager with initials "AAAA" is assigned to a Project
 	And there is not an Employee with initials "BBBB"

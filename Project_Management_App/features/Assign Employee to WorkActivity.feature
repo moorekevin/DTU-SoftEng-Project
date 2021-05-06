@@ -36,8 +36,14 @@ Scenario: Assign an Employee to an WorkActivity when Project Manager is not assi
 	Then the error is thrown "Project Manager is not assigned to the Project"
 	And the Employee with initials "BBBB" is not assigned to the WorkActivity
 	
-Scenario: Remove an Employee from an WorkActivity
+Scenario: Remove an Employee from an WorkActivity succesfully
     Given the Employee is assigned to the WorkActivity
     When the Employee is removed from the WorkActivity
     Then the Employee is unassigned from the WorkActivity
+    
+Scenario: Remove an Employee from an WorkActivity unsuccesfully
+    Given the Employee is not assigned to the WorkActivity
+    When the Employee is removed from the WorkActivity
+    Then the error is thrown "Employee is not assigned to the activity"
+    
     

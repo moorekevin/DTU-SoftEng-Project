@@ -29,4 +29,11 @@ Scenario: The Project Manager plans an Employee's Time Allocation for an Employe
 Scenario: The Project Manager plans an Employee's Time Allocation for an Activity that has ended	
 	When the Project Manager allocates 8.0 hours for the Employee for the WorkActivity for Week "9010"
 	Then the error is thrown "Activity has not begun/ended for planned time"
+
+Scenario: The Project Manager plans an Employee's Time Allocation for an Activity that has ended	
+	Given the Employee has 0.0 total hours Planned Work for Week "9002"
+	When the Project Manager allocates 8.0 hours for the Employee for the WorkActivity for Week "9002"
+	And the Project Manager edits the WorkActivity to name "Coding", start-week "9003" and end-week "9005"
+	Then the Employee has a total of 0.0 hours Planned Work for Week "9002"
+	
 	

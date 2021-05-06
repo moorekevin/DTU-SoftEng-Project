@@ -45,13 +45,6 @@ public class ActivitySteps {
 		assertFalse(ph.getProject().getActivities().contains(nonAssignedWA));
 	}
 
-	@Given("there is an Employee with initials {string} assigned to the Project")
-	public void there_is_an_employee_with_initials_assigned_to_the_project(String initials) throws Exception {
-		Employee pm = eh.getAdditionalEmployee();
-		Employee em = eh.createEmployee(initials);
-
-		projectApp.assignEmployeeToProject(ph.getProject().getId(), pm.getInitials(), em.getInitials());
-	}
 
 	@When("the Project Manager assigns the Employee to the WorkActivity")
 	public void the_project_manager_assigns_the_employee_to_the_work_activity() {
@@ -155,6 +148,12 @@ public class ActivitySteps {
 		projectApp.assignEmployeeToActivity(ph.getProject().getId(), ah.getWorkActivity().getName(),
 				eh.getAdditionalEmployee().getInitials(), eh.getEmployee().getInitials());
 	}
+	
+	@Given("the Employee is not assigned to the WorkActivity")
+	public void the_employee_is_not_assigned_to_the_work_activity() throws Exception {
+		the_employee_is_unassigned_from_the_work_activity();
+	}
+
 
 	@When("the Employee is removed from the WorkActivity")
 	public void the_employee_is_removed_from_the_work_activity() {

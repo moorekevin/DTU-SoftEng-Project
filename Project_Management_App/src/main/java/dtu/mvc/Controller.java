@@ -485,8 +485,12 @@ public class Controller {
 			if (week != null) {
 				try {
 					// TODO Maybe find a more permanent solution
-					ui.printTimeAllocation(app.calculatePlannedHours(emInitials, week),
-							indexer.findPlannedWeek(indexer.findEmployee(emInitials), week).getPlannedActivities());
+					if(indexer.findPlannedWeek(indexer.findEmployee(emInitials), week) == null) {
+						ui.print("\nThere aren't any planned hours for the week");
+					} else {
+						ui.printTimeAllocation(app.calculatePlannedHours(emInitials, week),
+								indexer.findPlannedWeek(indexer.findEmployee(emInitials), week).getPlannedActivities());
+					}
 				} catch (Exception e) {
 					System.out.println(e.getStackTrace()[0].getMethodName());
 					ui.printError(e.getMessage());

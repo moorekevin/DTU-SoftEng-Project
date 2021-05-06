@@ -21,7 +21,7 @@ public class Project {
 		activities = new ArrayList<WorkActivity>();
 		projectManager = null;
 	}
-	
+
 	public static int makeProjectId() {
 		Date date = new Date();
 		LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -33,36 +33,36 @@ public class Project {
 		projectNum++;
 		return projectID;
 	}
-	
+
 	public Employee getProjectManager() {
 		return projectManager;
 	}
-	
+
 	public void removeProjectManager() {
 		projectManager = null;
 	}
-	
+
 	public void assignEmployeeToProject(Employee em) {
 		assignedEmployees.add(em);
 	}
-	
+
 	public void removeEmployeeFromProject(Employee em) {
 		assignedEmployees.remove(em);
 	}
-	
+
 	public List<Employee> getAssignedEmployees() {
 		return assignedEmployees;
 	}
-	
+
 	public List<WorkActivity> getActivities() {
 		return activities;
 	}
-	
+
 	public void assignProjectManager(Employee em) throws Exception {
 		if (projectManager == null) {
 			projectManager = em;
 		} else {
-			throw new Exception("Project Manager already exists for project");
+			throw new Exception("Project already has a Project Manager");
 		}
 	}
 
@@ -73,7 +73,7 @@ public class Project {
 	public int getId() {
 		return id;
 	}
-	
+
 	public void addActivity(WorkActivity activity) {
 		activities.add(activity);
 	}

@@ -36,8 +36,12 @@ public class Employee {
 		return plannedWeekRepository;
 	}
 	
-	public void addPlannedWeek(PlannedWeek plannedWeek) {
+	public PlannedWeek createPlannedWeek(String yearWeek) throws Exception {
+		DateServer.validateYearWeek(yearWeek);
+		PlannedWeek plannedWeek = new PlannedWeek(yearWeek);
 		plannedWeekRepository.add(plannedWeek);
+		return plannedWeek;
+	
 	}
 	
 }
