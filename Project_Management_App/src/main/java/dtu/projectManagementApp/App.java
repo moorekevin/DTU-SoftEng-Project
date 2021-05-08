@@ -134,7 +134,8 @@ public class App {
 		WorkActivity activity = indexer.findActivity(project, activityName);
 		
 		indexer.validateEmployeeAssigned(em, project);
-		indexer.validateProjectManager(pm);
+
+		indexer.validateProjectManager(pm, project);
 		PlannedWeek plannedWeek = checkPlannedWeek(yearWeek, em);
 
 		if (Integer.parseInt(yearWeek) > Integer.parseInt(activity.getEnd())
