@@ -14,7 +14,7 @@ public class DateServer {
 		return calendar.get(Calendar.YEAR);
 	}
 	
-	public static void validateYearWeek(String yearWeek) throws Exception {
+	public static  void validateYearWeek(String yearWeek) throws Exception {
 		boolean correctFormat = true;
 		if (yearWeek.length() > 4)
 			correctFormat = false;

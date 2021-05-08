@@ -14,12 +14,17 @@ public class Project {
 	private Employee projectManager;
 	private static int projectNum = 1;
 
-	public Project(String name, int id) {
+	public Project(String name) {
 		this.name = name;
-		this.id = id;
+		this.id = makeProjectId();
 		assignedEmployees = new ArrayList<Employee>();
 		activities = new ArrayList<WorkActivity>();
 		projectManager = null;
+	}
+
+	public Project(String name, int id) {
+		this(name);
+		this.id = id;
 	}
 
 	public static int makeProjectId() {

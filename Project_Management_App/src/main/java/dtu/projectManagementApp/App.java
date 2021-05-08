@@ -12,6 +12,7 @@ public class App {
 	public Indexer getIndexer() {
 		return indexer;
 	}
+	
 
 	// Commands
 	public void assignEmployeeToProject(int projectID, String pmInitials, String emInitials) throws Exception {
@@ -89,7 +90,6 @@ public class App {
 		indexer.validateProjectManager(pm, project);
 		WorkActivity activity = indexer.findActivity(project, activityName);
 
-		// Use old weeks if no information was typed
 		if (startWeek.equals("")) {
 			startWeek = activity.getStart();
 		}
@@ -100,7 +100,6 @@ public class App {
 		DateServer.validateWeekInterval(startWeek, endWeek);
 		indexer.validateProjectManager(pm, project);
 
-		// Should only be updated if user typed information
 		if (!newName.equals("")) {
 			activity.setName(newName);
 		}
@@ -136,15 +135,13 @@ public class App {
 		
 		indexer.validateEmployeeAssigned(em, project);
 		indexer.validateProjectManager(pm);
-		DateServer.validateYearWeek(yearWeek);
+		PlannedWeek plannedWeek = checkPlannedWeek(yearWeek, em);
 
 		if (Integer.parseInt(yearWeek) > Integer.parseInt(activity.getEnd())
 				|| Integer.parseInt(yearWeek) < Integer.parseInt(activity.getStart())) {
 			throw new Exception("Activity has not begun/ended for planned time");
 		}
 
-		PlannedWeek plannedWeek = indexer.findPlannedWeek(em, yearWeek);
-		plannedWeek = checkPlannedWeek(yearWeek, em, plannedWeek);
 		plannedWeek.addHoursForActivity(activity, hours);
 	}
 
@@ -168,15 +165,15 @@ public class App {
 		}
 		
 		double weekHours = days * PlannedWeek.WORKHOURS_PER_DAY;
-		PlannedWeek plannedWeek = indexer.findPlannedWeek(em, yearWeek);
 		
-		plannedWeek = checkPlannedWeek(yearWeek, em, plannedWeek);
+		PlannedWeek plannedWeek = checkPlannedWeek(yearWeek, em);
 
 		NonWorkActivity activityFound = plannedWeek.findNonWorkActivity(activityName);
 		plannedWeek.addHoursForActivity(activityFound, weekHours);
 	}
 
-	private PlannedWeek checkPlannedWeek(String yearWeek, Employee em, PlannedWeek plannedWeek) throws Exception {
+	public PlannedWeek checkPlannedWeek(String yearWeek, Employee em) throws Exception {
+		PlannedWeek plannedWeek = indexer.findPlannedWeek(em, yearWeek);
 		if(plannedWeek == null) {
 			plannedWeek = em.createPlannedWeek(yearWeek);
 		}

@@ -1,20 +1,18 @@
 package dtu.projectManagementApp;
 
 import java.util.List;
-
-
+import java.util.Map;
 import java.util.ArrayList;
 import dtu.exceptions.EmployeeNotFoundException;
 
 public class Indexer {
 	private List<Employee> employeeRepository;
 	private List<Project> projectRepository;
-	private List<String> weekRepository;
+	
 
 	public Indexer() {
 		employeeRepository = new ArrayList<>();
 		projectRepository = new ArrayList<>();
-		weekRepository = new ArrayList<>();
 	}
 
 	public List<Project> getProjects() {
@@ -38,10 +36,14 @@ public class Indexer {
 	public void removeEmployee(String em) throws Exception {
 		employeeRepository.remove(findEmployee(em));
 	}
+	
+	public void addProject(Project project) {
+		projectRepository.add(project);
+	}
 
 	public Project createProject(String name) {
-		Project projectCreated = new Project(name, Project.makeProjectId());
-		projectRepository.add(projectCreated);
+		Project projectCreated = new Project(name);
+		addProject(projectCreated);
 		return projectCreated;
 	}
 

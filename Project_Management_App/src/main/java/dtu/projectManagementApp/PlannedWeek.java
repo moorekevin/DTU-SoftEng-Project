@@ -52,7 +52,7 @@ public class PlannedWeek {
 		Double registeredHours = plannedActivities.get(activity);
 		double calculatedTotalHoursBefore = calculateTotalPlannedHours();
 		if(calculatedTotalHoursBefore + hours > PlannedWeek.MAX_HOURS_PER_WEEK)
-			throw new Exception("Not enough available time for week");
+			throw new OperationNotAllowedException("Not enough available time for week");
 
 		plannedActivities.put(activity, registeredHours+hours);
 
