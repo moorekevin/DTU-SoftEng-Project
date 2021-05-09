@@ -64,7 +64,7 @@ public class App {
 		activity.removeEmployee(em);
 	}
 
-	public WorkActivity createWorkActivity(int projectID, String pmInitials, String name, String start, String end)
+	public WorkActivity createWorkActivity(int projectID, String pmInitials, String activityName, String start, String end)
 			throws Exception {
 		Project project = indexer.findProject(projectID);
 		Employee pm = indexer.findEmployee(pmInitials);
@@ -73,11 +73,11 @@ public class App {
 		indexer.validateProjectManager(pm, project);
 
 		for (WorkActivity activity : project.getActivities()) {
-			if (activity.getName().equals(name))
+			if (activity.getName().equals(activityName))
 				throw new Exception("This Activity is already assigned to the Project");
 		}
 
-		WorkActivity activity = new WorkActivity(name, start, end);
+		WorkActivity activity = new WorkActivity(activityName, start, end);
 		project.addActivity(activity);
 
 		return activity;
@@ -126,7 +126,7 @@ public class App {
 		activity.addEmployee(em);
 	}
 
-	public void allocateTimeForEmployee(String pmInitials, String emInitials, double hours, int projectID, String activityName,
+	public void allocateTimeForEmployee(String pmInitials, String emInitials, Double hours, int projectID, String activityName,
 			String yearWeek) throws Exception {
 		Employee pm = indexer.findEmployee(pmInitials);
 		Employee em = indexer.findEmployee(emInitials);

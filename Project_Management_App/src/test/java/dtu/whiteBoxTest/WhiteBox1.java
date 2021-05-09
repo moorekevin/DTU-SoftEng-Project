@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import dtu.projectManagementApp.App;
 import dtu.testSteps.ErrorMessage;
-import dtu.projectManagementApp.Employee;
 import dtu.projectManagementApp.Project;
 import dtu.projectManagementApp.Indexer;
 
@@ -14,14 +13,14 @@ public class WhiteBox1 {
 	App app = new App();
 	Indexer indexer = app.getIndexer();
 	ErrorMessage error = new ErrorMessage();
-	Project project = new Project("project", 999999);
-	Employee employee = new Employee("pmInitials");
+	int projectId = 123456;
+	String pmInitials = "ABC";
 	
 	@Test
 	public void testInputDataSetA()  {
-		//
+		
 		try {
-			app.unassignProjectManager(project.getId(), employee.getInitials());
+			app.unassignProjectManager(projectId, null);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
@@ -32,8 +31,9 @@ public class WhiteBox1 {
 	public void testInputDataSetB() {
 		
 		try {
-			indexer.addProject(project);
-			app.unassignProjectManager(project.getId(), employee.getInitials());
+			indexer.getProjects().add(new Project("project", projectId));
+			
+			app.unassignProjectManager(projectId, pmInitials);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
@@ -42,18 +42,16 @@ public class WhiteBox1 {
 	
 	@Test
 	public void testInputDataSetC() {
-	
-	
-		try {
-			//Create a new project and make the employee project manager for that project
-			Project project2 = new Project("project2");
-			indexer.addProject(project2);
-			indexer.addProject(project);
-			indexer.addEmployee(employee.getInitials());
-			app.assignProjectManager(project2.getId(), employee.getInitials());
+		
+		try {	
+			indexer.getProjects().add(new Project("project", projectId));
+			indexer.addEmployee(pmInitials);
 			
-			//Unassign the employee from the original project
-			app.unassignProjectManager(project.getId(), employee.getInitials());
+			//Create a new project and make the employee project manager for that project
+			indexer.getProjects().add(new Project("temp", 000000));
+			app.assignProjectManager(000000, pmInitials);
+			
+			app.unassignProjectManager(projectId, pmInitials);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
@@ -63,11 +61,11 @@ public class WhiteBox1 {
 	@Test
 	public void testInputDataSetD() {
 		try {
-			indexer.addProject(project);
-			indexer.addEmployee(employee.getInitials());
-			app.assignProjectManager(project.getId(), employee.getInitials());
+			indexer.getProjects().add(new Project("project", projectId));
+			indexer.addEmployee(pmInitials);
+			app.assignProjectManager(projectId, pmInitials);
 			
-			app.unassignProjectManager(project.getId(), employee.getInitials());
+			app.unassignProjectManager(projectId, pmInitials);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}

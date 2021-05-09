@@ -13,11 +13,16 @@ public class WhiteBox4 {
 	App app = new App();
 	Indexer indexer = app.getIndexer();
 	ErrorMessage error = new ErrorMessage();
+	int projectId = 123456;
+	String pmInitials = "ABC";
+	String activityName = "Coding";
+	String start;
+	String end;
 
 	@Test
 	public void testInputDataSetA() throws Exception {
 		try {
-			app.createWorkActivity(999999, null, null, null, null);
+			app.createWorkActivity(projectId, null, null, null, null);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
@@ -26,10 +31,10 @@ public class WhiteBox4 {
 
 	@Test
 	public void testInputDataSetB() throws Exception {
-		Project project = new Project("testProject", 999999);
-        indexer.getProjects().add(project);
+		indexer.getProjects().add(new Project("project", projectId));
+
 		try {
-			app.createWorkActivity(999999, "pmInitials", null, null, null);
+			app.createWorkActivity(projectId, pmInitials, null, null, null);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
@@ -38,11 +43,14 @@ public class WhiteBox4 {
 
 	@Test
 	public void testInputDataSetC() throws Exception {
-		Project project = new Project("testProject", 999999);
-        indexer.getProjects().add(project);
-		indexer.addEmployee("pmInitials");
+		indexer.getProjects().add(new Project("project", projectId));
+
+		indexer.addEmployee(pmInitials);
+		start = "9010";
+		end = "9001";
+
 		try {
-			app.createWorkActivity(999999, "pmInitials", null, "9010", "9001");
+			app.createWorkActivity(projectId, pmInitials, null, start, end);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
@@ -51,43 +59,60 @@ public class WhiteBox4 {
 
 	@Test
 	public void testInputDataSetD() throws Exception {
-		Project project = new Project("testProject", 999999);
-        indexer.getProjects().add(project);
+		indexer.getProjects().add(new Project("project", projectId));
+		indexer.addEmployee(pmInitials);
+		start = "9001";
+		end = "9010";
 
-    	Project proj = new Project("fakeProject", 123456);
-        indexer.getProjects().add(proj);
-    		
-        indexer.addEmployee("pmInitials");
-    	app.assignProjectManager(123456, "pmInitials");
+		// Create a new project and make the employee project manager for that project
+		indexer.getProjects().add(new Project("temp", 000000));
+		app.assignProjectManager(000000, pmInitials);
 
-        try {
-            app.createWorkActivity(999999, "pmInitials", null, "9001", "9010");
-        } catch (Exception e) {
-            error.setErrorMessage(e.getMessage());
-        }
+		try {
+			app.createWorkActivity(projectId, pmInitials, null, start, end);
+		} catch (Exception e) {
+			error.setErrorMessage(e.getMessage());
+		}
 		assertTrue(error.getErrorMessage().equals("Project Manager is not assigned to the Project"));
-    }
+	}
 
-    @Test
-    public void testInputDataSetE() throws Exception {
-        Project project = new Project("testProject", 999999);
-        indexer.getProjects().add(project);
-        indexer.addEmployee("pmInitials");
-        app.assignProjectManager(999999, "pmInitials");
+	@Test
+	public void testInputDataSetE() throws Exception {
+		indexer.getProjects().add(new Project("project", projectId));
+		indexer.addEmployee(pmInitials);
+		start = "9001";
+		end = "9010";
+		app.assignProjectManager(projectId, pmInitials);
 
-        WorkActivity activity = app.createWorkActivity(999999, "pmInitials", "coding", "9001", "9010");
-        assertTrue(activity.getName().equals("coding") && activity.getStart().equals("9001") && activity.getEnd().equals("9010") );
-        }
-	
+		activityName = "coding";
+		WorkActivity workActivity = null;
+		
+		try {
+			workActivity = app.createWorkActivity(projectId, pmInitials, activityName, start, end);
+		} catch (Exception e) {
+			error.setErrorMessage(e.getMessage());
+		}
+		
+		assertTrue(error.getErrorMessage().equals(""));
+		assertTrue(workActivity.getName().equals(activityName) 
+				   && workActivity.getStart().equals(start)
+				   && workActivity.getEnd().equals(end));
+		assertTrue(indexer.findProject(projectId).getActivities().contains(workActivity));
+	}
+
 	@Test
 	public void testInputDataSetF() throws Exception {
-		Project project = new Project("testProject", 999999);
-        indexer.getProjects().add(project);
-        indexer.addEmployee("pmInitials");
-        app.assignProjectManager(999999, "pmInitials");
-		app.createWorkActivity(999999, "pmInitials", "coding", "9001", "9010");
+		indexer.getProjects().add(new Project("project", projectId));
+		indexer.addEmployee(pmInitials);
+		start = "9001";
+		end = "9010";
+		app.assignProjectManager(projectId, pmInitials);
+		activityName = "coding";
+
+		app.createWorkActivity(projectId, pmInitials, activityName, start, end);
+
 		try {
-			app.createWorkActivity(999999, "pmInitials", "coding", "9001", "9010");
+			app.createWorkActivity(projectId, pmInitials, activityName, start, end);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
@@ -96,16 +121,25 @@ public class WhiteBox4 {
 
 	@Test
 	public void testInputDataSetG() throws Exception {
-		Project project = new Project("testProject", 999999);
-        indexer.getProjects().add(project);
-        indexer.addEmployee("pmInitials");
-        app.assignProjectManager(999999, "pmInitials");
-		app.createWorkActivity(999999, "pmInitials", "testAcitivity", "9001", "9010");
-
-		WorkActivity activity = app.createWorkActivity(999999, "pmInitials", "coding", "9001", "9010");
-        assertTrue(activity.getName().equals("coding") && activity.getStart().equals("9001") && activity.getEnd().equals("9010") );
+		indexer.getProjects().add(new Project("project", projectId));
+		indexer.addEmployee(pmInitials);
+		start = "9001";
+		end = "9010";
+		app.assignProjectManager(projectId, pmInitials);
+		activityName = "coding";
+		
+		WorkActivity workActivity = null;
+		app.createWorkActivity(projectId, pmInitials, "programming", start, end);
+		try {
+			workActivity = app.createWorkActivity(projectId, pmInitials, activityName, start, end);
+		} catch (Exception e) {
+			error.setErrorMessage(e.getMessage());
+		}
+		assertTrue(error.getErrorMessage().equals(""));
+		assertTrue(workActivity.getName().equals(activityName) 
+				   && workActivity.getStart().equals(start)
+				   && workActivity.getEnd().equals(end));
+		assertTrue(indexer.findProject(projectId).getActivities().contains(workActivity));
 	}
 
 }
-
-

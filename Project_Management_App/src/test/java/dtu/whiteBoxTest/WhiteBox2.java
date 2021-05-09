@@ -15,9 +15,9 @@ public class WhiteBox2 {
 	Indexer indexer = app.getIndexer();
 	ErrorMessage error = new ErrorMessage();
 
-	String em = "emInitials";
-	String pm = "pmInitials";
-	int projectID = 999999;
+	String em = "ABC";
+	String pm = "DEF";
+	int projectID = 123456;
 	String activityName = "coding";
 	String yearWeek;
 	double hours;
@@ -26,7 +26,7 @@ public class WhiteBox2 {
 	public void testInputDataSetA() throws Exception {
 		// There is no Employee em with the given initials
 		try {
-			app.allocateTimeForEmployee(pm, em, hours, projectID, activityName, yearWeek);
+			app.allocateTimeForEmployee(null, em, null, 0, null, null);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
@@ -38,7 +38,7 @@ public class WhiteBox2 {
 		// There is no Employee pm with the given initials
 		indexer.addEmployee(em);
 		try {
-			app.allocateTimeForEmployee(pm, em, hours, projectID, activityName, yearWeek);
+			app.allocateTimeForEmployee(pm, em, null, 0, null, null);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
@@ -47,11 +47,12 @@ public class WhiteBox2 {
 
 	@Test
 	public void testInputDataSetC() throws Exception {
-		// There is no Employee pm with the given initials
 		indexer.addEmployee(em);
+		
 		indexer.addEmployee(pm);
+		
 		try {
-			app.allocateTimeForEmployee(pm, em, hours, projectID, activityName, yearWeek);
+			app.allocateTimeForEmployee(pm, em, null, projectID, null, null);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
@@ -60,14 +61,13 @@ public class WhiteBox2 {
 
 	@Test
 	public void testInputDataSetD() throws Exception {
-		// There is no Employee pm with the given initials
 		indexer.addEmployee(em);
 		indexer.addEmployee(pm);
-		Project proj = new Project("project",projectID);
-		indexer.getProjects().add(proj);
+		
+		indexer.getProjects().add(new Project("project",projectID));
 
 		try {
-			app.allocateTimeForEmployee(pm, em, hours, projectID, activityName, yearWeek);
+			app.allocateTimeForEmployee(pm, em, null, projectID, activityName, null);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
@@ -76,17 +76,16 @@ public class WhiteBox2 {
 
 	@Test
 	public void testInputDataSetE() throws Exception {
-		// There is no Employee pm with the given initials
 		indexer.addEmployee(em);
 		indexer.addEmployee(pm);
-		Project proj = new Project("project", projectID);
-		indexer.getProjects().add(proj);
-		WorkActivity act = new WorkActivity(activityName, "9040", "9050");
-		proj.addActivity(act);
+		Project project = new Project("project", projectID);
+		indexer.getProjects().add(project);
 		
+		WorkActivity act = new WorkActivity(activityName, "9000", "9005");
+		project.addActivity(act);
 		
 		try {
-			app.allocateTimeForEmployee(pm, em, hours, projectID, activityName, yearWeek);
+			app.allocateTimeForEmployee(pm, em, null, projectID, activityName, null);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
@@ -95,17 +94,18 @@ public class WhiteBox2 {
 	
 	@Test
 	public void testInputDataSetF() throws Exception {
-		// There is no Employee pm with the given initials
 		indexer.addEmployee(em);
 		indexer.addEmployee(pm);
-		Project proj = new Project("project", projectID);
-		indexer.getProjects().add(proj);
-		WorkActivity act = new WorkActivity(activityName, "9040", "9050");
-		proj.addActivity(act);
-		proj.assignEmployeeToProject(indexer.findEmployee(em));
+		Project project = new Project("project", projectID);
+		indexer.getProjects().add(project);
+		WorkActivity act = new WorkActivity(activityName, "9000", "9005");
+		project.addActivity(act);
+		
+		project.assignEmployeeToProject(indexer.findEmployee(em));
+		yearWeek = "2000";
 		
 		try {
-			app.allocateTimeForEmployee(pm, em, hours, projectID, activityName, yearWeek);
+			app.allocateTimeForEmployee(pm, em, null, projectID, activityName, yearWeek);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
@@ -116,16 +116,17 @@ public class WhiteBox2 {
 	public void testInputDataSetG() throws Exception {
 		indexer.addEmployee(em);
 		indexer.addEmployee(pm);
-		Project proj = new Project("project", projectID);
-		indexer.getProjects().add(proj);
-		WorkActivity act = new WorkActivity(activityName, "9040", "9050");
-		proj.addActivity(act);
-		proj.assignEmployeeToProject(indexer.findEmployee(em));
+		Project project = new Project("project", projectID);
+		indexer.getProjects().add(project);
+		project.assignEmployeeToProject(indexer.findEmployee(em));
+		
+		WorkActivity act = new WorkActivity(activityName, "9000", "9005");
+		project.addActivity(act);
 		app.assignProjectManager(projectID, pm);
 		yearWeek = "2000";
 		
 		try {
-			app.allocateTimeForEmployee(pm, em, hours, projectID, activityName, yearWeek);
+			app.allocateTimeForEmployee(pm, em, null, projectID, activityName, yearWeek);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
@@ -136,17 +137,18 @@ public class WhiteBox2 {
 	public void testInputDataSetH() throws Exception {
 		indexer.addEmployee(em);
 		indexer.addEmployee(pm);
-		Project proj = new Project("project", projectID);
-		indexer.getProjects().add(proj);
+		Project project = new Project("project", projectID);
+		indexer.getProjects().add(project);
+		project.assignEmployeeToProject(indexer.findEmployee(em));
 		WorkActivity act = new WorkActivity(activityName, "9000", "9005");
-		proj.addActivity(act);
-		proj.assignEmployeeToProject(indexer.findEmployee(em));
+		project.addActivity(act);
 		app.assignProjectManager(projectID, pm);
+		
 		yearWeek = "9010";
 		
 		
 		try {
-			app.allocateTimeForEmployee(pm, em, hours, projectID, activityName, yearWeek);
+			app.allocateTimeForEmployee(pm, em, null, projectID, activityName, yearWeek);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
@@ -157,15 +159,16 @@ public class WhiteBox2 {
 	public void testInputDataSetI() throws Exception {
 		indexer.addEmployee(em);
 		indexer.addEmployee(pm);
-		Project proj = new Project("project", projectID);
-		indexer.getProjects().add(proj);
-		WorkActivity act = new WorkActivity(activityName, "9000", "9020");
-		proj.addActivity(act);
-		proj.assignEmployeeToProject(indexer.findEmployee(em));
+		Project project = new Project("project", projectID);
+		indexer.getProjects().add(project);
+		project.assignEmployeeToProject(indexer.findEmployee(em));
+		WorkActivity act = new WorkActivity(activityName, "9000", "9005");
+		project.addActivity(act);
 		app.assignProjectManager(projectID, pm);
-		yearWeek = "9010";
-		hours = 40.0;
+		
+		yearWeek = "9003";
 		app.allocateTimeForEmployee(pm, em, 20.0, projectID, activityName, yearWeek);
+		hours = 40.0;
 		
 		try {
 			app.allocateTimeForEmployee(pm, em, hours, projectID, activityName, yearWeek);
@@ -179,15 +182,16 @@ public class WhiteBox2 {
 	public void testInputDataSetJ() throws Exception {
 		indexer.addEmployee(em);
 		indexer.addEmployee(pm);
-		Project proj = new Project("project", projectID);
-		indexer.getProjects().add(proj);
-		WorkActivity act = new WorkActivity(activityName, "9000", "9020");
-		proj.addActivity(act);
-		proj.assignEmployeeToProject(indexer.findEmployee(em));
+		Project project = new Project("project", projectID);
+		indexer.getProjects().add(project);
+		project.assignEmployeeToProject(indexer.findEmployee(em));
+		WorkActivity act = new WorkActivity(activityName, "9000", "9005");
+		project.addActivity(act);
 		app.assignProjectManager(projectID, pm);
-		yearWeek = "9010";
-		hours = 150.0;
+		yearWeek = "9003";
 		app.allocateTimeForEmployee(pm, em, 20.0, projectID, activityName, yearWeek);
+		
+		hours = 150.0;
 		
 		try {
 			app.allocateTimeForEmployee(pm, em, hours, projectID, activityName, yearWeek);
@@ -201,15 +205,16 @@ public class WhiteBox2 {
 	public void testInputDataSetK() throws Exception {
 		indexer.addEmployee(em);
 		indexer.addEmployee(pm);
-		Project proj = new Project("project", projectID);
-		indexer.getProjects().add(proj);
-		WorkActivity act = new WorkActivity(activityName, "9000", "9020");
-		proj.addActivity(act);
-		proj.assignEmployeeToProject(indexer.findEmployee(em));
+		Project project = new Project("project", projectID);
+		indexer.getProjects().add(project);
+		project.assignEmployeeToProject(indexer.findEmployee(em));
+		WorkActivity act = new WorkActivity(activityName, "9000", "9005");
+		project.addActivity(act);
 		app.assignProjectManager(projectID, pm);
-		yearWeek = "9010";
-		hours = 20.0;
+		yearWeek = "9003";
 		app.allocateTimeForEmployee(pm, em, 20.0, projectID, activityName, yearWeek);
+		
+		hours = 20.0;
 		
 		try {
 			app.allocateTimeForEmployee(pm, em, hours, projectID, activityName, yearWeek);

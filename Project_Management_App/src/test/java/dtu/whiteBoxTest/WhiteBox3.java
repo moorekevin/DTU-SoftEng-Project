@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import dtu.exceptions.OperationNotAllowedException;
 import dtu.projectManagementApp.App;
 import dtu.projectManagementApp.Indexer;
 import dtu.projectManagementApp.Employee;
@@ -15,13 +16,15 @@ public class WhiteBox3 {
 	Indexer indexer = app.getIndexer();
 	ErrorMessage error = new ErrorMessage();
 
-	String emInitials = "EM";
-	String yearWeek = "9005";
+	String emInitials = "ABC";
+	String activityName;
+	String yearWeek;
+	Integer days;
 
 	@Test
 	public void testInputDataSetA() {
 		try {
-			app.assignToNonWorkActivity("newEmployee", null, 0, null);
+			app.assignToNonWorkActivity(emInitials, null, 0, null);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
@@ -29,10 +32,12 @@ public class WhiteBox3 {
 	}
 
 	@Test
-	public void testInputDataSetB() {
+	public void testInputDataSetB() throws Exception {
+		indexer.addEmployee(emInitials);
+		days = 8;
+
 		try {
-			indexer.addEmployee(emInitials);
-			app.assignToNonWorkActivity(emInitials, null, 8, null);
+			app.assignToNonWorkActivity(emInitials, null, days, null);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
@@ -40,10 +45,13 @@ public class WhiteBox3 {
 	}
 
 	@Test
-	public void testInputDataSetC() {
+	public void testInputDataSetC() throws Exception {
+		indexer.addEmployee(emInitials);
+
+		days = 4;
+		yearWeek = "yearWeek";
 		try {
-			indexer.addEmployee(emInitials);
-			app.assignToNonWorkActivity(emInitials, null, 4, "yearWeek");
+			app.assignToNonWorkActivity(emInitials, null, days, yearWeek);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
@@ -51,10 +59,15 @@ public class WhiteBox3 {
 	}
 
 	@Test
-	public void testInputDataSetD() {
+	public void testInputDataSetD() throws Exception {
+		indexer.addEmployee(emInitials);
+		days = 4;
+
+		yearWeek = "9005";
+		activityName = "Activity";
+
 		try {
-			indexer.addEmployee(emInitials);
-			app.assignToNonWorkActivity(emInitials, "Activity", 4, yearWeek);
+			app.assignToNonWorkActivity(emInitials, activityName, days, yearWeek);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
@@ -63,14 +76,19 @@ public class WhiteBox3 {
 
 	@Test
 	public void testInputDataSetE() throws Exception {
+		indexer.addEmployee(emInitials);
+		days = 4;
+		yearWeek = "9005";
+		
+		activityName = "Sickness";
+		PlannedWeek week = app.checkPlannedWeek(yearWeek, indexer.findEmployee(emInitials));
 		try {
-			indexer.addEmployee(emInitials);
-			Employee em = indexer.findEmployee(emInitials);
-			PlannedWeek week = app.checkPlannedWeek(yearWeek, em);
+			//The employee has 160 hours planned for week "9005"
 			week.addHoursForActivity(week.findNonWorkActivity("Other"), 160.0);
 		} catch (Exception e) {
+			
 			try {
-				app.assignToNonWorkActivity(emInitials, "Sickness", 4, yearWeek);
+				app.assignToNonWorkActivity(emInitials, activityName, days, yearWeek);
 			} catch (Exception we) {
 				error.setErrorMessage(we.getMessage());
 			}
@@ -79,13 +97,16 @@ public class WhiteBox3 {
 	}
 
 	@Test
-	public void testInputDataSetF() {
+	public void testInputDataSetF() throws Exception {
+		indexer.addEmployee(emInitials);
+		days = 4;
+		yearWeek = "9005";
+		activityName = "Sickness";
+		
+		PlannedWeek week = app.checkPlannedWeek(yearWeek, indexer.findEmployee(emInitials));
+		week.addHoursForActivity(week.findNonWorkActivity("Other"), 40.0);
 		try {
-			indexer.addEmployee(emInitials);
-			Employee em = indexer.findEmployee(emInitials);
-			PlannedWeek week = app.checkPlannedWeek(yearWeek, em);
-			week.addHoursForActivity(week.findNonWorkActivity("Other"), 40.0);
-			app.assignToNonWorkActivity(emInitials, "Sickness", 4, yearWeek);
+			app.assignToNonWorkActivity(emInitials, activityName, days, yearWeek);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
@@ -94,13 +115,17 @@ public class WhiteBox3 {
 	}
 
 	@Test
-	public void testInputDataSetG() {
+	public void testInputDataSetG() throws OperationNotAllowedException, Exception {
+		indexer.addEmployee(emInitials);
+		days = 4;
+		yearWeek = "9005";
+		activityName = "Sickness";
+		
+		PlannedWeek week = app.checkPlannedWeek(yearWeek, indexer.findEmployee(emInitials));
+		week.addHoursForActivity(week.findNonWorkActivity("Other"), 5.0);
+		
 		try {
-			indexer.addEmployee(emInitials);
-			Employee em = indexer.findEmployee(emInitials);
-			PlannedWeek week = app.checkPlannedWeek(yearWeek, em);
-			week.addHoursForActivity(week.findNonWorkActivity("Other"), 5.0);
-			app.assignToNonWorkActivity(emInitials, "Sickness", 4, yearWeek);
+			app.assignToNonWorkActivity(emInitials, activityName, days, yearWeek);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}

@@ -37,13 +37,10 @@ public class Indexer {
 		employeeRepository.remove(findEmployee(em));
 	}
 	
-	public void addProject(Project project) {
-		projectRepository.add(project);
-	}
 
 	public Project createProject(String name) {
 		Project projectCreated = new Project(name);
-		addProject(projectCreated);
+		projectRepository.add(projectCreated);
 		return projectCreated;
 	}
 
