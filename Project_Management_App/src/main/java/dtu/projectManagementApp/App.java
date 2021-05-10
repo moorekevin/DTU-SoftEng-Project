@@ -133,7 +133,8 @@ public class App {
 		Project project = indexer.findProject(projectID);
 		WorkActivity activity = indexer.findActivity(project, activityName);
 		
-		indexer.validateEmployeeAssigned(em, project);
+		//indexer.validateEmployeeAssigned(em, project);
+		indexer.validateEmployeeAssigned(em, project, activity);
 
 		indexer.validateProjectManager(pm, project);
 		PlannedWeek plannedWeek = checkPlannedWeek(yearWeek, em);

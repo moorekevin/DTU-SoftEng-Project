@@ -223,5 +223,6 @@ public class WhiteBox2 {
 		}
 		System.out.println(error.getErrorMessage());
 		assertTrue(error.getErrorMessage().equals(""));	
+		assertTrue(app.calculatePlannedHours(em, yearWeek) == 40);
 	}
 }

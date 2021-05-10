@@ -19,8 +19,6 @@ public class Controller {
 		ui = new UI(this.commandList);
 		app = new App();
 		indexer = app.getIndexer();
-
-		createDataToTest();
 	}
 
 	public void start() {
@@ -35,24 +33,6 @@ public class Controller {
 			commandList.get(userInput).getCommand().runCommand();
 		} else {
 			ui.print("\nERROR: Unknown command");
-		}
-	}
-
-	// Is not part of final product
-	// Should be deleted once done testing GUI
-	private void createDataToTest() {
-		try {
-			indexer.addEmployee("EM");
-			indexer.addEmployee("PM");
-			indexer.createProject("Project01");
-			indexer.createProject("Number2");
-			app.assignProjectManager(210001, "pm");
-			app.assignEmployeeToProject(210001, "pm", "em");
-			app.createWorkActivity(210001, "pm", "act1", "2201", "2210");
-			app.assignEmployeeToActivity(210001, "act1", "pm", "em");
-			app.allocateTimeForEmployee("pm", "em", 12.0, 210001, "act1", "2202");
-		} catch (Exception e) {
-			ui.printError(e.getMessage());
 		}
 	}
 
@@ -484,7 +464,6 @@ public class Controller {
 			String week = requestWeek();
 			if (week != null) {
 				try {
-					// TODO Maybe find a more permanent solution
 					if(indexer.findPlannedWeek(indexer.findEmployee(emInitials), week) == null) {
 						ui.print("\nThere aren't any planned hours for the week");
 					} else {

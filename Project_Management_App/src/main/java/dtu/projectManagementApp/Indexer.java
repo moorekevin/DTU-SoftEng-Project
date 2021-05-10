@@ -8,7 +8,6 @@ import dtu.exceptions.EmployeeNotFoundException;
 public class Indexer {
 	private List<Employee> employeeRepository;
 	private List<Project> projectRepository;
-	
 
 	public Indexer() {
 		employeeRepository = new ArrayList<>();
@@ -36,7 +35,6 @@ public class Indexer {
 	public void removeEmployee(String em) throws Exception {
 		employeeRepository.remove(findEmployee(em));
 	}
-	
 
 	public Project createProject(String name) {
 		Project projectCreated = new Project(name);
@@ -72,6 +70,17 @@ public class Indexer {
 		}
 	}
 
+	public void validateEmployeeAssigned(Employee employeeToCheck, Project projectToCheck, Activity activityToCheck)
+			throws Exception {
+		Employee empFound = findEmployee(employeeToCheck.getInitials());
+		Project projFound = findProject(projectToCheck.getId());
+		validateEmployeeAssigned(employeeToCheck, projFound);
+
+		WorkActivity actFound = findActivity(projFound, activityToCheck.getName());
+		if (!actFound.getAssignedEmployees().contains(empFound)) {
+			throw new Exception("Employee is not assigned to the Activity");
+		}
+	}
 
 	// Find methods
 	public Project findProject(int id) throws Exception {
@@ -100,7 +109,6 @@ public class Indexer {
 		}
 		throw new Exception("Activity is not assigned to the project");
 	}
-
 
 	public PlannedWeek findPlannedWeek(Employee em, String week) {
 		PlannedWeek plannedWeek = null;
