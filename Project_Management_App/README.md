@@ -4,6 +4,8 @@ The prototype is a Project Management App  that is requested by the artificial c
 
 The app can be run by running the main method as a Java application and is navigated through using the console and typing commands.
 
+The tests can be run as a JUnit Test.
+
 The application can be navigated through the command "\help" which shows the functionality of the program.
 
 We have also incorporated Cucumber testing in this project to make sure that the application does not contain bugs and that the features work as Softwarehuset intended them.
