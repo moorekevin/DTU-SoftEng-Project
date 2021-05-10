@@ -1,3 +1,7 @@
+/*
+	Made by Kevin Moore s204462
+	This class holds the repositories for the App as well as the validation methods and finding methods.
+*/
 package dtu.projectManagementApp;
 
 import java.util.List;
@@ -21,8 +25,8 @@ public class Indexer {
 	public List<Employee> getEmployees() {
 		return employeeRepository;
 	}
-
-	// Index methods
+	///////////////////
+	// Index methods //
 	public void addEmployee(String initials) throws Exception {
 		try {
 			findEmployee(initials);
@@ -45,8 +49,8 @@ public class Indexer {
 	public void deleteProject(int project) throws Exception {
 		projectRepository.remove(findProject(project));
 	}
-
-	// Validations
+	/////////////////
+	// Validations //
 	public void validateProjectManager(Employee employeeToCheck) throws Exception {
 		findEmployee(employeeToCheck.getInitials());
 		if (!employeeToCheck.isProjectManger()) {
@@ -81,8 +85,8 @@ public class Indexer {
 			throw new Exception("Employee is not assigned to the Activity");
 		}
 	}
-
-	// Find methods
+	//////////////////
+	// Find methods //
 	public Project findProject(int id) throws Exception {
 		for (Project p : projectRepository) {
 			if (id == p.getId()) {
@@ -118,8 +122,5 @@ public class Indexer {
 			}
 		}
 		return plannedWeek;
-//		PlannedWeek newPlannedWeek = new PlannedWeek(week);
-//		em.addPlannedWeek(newPlannedWeek);
-//		return newPlannedWeek;
 	}
 }

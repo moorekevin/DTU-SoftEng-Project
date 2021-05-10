@@ -1,3 +1,7 @@
+/*
+	Made by Bjørn Laursen s204451
+	This class represents a general acitivity - has the subclasses WorkActivity and NonWorkActivity
+*/
 package dtu.projectManagementApp;
 
 public abstract class Activity {

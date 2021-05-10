@@ -1,3 +1,8 @@
+/*
+	Made by Bjørn Laursen s204451
+	This class represents a WorkActivity assigned to a Project
+*/
+
 package dtu.projectManagementApp;
 
 import java.util.List;
@@ -18,8 +23,6 @@ public class WorkActivity extends Activity {
 		this.end = endWeek;
 		expectedHours = 0.0;
 	}
-	
-
 	
 	public List<Employee> getAssignedEmployees(){
 		return assignedEmployees;

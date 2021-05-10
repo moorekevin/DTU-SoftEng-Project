@@ -1,11 +1,9 @@
-This project can be used as a starting project for your own projects.
+This project is a prototype for 02161 Software Engineering 1 exam project.
 
-It contains all the necessary libraries to run Cucumber tests, JUnit 5 tests, and JUnit 4 tests. In addition, it contains the reference to the Mockito libraries.
+The prototype is a Project Management App  that is requested by the artificial company Softwarehuset A/S.
 
-It is a good idea to change the name of the project. Don't forget to also change the name in the `pom.xml` file. 
+The app can be run by running the main method as a Java application and is navigated through using the console and typing commands.
 
-If you use a different version than Java 11, then change the `maven.compiler.source` and `maven.compiler.target` properties in the `pom.xml` file. This should only be needed if you want to use Java 8. The setting Java 11 is compatible with all installed JDK's of version 11 or higher.
+The application can be navigated through the command "\help" which shows the functionality of the program.
 
-It can be run through Maven, e.g., `mvn clean test`, Eclipse (run as JUnit test), and ItelliJ. 
-
-In case of Eclipse, if the run configuratiom for the test is set to JUnit 4, all the Cucumber tests and all the JUnit 4 tests are run, but not the JUnit 5 tests. If the setting is set to JUnit 5, then all the tests are run.
+We have also incorporated Cucumber testing in this project to make sure that the application does not contain bugs and that the features work as Softwarehuset intended them.

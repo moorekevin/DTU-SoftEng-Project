@@ -1,3 +1,7 @@
+/*
+	Made by Jakob Jacobsen s204502
+	This class tests the method unassignProjectManager using White Box test 1 from the report
+*/
 package dtu.whiteBoxTest;
 
 import static org.junit.Assert.assertTrue;

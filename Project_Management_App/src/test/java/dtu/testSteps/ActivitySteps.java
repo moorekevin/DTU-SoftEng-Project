@@ -1,3 +1,7 @@
+/*
+	Made by Aryan Mirzazadeh s204489
+	This class tests activity related cucumber features
+*/
 package dtu.testSteps;
 
 import static org.junit.Assert.assertFalse;
@@ -29,22 +33,21 @@ public class ActivitySteps {
 
 	@Given("a WorkActivity with name {string} is assigned to the Project")
 	public void a_work_activity_with_name_is_assigned_to_the_project(String name) throws Exception {
-			Employee pm = eh.getAdditionalEmployee();
-			String start = ah.getCurrentYearWeek();
-			String end = ah.addToYearWeek(1, 0);	
-			Project project = ph.getProject();
+		Employee pm = eh.getAdditionalEmployee();
+		String start = ah.getCurrentYearWeek();
+		String end = ah.addToYearWeek(1, 0);
+		Project project = ph.getProject();
 
-			ah.setWorkActivity(projectApp.createWorkActivity(project.getId(), pm.getInitials(), name, start, end));
-			assertTrue(ph.getProject().getActivities().contains(ah.getWorkActivity()));
+		ah.setWorkActivity(projectApp.createWorkActivity(project.getId(), pm.getInitials(), name, start, end));
+		assertTrue(ph.getProject().getActivities().contains(ah.getWorkActivity()));
 	}
-	
+
 	@Given("there is a WorkActivity with name {string} that is not assigned to the Project")
 	public void there_is_a_work_activity_with_name_that_is_not_assigned_to_the_project(String activityName) {
 		WorkActivity nonAssignedWA = new WorkActivity(activityName, ah.getCurrentYearWeek(), ah.addToYearWeek(1, 0));
-	    ah.setWorkActivity(nonAssignedWA);
+		ah.setWorkActivity(nonAssignedWA);
 		assertFalse(ph.getProject().getActivities().contains(nonAssignedWA));
 	}
-
 
 	@When("the Project Manager assigns the Employee to the WorkActivity")
 	public void the_project_manager_assigns_the_employee_to_the_work_activity() {
@@ -68,13 +71,13 @@ public class ActivitySteps {
 		assertFalse(ah.getWorkActivity().getAssignedEmployees().contains(eh.getEmployee()));
 	}
 
-	// Feature Plan Project-Related Activities
 	@When("the Project Manager creates a WorkActivity with name {string}, start-week {string} and end-week {string}")
 	public void the_project_manager_creates_a_work_activity_with_name_start_week_and_end_week(String name,
 			String startWeek, String endWeek) throws Exception {
 		try {
 			Employee pm = eh.getAdditionalEmployee();
-			ah.setWorkActivity(projectApp.createWorkActivity(ph.getProject().getId(), pm.getInitials(), name, startWeek, endWeek));
+			ah.setWorkActivity(
+					projectApp.createWorkActivity(ph.getProject().getId(), pm.getInitials(), name, startWeek, endWeek));
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -109,7 +112,7 @@ public class ActivitySteps {
 			String end) throws Exception {
 		Project project = ph.getProject();
 		Employee pm = eh.getAdditionalEmployee();
-		
+
 		ah.setWorkActivity(projectApp.createWorkActivity(project.getId(), pm.getInitials(), name, start, end));
 		ah.setWorkActivity(ah.getWorkActivity());
 	}
@@ -124,7 +127,8 @@ public class ActivitySteps {
 			String end) {
 		try {
 			Employee pm = eh.getAdditionalEmployee();
-			projectApp.editActivity(ah.getWorkActivity().getName(), ph.getProject().getId(), pm.getInitials(), name, start, end);
+			projectApp.editActivity(ah.getWorkActivity().getName(), ph.getProject().getId(), pm.getInitials(), name,
+					start, end);
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}
@@ -148,17 +152,17 @@ public class ActivitySteps {
 		projectApp.assignEmployeeToActivity(ph.getProject().getId(), ah.getWorkActivity().getName(),
 				eh.getAdditionalEmployee().getInitials(), eh.getEmployee().getInitials());
 	}
-	
+
 	@Given("the Employee is not assigned to the WorkActivity")
 	public void the_employee_is_not_assigned_to_the_work_activity() throws Exception {
 		the_employee_is_unassigned_from_the_work_activity();
 	}
 
-
 	@When("the Employee is removed from the WorkActivity")
 	public void the_employee_is_removed_from_the_work_activity() {
 		try {
-			projectApp.removeEmployeeFromActivity(ph.getProject().getId(), eh.getEmployee().getInitials(), ah.getWorkActivity().getName());
+			projectApp.removeEmployeeFromActivity(ph.getProject().getId(), eh.getEmployee().getInitials(),
+					ah.getWorkActivity().getName());
 		} catch (Exception e) {
 			errorMessage.setErrorMessage(e.getMessage());
 		}

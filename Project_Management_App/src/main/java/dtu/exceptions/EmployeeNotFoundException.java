@@ -1,3 +1,7 @@
+/*
+	Made by Aryan Mirzazadeh - s204489
+	This class throws exception when employee is not found
+*/
 package dtu.exceptions;
 
 public class EmployeeNotFoundException extends Exception {

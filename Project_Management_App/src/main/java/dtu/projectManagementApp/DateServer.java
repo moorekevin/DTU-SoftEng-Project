@@ -1,3 +1,7 @@
+/*
+	Made by Bjørn Laursen s204451
+	This class handles the date and validates weeks
+*/
 package dtu.projectManagementApp;
 
 import java.util.Calendar;
@@ -14,7 +18,9 @@ public class DateServer {
 		return calendar.get(Calendar.YEAR);
 	}
 	
-	public static  void validateYearWeek(String yearWeek) throws Exception {
+	// Checks that the yearWeek String is the correct format of yyWW 
+	// Also checks that the yearweek is not before the current date.
+	public static void validateYearWeek(String yearWeek) throws Exception {
 		boolean correctFormat = true;
 		if (yearWeek.length() > 4)
 			correctFormat = false;
@@ -40,7 +46,7 @@ public class DateServer {
 		}
 
 	}
-
+	// Checks that the interval is correct for two yearWeeks
 	public static void validateWeekInterval(String start, String end) throws Exception {
 		validateYearWeek(start);
 		validateYearWeek(end);

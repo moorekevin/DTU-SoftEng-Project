@@ -1,3 +1,7 @@
+/*
+	Made by Bjørn Laursen s204451
+	This class controls the activities used in the tests
+*/
 package dtu.testSteps;
 
 import dtu.projectManagementApp.App;
@@ -26,6 +30,7 @@ public class ActivityHelper {
 		return (date.getYear() % 100) + "" + date.getWeek() / 10 + "" + date.getWeek() % 10;
 	}
 	
+	//Method used to create an arbitrary week, where the arguments are used to increment the current yearWeek
 	public String addToYearWeek(int yearPlus, int weekPlus) {
 		String yearWeek = getCurrentYearWeek();
 		int week = Integer.parseInt((yearWeek).substring(2, 4));

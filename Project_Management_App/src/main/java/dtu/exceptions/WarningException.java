@@ -1,3 +1,8 @@
+
+/*
+	Made by Aryan Mirzazadeh - s204489
+	This class i used for WarningExceptions, which we interpret as soft exceptions that are not necessarily illegal.
+*/
 package dtu.exceptions;
 
 public class WarningException extends Exception {

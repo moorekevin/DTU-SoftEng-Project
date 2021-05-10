@@ -1,3 +1,8 @@
+/*
+	Made by Jakob Jacobsen s204502
+	This class controls the employees used in the tests
+*/
+
 package dtu.testSteps;
 
 import dtu.projectManagementApp.App;
@@ -31,16 +36,15 @@ public class EmployeeHelper {
 		employee = indexer.findEmployee(name);
 		return employee;
 	}
-
-	// Nødt til at skelne fordi skal bruge begge seperate i senere test
+	
+	//Method used to create and differentiate between a normal employee and an employee who is a project manager
 	public Employee createAdditionalEmployee(String name) throws Exception {
 		indexer.addEmployee(name);
 		additionalEmployee = app.getIndexer().findEmployee(name);
 		return additionalEmployee;
 	}
-
-	// Tilføjet fordi "given there is not an employee" - kaldte på createEmployee
-	// som tilføjer den til repository
+	
+	//Method used for the scenarios "Given there is not an Employee.."
 	public Employee createNonExistingEmployee(String name) {
 		employee = new Employee(name);
 		return employee;
@@ -49,7 +53,8 @@ public class EmployeeHelper {
 	public void makeEmployeeProjectManager(Employee em) {
 		em.setProjectManager(new Project("v", 9));
 	}
-
+	
+	//Sets planned time for the nonWorkActivity holiday
 	public void setTimeAllocation(Employee em, String yearWeek, Double hours) throws Exception {
 		PlannedWeek plannedWeek = em.createPlannedWeek(yearWeek);
 

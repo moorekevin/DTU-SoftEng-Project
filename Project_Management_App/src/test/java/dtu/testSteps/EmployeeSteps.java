@@ -1,3 +1,7 @@
+/*
+	Made by Kevin Moore s204462
+	This class tests the methods surrounding the employee
+*/
 package dtu.testSteps;
 
 import static org.junit.Assert.assertFalse;

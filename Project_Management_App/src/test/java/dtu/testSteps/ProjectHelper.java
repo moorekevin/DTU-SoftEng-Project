@@ -1,3 +1,7 @@
+/*
+	Made by Bjørn Laursen s204451
+	This class controls the projects used in the tests
+*/
 package dtu.testSteps;
 
 import dtu.projectManagementApp.App;

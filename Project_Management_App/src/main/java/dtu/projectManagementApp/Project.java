@@ -1,3 +1,7 @@
+/*
+	Made by Jakob Jacobsen s204502
+	This class creates and represents projects in the program with all project the related functionalities
+*/
 package dtu.projectManagementApp;
 
 import java.util.List;
@@ -26,7 +30,10 @@ public class Project {
 		this(name);
 		this.id = id;
 	}
-
+	
+	// Creates a unique ID where first two digits are the last two digits of the year
+	// and last four digits is the number of the project created
+	// e.g. 210001 for the first project created with the year 2100
 	public static int makeProjectId() {
 		Date date = new Date();
 		LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

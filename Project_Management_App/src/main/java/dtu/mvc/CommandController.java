@@ -1,3 +1,7 @@
+/*
+	Made by Kevin Moore s204462
+	This class is a holder for all the commands in the app and which methods should be called for each command in the controller.
+*/
 package dtu.mvc;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +19,7 @@ public class CommandController {
         controller.start();
     }
 
-    public void setCommands() {
+    public void setCommands() { // Sets all the commands for the app
 		commandList = new HashMap<String, CommandInfo>();
 
 		commandList.put("/help", new CommandInfo("Print all commands available", new Command() {

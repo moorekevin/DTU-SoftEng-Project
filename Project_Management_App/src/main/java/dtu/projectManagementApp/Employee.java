@@ -1,3 +1,7 @@
+/*
+	Made by Bjørn Laursen s204451
+	This class represents an Employee who could also be a project manager
+*/
 package dtu.projectManagementApp;
 
 import java.util.ArrayList;

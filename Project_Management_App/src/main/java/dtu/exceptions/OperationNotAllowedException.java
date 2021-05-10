@@ -1,3 +1,7 @@
+/*
+	Made by Aryan Mirzazadeh - s204489
+	This class throws an exception for an illegal operation
+*/
 package dtu.exceptions;
 
 public class OperationNotAllowedException extends Exception {

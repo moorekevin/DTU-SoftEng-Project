@@ -1,3 +1,7 @@
+/*
+	Made by Jakob Jacobsen s204502
+	This class is responsible for the UI part of the program.
+*/
 package dtu.mvc;
 
 import java.util.List;

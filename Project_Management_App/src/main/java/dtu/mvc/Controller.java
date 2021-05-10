@@ -1,3 +1,7 @@
+/*
+	Made by Bjørn Laursen s204451
+	This class handles which methods from app should be called and tells UI what to display
+*/
 package dtu.mvc;
 
 import java.util.Map;
@@ -22,6 +26,7 @@ public class Controller {
 	}
 
 	public void start() {
+		// Keep waiting for next user input
 		while (isRunning) {
 			ui.start();
 			runUserCommand(ui.getUserInput());
@@ -52,10 +57,6 @@ public class Controller {
 		}
 	}
 
-	public void printCommandList() {
-		ui.printCommandList();
-	}
-
 	// Request methods //
 	public String requestProjectManager(String methodName) {
 		ui.print(methodName, "What are the initials of the project manager?");
@@ -82,12 +83,16 @@ public class Controller {
 		return ui.getUserInput();
 	}
 	//////////////////////
+	
+	public void printCommandList() {
+		ui.printCommandList();
+	}
 
 	public void createProject() {
 		String methodName = "Create project";
 		ui.print(methodName, "What should the name of the project be?");
 		String nameOfProject = ui.getUserInput();
-		if (nameOfProject != null) {
+		if (nameOfProject != null) { // If user didn't type "/exit"
 			Project project = indexer.createProject(nameOfProject);
 			ui.print("Project \"" + project.getName() + "\" created with ID \"" + project.getId() + "\"!");
 			ui.printSuccess(methodName);
@@ -138,7 +143,7 @@ public class Controller {
 	public void assignEmployeeToProject() {
 		String methodName = "Assign employee to project";
 		String pmInitials = requestProjectManager(methodName);
-		if (pmInitials != null) { // Continue only if user didn't type /exit
+		if (pmInitials != null) { // Continue each step only if user didn't type /exit
 			String emInitials = requestEmployee(methodName);
 			if (emInitials != null) {
 				String projectID = requestProject(methodName);
@@ -471,7 +476,6 @@ public class Controller {
 								indexer.findPlannedWeek(indexer.findEmployee(emInitials), week).getPlannedActivities());
 					}
 				} catch (Exception e) {
-					System.out.println(e.getStackTrace()[0].getMethodName());
 					ui.printError(e.getMessage());
 				}
 			}

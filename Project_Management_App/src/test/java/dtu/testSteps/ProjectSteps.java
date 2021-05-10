@@ -1,10 +1,13 @@
+/*
+	Made by Bjørn Laursen s204451
+	This class tests the project related features
+*/
 package dtu.testSteps;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import dtu.Main;
 import dtu.projectManagementApp.App;
 import dtu.projectManagementApp.Project;
 import io.cucumber.java.en.Given;
@@ -23,8 +26,8 @@ public class ProjectSteps {
 	}
 	
 
-	@When("the Employee creates a Project with name {string}")
-	public void the_employee_creates_a_project_with_name(String name) {
+	@When("a Project with name {string} is created")
+	public void a_project_with_name_is_created(String name) {
 		ph.createProject(name);
 	}
 

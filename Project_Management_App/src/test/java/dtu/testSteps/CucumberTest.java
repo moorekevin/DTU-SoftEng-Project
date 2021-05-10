@@ -1,3 +1,7 @@
+/*
+	Made by Kevin Moore s204462
+	This class is needed to operate the cucumber tests.
+*/
 package dtu.testSteps;
 
 import org.junit.runner.RunWith;

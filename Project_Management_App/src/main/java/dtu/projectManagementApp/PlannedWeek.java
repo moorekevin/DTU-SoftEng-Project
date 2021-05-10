@@ -1,3 +1,7 @@
+/*
+	Made by Jakob Jacobsen s204502
+	This class represents a planned week and covers the functionality of planning a week for an employee.
+*/
 package dtu.projectManagementApp;
 
 import java.util.Map;
@@ -13,9 +17,11 @@ public class PlannedWeek {
 	private Map<Activity,Double> plannedActivities;
 	private ArrayList<WorkActivity> invalidActivities = new ArrayList<WorkActivity>();
 	private String yearWeek;
-	public static final double WORKHOURS_PER_DAY = 10.0;
-	public static final int DAYS_PER_WEEK = 5;
-	public static final double MAX_HOURS_PER_WEEK = 168.0;
+
+	public static final double WORKHOURS_PER_DAY = 10.0;  // How many hours is a normal workday for the company
+	public static final int DAYS_PER_WEEK = 5; // How many days is a normal workweek for the company
+	public static final double MAX_HOURS_PER_WEEK = 168.0; // A hard limit for how many hours that can be assigned for an employee pr week.
+
 	public static final String[] NON_WORK_ACTIVITIES = {"Holiday", "Sickness", "Courses", "Other"};
 	
 	public PlannedWeek(String yearWeek) {
@@ -28,10 +34,10 @@ public class PlannedWeek {
 	}
 
 	public NonWorkActivity findNonWorkActivity(String activityName) throws OperationNotAllowedException{
-		for (String nonWorkActivityName : PlannedWeek.NON_WORK_ACTIVITIES) {
-			if (nonWorkActivityName.equals(activityName)) { // If nonwork activity found it is returned back as an activity object
-				for (Activity activity : plannedActivities.keySet()) {
-					if (activity.getName().equals(activityName) && activity instanceof NonWorkActivity) {
+		for (String nonWorkActivityName : PlannedWeek.NON_WORK_ACTIVITIES) { 
+			if (nonWorkActivityName.equals(activityName)) { // Checks that the nonworkactivity name exists in the list 
+				for (Activity activity : plannedActivities.keySet()) { 
+					if (activity.getName().equals(activityName) && activity instanceof NonWorkActivity) { // finds it in the total plannedActivities list
 						return (NonWorkActivity) activity;
 					}
 				}
@@ -106,21 +112,5 @@ public class PlannedWeek {
 	public String getYearWeek() {
 		return yearWeek;
 	}
-	
-	
-//	@Override
-//    public boolean equals(Object obj) {
-//        if (obj == this) {
-//            return true;
-//        }
-//  
-//        if (!(obj instanceof PlannedWeek)) {
-//            return false;
-//        }
-//          
-//        PlannedWeek plannedWeekComparison = (PlannedWeek) obj;
-//          
-//        return this.getWeek().equals(plannedWeekComparison.getWeek());
-//    }
 
 }

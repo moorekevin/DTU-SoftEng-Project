@@ -1,228 +1,150 @@
+/*
+/*
+	Made by Aryan Mirzazadeh - s204489
+	This class tests the method createWorkActivity using White Box test 2 from the report
+*/
 package dtu.whiteBoxTest;
 
 import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
 
 import dtu.projectManagementApp.App;
-import dtu.testSteps.ErrorMessage;
+import dtu.projectManagementApp.Indexer;
 import dtu.projectManagementApp.Project;
 import dtu.projectManagementApp.WorkActivity;
-import dtu.projectManagementApp.Indexer;
+import dtu.testSteps.ErrorMessage;
 
 public class WhiteBox2 {
 	App app = new App();
 	Indexer indexer = app.getIndexer();
 	ErrorMessage error = new ErrorMessage();
-
-	String em = "ABC";
-	String pm = "DEF";
-	int projectID = 123456;
-	String activityName = "coding";
-	String yearWeek;
-	double hours;
+	int projectId = 123456;
+	String pmInitials = "ABC";
+	String activityName = "Coding";
+	String start;
+	String end;
 
 	@Test
 	public void testInputDataSetA() throws Exception {
-		// There is no Employee em with the given initials
 		try {
-			app.allocateTimeForEmployee(null, em, null, 0, null, null);
+			app.createWorkActivity(projectId, null, null, null, null);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
-		assertTrue(error.getErrorMessage().equals("Employee does not exist"));	
+		assertTrue(error.getErrorMessage().equals("Project does not exist"));
 	}
 
 	@Test
 	public void testInputDataSetB() throws Exception {
-		// There is no Employee pm with the given initials
-		indexer.addEmployee(em);
+		indexer.getProjects().add(new Project("project", projectId));
+
 		try {
-			app.allocateTimeForEmployee(pm, em, null, 0, null, null);
+			app.createWorkActivity(projectId, pmInitials, null, null, null);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
-		assertTrue(error.getErrorMessage().equals("Employee does not exist"));	
+		assertTrue(error.getErrorMessage().equals("Employee does not exist"));
 	}
 
 	@Test
 	public void testInputDataSetC() throws Exception {
-		indexer.addEmployee(em);
-		
-		indexer.addEmployee(pm);
-		
+		indexer.getProjects().add(new Project("project", projectId));
+
+		indexer.addEmployee(pmInitials);
+		start = "9010";
+		end = "9001";
+
 		try {
-			app.allocateTimeForEmployee(pm, em, null, projectID, null, null);
+			app.createWorkActivity(projectId, pmInitials, null, start, end);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
-		assertTrue(error.getErrorMessage().equals("Project does not exist"));	
+		assertTrue(error.getErrorMessage().equals("Start week cannot be larger than end week"));
 	}
 
 	@Test
 	public void testInputDataSetD() throws Exception {
-		indexer.addEmployee(em);
-		indexer.addEmployee(pm);
-		
-		indexer.getProjects().add(new Project("project",projectID));
+		indexer.getProjects().add(new Project("project", projectId));
+		indexer.addEmployee(pmInitials);
+		start = "9001";
+		end = "9010";
+
+		// Create a new project and make the employee project manager for that project
+		indexer.getProjects().add(new Project("temp", 000000));
+		app.assignProjectManager(000000, pmInitials);
 
 		try {
-			app.allocateTimeForEmployee(pm, em, null, projectID, activityName, null);
+			app.createWorkActivity(projectId, pmInitials, null, start, end);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
-		assertTrue(error.getErrorMessage().equals("Activity is not assigned to the project"));	
+		assertTrue(error.getErrorMessage().equals("Project Manager is not assigned to the Project"));
 	}
 
 	@Test
 	public void testInputDataSetE() throws Exception {
-		indexer.addEmployee(em);
-		indexer.addEmployee(pm);
-		Project project = new Project("project", projectID);
-		indexer.getProjects().add(project);
-		
-		WorkActivity act = new WorkActivity(activityName, "9000", "9005");
-		project.addActivity(act);
+		indexer.getProjects().add(new Project("project", projectId));
+		indexer.addEmployee(pmInitials);
+		start = "9001";
+		end = "9010";
+		app.assignProjectManager(projectId, pmInitials);
+
+		activityName = "coding";
+		WorkActivity workActivity = null;
 		
 		try {
-			app.allocateTimeForEmployee(pm, em, null, projectID, activityName, null);
+			workActivity = app.createWorkActivity(projectId, pmInitials, activityName, start, end);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
-		assertTrue(error.getErrorMessage().equals("Employee is not assigned to the Project"));	
+		
+		assertTrue(error.getErrorMessage().equals(""));
+		assertTrue(workActivity.getName().equals(activityName) 
+				   && workActivity.getStart().equals(start)
+				   && workActivity.getEnd().equals(end));
+		assertTrue(indexer.findProject(projectId).getActivities().contains(workActivity));
 	}
-	
+
 	@Test
 	public void testInputDataSetF() throws Exception {
-		indexer.addEmployee(em);
-		indexer.addEmployee(pm);
-		Project project = new Project("project", projectID);
-		indexer.getProjects().add(project);
-		WorkActivity act = new WorkActivity(activityName, "9000", "9005");
-		project.addActivity(act);
-		
-		project.assignEmployeeToProject(indexer.findEmployee(em));
-		yearWeek = "2000";
-		
+		indexer.getProjects().add(new Project("project", projectId));
+		indexer.addEmployee(pmInitials);
+		start = "9001";
+		end = "9010";
+		app.assignProjectManager(projectId, pmInitials);
+		activityName = "coding";
+
+		app.createWorkActivity(projectId, pmInitials, activityName, start, end);
+
 		try {
-			app.allocateTimeForEmployee(pm, em, null, projectID, activityName, yearWeek);
+			app.createWorkActivity(projectId, pmInitials, activityName, start, end);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
-		assertTrue(error.getErrorMessage().equals("Employee is not project manager"));	
+		assertTrue(error.getErrorMessage().equals("This Activity is already assigned to the Project"));
 	}
-	
+
 	@Test
 	public void testInputDataSetG() throws Exception {
-		indexer.addEmployee(em);
-		indexer.addEmployee(pm);
-		Project project = new Project("project", projectID);
-		indexer.getProjects().add(project);
-		project.assignEmployeeToProject(indexer.findEmployee(em));
+		indexer.getProjects().add(new Project("project", projectId));
+		indexer.addEmployee(pmInitials);
+		start = "9001";
+		end = "9010";
+		app.assignProjectManager(projectId, pmInitials);
+		activityName = "coding";
 		
-		WorkActivity act = new WorkActivity(activityName, "9000", "9005");
-		project.addActivity(act);
-		app.assignProjectManager(projectID, pm);
-		yearWeek = "2000";
-		
+		WorkActivity workActivity = null;
+		app.createWorkActivity(projectId, pmInitials, "programming", start, end);
 		try {
-			app.allocateTimeForEmployee(pm, em, null, projectID, activityName, yearWeek);
+			workActivity = app.createWorkActivity(projectId, pmInitials, activityName, start, end);
 		} catch (Exception e) {
 			error.setErrorMessage(e.getMessage());
 		}
-		assertTrue(error.getErrorMessage().equals("Week(s) are invalid"));	
+		assertTrue(error.getErrorMessage().equals(""));
+		assertTrue(workActivity.getName().equals(activityName) 
+				   && workActivity.getStart().equals(start)
+				   && workActivity.getEnd().equals(end));
+		assertTrue(indexer.findProject(projectId).getActivities().contains(workActivity));
 	}
-	
-	@Test
-	public void testInputDataSetH() throws Exception {
-		indexer.addEmployee(em);
-		indexer.addEmployee(pm);
-		Project project = new Project("project", projectID);
-		indexer.getProjects().add(project);
-		project.assignEmployeeToProject(indexer.findEmployee(em));
-		WorkActivity act = new WorkActivity(activityName, "9000", "9005");
-		project.addActivity(act);
-		app.assignProjectManager(projectID, pm);
-		
-		yearWeek = "9010";
-		
-		
-		try {
-			app.allocateTimeForEmployee(pm, em, null, projectID, activityName, yearWeek);
-		} catch (Exception e) {
-			error.setErrorMessage(e.getMessage());
-		}
-		assertTrue(error.getErrorMessage().equals("Activity has not begun/ended for planned time"));	
-	}
-	
-	@Test
-	public void testInputDataSetI() throws Exception {
-		indexer.addEmployee(em);
-		indexer.addEmployee(pm);
-		Project project = new Project("project", projectID);
-		indexer.getProjects().add(project);
-		project.assignEmployeeToProject(indexer.findEmployee(em));
-		WorkActivity act = new WorkActivity(activityName, "9000", "9005");
-		project.addActivity(act);
-		app.assignProjectManager(projectID, pm);
-		
-		yearWeek = "9003";
-		app.allocateTimeForEmployee(pm, em, 20.0, projectID, activityName, yearWeek);
-		hours = 40.0;
-		
-		try {
-			app.allocateTimeForEmployee(pm, em, hours, projectID, activityName, yearWeek);
-		} catch (Exception e) {
-			error.setErrorMessage(e.getMessage());
-		}
-		assertTrue(error.getErrorMessage().equals("The total planned work exceeds allowed hours for the week. Time is allocated but please contact a Project Manager"));	
-	}
-	
-	@Test
-	public void testInputDataSetJ() throws Exception {
-		indexer.addEmployee(em);
-		indexer.addEmployee(pm);
-		Project project = new Project("project", projectID);
-		indexer.getProjects().add(project);
-		project.assignEmployeeToProject(indexer.findEmployee(em));
-		WorkActivity act = new WorkActivity(activityName, "9000", "9005");
-		project.addActivity(act);
-		app.assignProjectManager(projectID, pm);
-		yearWeek = "9003";
-		app.allocateTimeForEmployee(pm, em, 20.0, projectID, activityName, yearWeek);
-		
-		hours = 150.0;
-		
-		try {
-			app.allocateTimeForEmployee(pm, em, hours, projectID, activityName, yearWeek);
-		} catch (Exception e) {
-			error.setErrorMessage(e.getMessage());
-		}
-		assertTrue(error.getErrorMessage().equals("Not enough available time for week"));	
-	}
-	
-	@Test
-	public void testInputDataSetK() throws Exception {
-		indexer.addEmployee(em);
-		indexer.addEmployee(pm);
-		Project project = new Project("project", projectID);
-		indexer.getProjects().add(project);
-		project.assignEmployeeToProject(indexer.findEmployee(em));
-		WorkActivity act = new WorkActivity(activityName, "9000", "9005");
-		project.addActivity(act);
-		app.assignProjectManager(projectID, pm);
-		yearWeek = "9003";
-		app.allocateTimeForEmployee(pm, em, 20.0, projectID, activityName, yearWeek);
-		
-		hours = 20.0;
-		
-		try {
-			app.allocateTimeForEmployee(pm, em, hours, projectID, activityName, yearWeek);
-		} catch (Exception e) {
-			error.setErrorMessage(e.getMessage());
-		}
-		System.out.println(error.getErrorMessage());
-		assertTrue(error.getErrorMessage().equals(""));	
-		assertTrue(app.calculatePlannedHours(em, yearWeek) == 40);
-	}
+
 }
